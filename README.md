@@ -62,15 +62,13 @@ A project is an optional group of tasks with a channel of its own. Its board has
 
 ## What it works with
 
-| | |
-|---|---|
-| **Coding agents** | Claude Code, Codex, Grok Build, OpenCode and Cursor, in T3 Code threads or in a shared terminal |
-| **Terminals** | A plain shell, tmux, herdr or Rex, shared by the bridge on each machine |
-| **Team agents** | Hermes, OpenClaw and other agents that speak A2A. Each one is added by a person and can do at most what that person can. |
-| **Desktops** | Cua Spaces on machines you own, with one driver at a time |
-| **Browsers** | Shared browsers in a channel, which can keep their logins for as long as you choose |
-| **Files** | Markdown docs, canvases, PDFs and images, with comments pinned to the exact spot |
-| **Cloud machines** | Team Linux machines that start when work needs them and stop once they're idle |
+- **Coding agents:** Claude Code, Codex, Grok Build, OpenCode and Cursor, in T3 Code threads or in a shared terminal
+- **Terminals:** A plain shell, tmux, herdr or Rex, shared by the bridge on each machine
+- **Team agents:** Hermes, OpenClaw and other agents that speak A2A. Each one is added by a person and can do at most what that person can.
+- **Desktops:** Cua Spaces on machines you own, with one driver at a time
+- **Browsers:** Shared browsers in a channel, which can keep their logins for as long as you choose
+- **Files:** Markdown docs, canvases, PDFs and images, with comments pinned to the exact spot
+- **Cloud machines:** Team Linux machines that start when work needs them and stop once they're idle
 
 Agents and scripts can do everything the app does through the Room API: `packages/room-client` ships a TypeScript client, an MCP server (`uplink-mcp`) and a CLI (`uplink`).
 
