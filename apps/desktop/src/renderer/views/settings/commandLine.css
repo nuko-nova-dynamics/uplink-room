@@ -1,0 +1,54 @@
+/* Settings, Command line (views/settings/CommandLine.tsx). */
+.cli-intro {
+  line-height: var(--line-12);
+  max-width: 68ch;
+  font-size: var(--font-12);
+}
+.cli-signins {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+.cli-signin-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.cli-signin-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.cli-confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cli-confirm p {
+  margin: 0;
+  line-height: var(--line-13);
+  max-width: 68ch;
+  font-size: var(--font-13);
+}
+/* On this computer (components/AgentSetup.tsx): the setup's permission rows, under the intro. */
+.panel .agent-setup {
+  margin-top: 4px;
+}
+/* The agent choice in McpRow (components/AgentSetup.tsx): a UI SDK Select trigger, with the
+   chevron beside it in .select-wrap. */
+.agent-setup .input[data-slot="select-trigger"] {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  padding-right: var(--space-28);
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+}
+.agent-added {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}

@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Inbox mock</title><style>
+:root{color-scheme:light;--ground:#FCFCFC;--sidebar:#F5F5F5;--raised:#FFFFFF;--hover:#EFEFEF;--current:#E8E8E8;--chip:#F0F0F0;--line:#E6E6E6;--text:#1A1A1A;--muted:#666666;--faint:#707070;--accent:#1F1F1F;--on-accent:#FCFCFC;--link:#1A6FD6;--own:#222222;--on-own:#FFFFFF;--bubble:#F0F0F0;--amber:#F0A73A;--amber-text:#9A5B00;--done:#1F9D63;--working:#5B6F99;--shimmer:#BDBDBD}
+:root[data-theme=dark]{color-scheme:dark;--ground:#121212;--sidebar:#0E0E0E;--raised:#1F1F1F;--hover:#262626;--current:#212121;--chip:#262626;--line:#2C2C2C;--text:#ECECEC;--muted:#A1A1A1;--faint:#8C8C8C;--accent:#ECECEC;--on-accent:#121212;--link:#6CB2FF;--own:#3B3B3B;--on-own:#ECECEC;--bubble:#262626;--amber-text:#F0A73A;--done:#5FC38F;--working:#9DB0D8;--shimmer:#5A5A5A}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--ground:#121212;--sidebar:#0E0E0E;--raised:#1F1F1F;--hover:#262626;--current:#212121;--chip:#262626;--line:#2C2C2C;--text:#ECECEC;--muted:#A1A1A1;--faint:#8C8C8C;--accent:#ECECEC;--on-accent:#121212;--link:#6CB2FF;--own:#3B3B3B;--on-own:#ECECEC;--bubble:#262626;--amber-text:#F0A73A;--done:#5FC38F;--working:#9DB0D8;--shimmer:#5A5A5A}}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--ground);color:var(--text);font:400 13px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Inter,system-ui,sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+.app{display:grid;grid-template-columns:232px 1fr;grid-template-rows:minmax(0,1fr);height:100%}
+@media (max-width:700px){.app{grid-template-columns:1fr}.app .side{display:none}}
+.side{background:var(--sidebar);padding:12px 8px;display:flex;flex-direction:column;gap:2px;overflow:hidden}
+.team{display:flex;align-items:center;gap:8px;padding:6px 8px 12px;font-weight:600}
+.team i{width:22px;height:22px;border-radius:7px;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-style:normal;font-size:11px}
+.srow{display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:10px;color:var(--text);min-width:0}
+.srow.cur{background:var(--current)}
+.srow .nm{font-weight:500;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srow .pv{display:block;font-weight:400;color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srow .pv.wait{color:var(--amber-text)}
+.dot{width:7px;height:7px;border-radius:50%;flex:none}
+.dot.amber{background:var(--amber)}
+.sh{padding:14px 8px 4px;color:var(--faint);font-size:12px;font-weight:500}
+.main{display:flex;flex-direction:column;min-width:0;height:100%;position:relative}
+.head{height:52px;flex:none;display:flex;align-items:center;justify-content:center;position:relative}
+.pill-title{display:flex;align-items:center;gap:8px;height:34px;padding:0 14px 0 6px;border:1px solid var(--line);border-radius:17px;background:var(--raised);font-weight:500;font-size:14px}
+.head .right{position:absolute;right:16px;top:12px;display:flex;gap:6px}
+.chipbtn{height:28px;padding:0 10px;border-radius:14px;background:var(--chip);border:0;font-weight:500;display:inline-flex;align-items:center;gap:6px}
+.scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column}
+.scroll::-webkit-scrollbar{width:0}
+.col{width:100%;max-width:720px;margin:0 auto;padding:8px 18px 12px;display:flex;flex-direction:column;gap:10px}
+.spacer{margin-top:auto}
+.day{align-self:center;color:var(--faint);font-size:12px;padding:6px 0}
+.msg{display:flex;gap:8px;align-items:flex-end;max-width:86%}
+.msg.link{align-self:flex-start}
+.msg.me{align-self:flex-end}
+.bubble{padding:9px 14px;border-radius:18px;background:var(--bubble);font-size:15px;line-height:1.45}
+.me .bubble{background:var(--own);color:var(--on-own);border-radius:20px}
+.bubble b{font-weight:600}
+.bubble p{margin:0}.bubble p+p{margin-top:6px}
+.under{display:flex;gap:6px;align-items:center;margin:4px 0 0 36px;color:var(--muted);font-size:12px}
+.tag{align-self:flex-end;margin-top:-4px;color:var(--muted);font-size:12px;display:flex;gap:6px;align-items:center}
+.event{align-self:center;color:var(--muted);font-size:13px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;text-align:center;padding:2px 0}
+.event b{color:var(--text);font-weight:500}
+.event a,.linkish{color:var(--link);text-decoration:none;cursor:pointer;font-weight:500}
+.cards{display:flex;flex-direction:column;gap:10px;margin-left:36px}
+.card{background:var(--raised);border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.card.amber{border-color:color-mix(in srgb,var(--amber) 55%,var(--line))}
+.who{color:var(--muted);font-size:12px;display:flex;gap:6px;align-items:center}
+.q{font-size:15px;font-weight:500;line-height:1.4}
+code{font:12px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--chip);padding:1px 5px;border-radius:5px}
+.acts{display:flex;gap:8px;justify-content:flex-end}
+.btn{height:28px;padding:0 12px;border-radius:14px;border:0;background:var(--chip);font-weight:500}
+.btn.pri{background:var(--accent);color:var(--on-accent)}
+.letters{display:flex;flex-direction:column;gap:2px}
+.letter{display:flex;gap:10px;align-items:center;padding:7px 8px;border-radius:10px;text-align:left;background:transparent;border:0;width:100%}
+.letter:hover{background:var(--hover)}
+.letter .k{width:22px;height:22px;border-radius:7px;background:var(--chip);display:grid;place-items:center;font-size:12px;font-weight:600;flex:none}
+.letter .d{display:block;color:var(--muted);font-size:13px;margin-top:1px}
+.letter.other .k,.letter.other .t{color:var(--muted)}
+.receipt{display:flex;flex-direction:column;gap:2px;padding:9px 14px;border:1px solid var(--line);border-radius:14px;background:var(--raised)}
+.receipt .rq{color:var(--muted)}
+.receipt .ra{display:flex;gap:6px;align-items:center;font-weight:500}
+.ok{color:var(--done)}
+.fold{align-self:center;display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px}
+.faces{display:flex}.faces .face{margin-left:-5px;box-shadow:0 0 0 2px var(--ground)}.faces .face:first-child{margin-left:0}
+.face{width:20px;height:20px;border-radius:50%;outline:1px solid var(--line);outline-offset:-1px;display:grid;place-items:center;color:#fff;font-size:11px;font-weight:600;flex:none}
+.run{background:var(--raised);border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;margin-left:36px;max-width:440px;transition:border-color .3s}
+.run .top{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:12px}
+.run .ttl{font-weight:600;font-size:15px}
+.run .scope{color:var(--muted)}
+.run .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.status{height:22px;padding:0 9px;border-radius:11px;border:1px solid var(--line);display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500}
+.status .sd{width:7px;height:7px;border-radius:50%;background:var(--working)}
+.status.fin{color:var(--done)}
+.diff{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}.diff .p{color:var(--done)}.diff .m{color:#E5484D}
+@keyframes pulse{50%{opacity:.35}}
+.shimmer{color:var(--muted)}
+@keyframes sh{from{background-position:100% 0}to{background-position:-150% 0}}
+.thinking{display:flex;gap:8px;align-items:center;align-self:flex-start;font-size:14px}
+.taskchip{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:13px;background:var(--raised);border:1px solid var(--line);font-size:12px;font-weight:500;color:var(--text);margin-top:6px}
+.hoveracts{display:flex;gap:4px;margin:2px 0 0 36px}
+.ha{height:26px;padding:0 9px;border-radius:13px;background:transparent;border:1px solid var(--line);font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:5px}
+.ha.strong{color:var(--text);border-color:var(--text)}
+.composer-wrap{flex:none;padding:6px 0 14px}
+.composer-wrap .col{padding-top:0;padding-bottom:0}
+.composer{display:flex;align-items:center;gap:6px;min-height:50px;padding:6px 7px 6px 8px;border:1px solid var(--line);border-radius:25px;background:var(--raised);box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.composer input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:15px;color:var(--text);padding:0 6px}
+.composer input::placeholder{color:var(--faint)}
+.ic{width:34px;height:34px;border-radius:50%;border:0;background:transparent;display:grid;place-items:center;color:var(--muted);flex:none}
+.ic:hover{background:var(--chip)}
+.send{width:34px;height:34px;border-radius:50%;border:0;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;flex:none}
+.target{height:30px;padding:0 8px 0 5px;border-radius:15px;border:1px solid var(--line);background:var(--chip);display:inline-flex;align-items:center;gap:6px;font-weight:500;font-size:13px;flex:none;white-space:nowrap}
+.menu{position:absolute;bottom:72px;right:calc(50% - 360px + 60px);width:280px;background:var(--raised);border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.14);padding:6px;display:none;z-index:5}
+@media (max-width:1060px){.menu{right:24px}}
+.menu.open{display:block}
+.mi{display:flex;gap:10px;align-items:center;width:100%;padding:8px;border-radius:9px;border:0;background:transparent;text-align:left}
+.mi:hover{background:var(--hover)}
+.mi .mt{flex:1;min-width:0}.mi .mt span{display:block;color:var(--muted);font-size:12px}
+.mh{padding:8px 8px 2px;color:var(--faint);font-size:12px}
+.sep{height:1px;background:var(--line);margin:4px 2px}
+.demo{position:absolute;top:60px;right:14px;z-index:4;height:28px;padding:0 11px;border-radius:14px;border:1px dashed var(--muted);background:var(--ground);color:var(--muted);font-size:12px;font-weight:500;display:inline-flex;align-items:center;gap:6px}
+.pinned{flex:none;border-bottom:1px solid var(--line);max-height:58%;overflow:auto}
+.pinned::-webkit-scrollbar{width:0}
+.divider{align-self:stretch;display:flex;align-items:center;gap:10px;color:var(--faint);font-size:12px}
+.divider:before,.divider:after{content:"";flex:1;height:1px;background:var(--line)}
+.recent{display:flex;flex-direction:column;gap:8px;padding-top:10px;border-top:1px solid var(--line)}
+.recent .bubble{font-size:14px;padding:7px 12px}
+.fadein{animation:fi .35s cubic-bezier(.2,.7,.2,1) both}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head>
+<body><div class="app">
+<aside class="side">
+  <div class="team"><i>T</i>Tidewater</div>
+  <div class="srow cur"><svg class="linkface" width="20" height="20" viewBox="0 0 100 100" aria-label="Link" role="img" style="flex:none"><defs><linearGradient id="lg20done" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F7E7CB"/><stop offset="1" stop-color="#EBC896"/></linearGradient></defs><path d="M50 22 L50 9" stroke="#1F2228" stroke-width="3.4" stroke-linecap="round"/><circle cx="50" cy="8" r="6.5" fill="#F0A73A" opacity="0.0625"/><circle cx="50" cy="8" r="5" fill="#F0A73A" stroke="#1F2228" stroke-width="2.6"/><path d="M50 22 C83 22 90 29 90 57 C90 85 83 92 50 92 C17 92 10 85 10 57 C10 29 17 22 50 22 Z" fill="url(#lg20done)" stroke="#1F2228" stroke-width="3.4"/><path d="M31 49 Q37 42 43 49" fill="none" stroke="#1F2228" stroke-width="3.6" stroke-linecap="round"/><path d="M57 49 Q63 42 69 49" fill="none" stroke="#1F2228" stroke-width="3.6" stroke-linecap="round"/><path d="M41 61 Q50 70 59 61" fill="none" stroke="#1F2228" stroke-width="3.4" stroke-linecap="round"/><ellipse cx="27" cy="62" rx="5" ry="3" fill="#F2A08A" opacity=".45"/><ellipse cx="73" cy="62" rx="5" ry="3" fill="#F2A08A" opacity=".45"/></svg><span class="nm">Inbox</span></div>
+  <div class="srow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color:var(--muted)"><circle cx="11" cy="11" r="6"/><path d="m20 20-4-4"/></svg><span class="nm" style="color:var(--muted)">Search</span></div>
+  <div class="sh">Agents</div>
+  <div class="srow"><span class="face" style="background:#B5533B">I</span><span class="nm">Icarus<span class="pv ">Exported the March tables.</span></span></div>
+  <div class="srow"><span class="face" style="background:#111">G</span><span class="nm">Grok Bot<span class="pv">Inbox triaged. 3 unread.</span></span></div>
+  <div class="srow"><span class="face" style="background:#6E52C2">D</span><span class="nm">Duet<span class="pv">Notes from Monday's call.</span></span></div>
+  <div class="srow"><span class="face" style="background:#2B7D58">M</span><span class="nm">Muse<span class="pv">Drafted the release post.</span></span></div>
+  <div class="sh">Projects</div>
+  <div class="srow"><span class="nm" style="color:var(--muted)"># tide-tables</span></div>
+  <div class="srow"><span class="nm" style="color:var(--muted)"># checkout</span></div>
+</aside><div class="main">
+<header class="head"><div class="pill-title"><svg class="linkface" width="24" height="24" viewBox="0 0 100 100" aria-label="Link" role="img" style="flex:none"><defs><linearGradient id="lg24done" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F7E7CB"/><stop offset="1" stop-color="#EBC896"/></linearGradient></defs><path d="M50 22 L50 9" stroke="#1F2228" stroke-width="3.4" stroke-linecap="round"/><circle cx="50" cy="8" r="6.5" fill="#F0A73A" opacity="0.0625"/><circle cx="50" cy="8" r="5" fill="#F0A73A" stroke="#1F2228" stroke-width="2.6"/><path d="M50 22 C83 22 90 29 90 57 C90 85 83 92 50 92 C17 92 10 85 10 57 C10 29 17 22 50 22 Z" fill="url(#lg24done)" stroke="#1F2228" stroke-width="3.4"/><path d="M31 49 Q37 42 43 49" fill="none" stroke="#1F2228" stroke-width="3.6" stroke-linecap="round"/><path d="M57 49 Q63 42 69 49" fill="none" stroke="#1F2228" stroke-width="3.6" stroke-linecap="round"/><path d="M41 61 Q50 70 59 61" fill="none" stroke="#1F2228" stroke-width="3.4" stroke-linecap="round"/><ellipse cx="27" cy="62" rx="5" ry="3" fill="#F2A08A" opacity=".45"/><ellipse cx="73" cy="62" rx="5" ry="3" fill="#F2A08A" opacity=".45"/></svg>Inbox</div><div class="right"><button class="chipbtn">Mine <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></button></div></header><button class="demo" id="replay" type="button"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg> Replay</button><div class="scroll" id="scroll"><div class="col" id="feed"><div class="spacer"></div>
+<div class="day">Today</div>
+<div class="msg link "><svg class="linkface" width="28" height="28" viewBox="0 0 100 100" aria-label="Link" role="img" style="flex:none"><defs><linearGradient id="lg28done" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F7E7CB"/><stop offset="1" stop-color="#EBC896"/></linearGradient></defs><path d="M50 22 L50 9" stroke="#1F2228" stroke-width="3.4" stroke-linecap="round"/><circle cx="50" cy="8" r="6.5" fill="#F0A73A" opacity="0.0625"/><circle cx="50" cy="8" r="5" fill="#F0A73A" stroke="#1F2228" stroke-width="2.6"/><path d="M50 22 C83 22 90 29 90 57 C90 85 83 92 50 92 C17 92 10 85 10 57 C10 29 17 22 50 22 Z" fill="url(#lg28done)" stroke="#1F2228" stroke-width="3.4"/><path d="M31 49 Q37 42 43 49" fill="none" stroke="#1F2228" stroke-width="3.6" stroke-linecap="round"/><path d="M57 49 Q63 42 69 49" fill="none" stroke="#1F2228" stroke-width="3.6" stroke-linecap="round"/><path d="M41 61 Q50 70 59 61" fill="none" stroke="#1F2228" stroke-width="3.4" stroke-linecap="round"/><ellipse cx="27" cy="62" rx="5" ry="3" fill="#F2A08A" opacity=".45"/><ellipse cx="73" cy="62" rx="5" ry="3" fill="#F2A08A" opacity=".45"/></svg><div class="bubble">You're all caught up.</div></div>
+<div class="msg me "><div class="bubble">the checkout page crashes on Safari, can someone look</div></div>
+<div class="event "><svg width="16" height="16" viewBox="0 0 20 20" style="flex:none" aria-label="Claude Code"><rect width="20" height="20" rx="6" fill="#D97757"/><path d="M10 4.2v11.6M4.2 10h11.6M5.9 5.9l8.2 8.2M14.1 5.9l-8.2 8.2" stroke="#fff" stroke-width="1.9" stroke-linecap="round"/></svg> Started a thread: <b>Fix Safari checkout crash</b> <span class="ok"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"/></svg></span> Finished <a>View PR #41</a></div>
+<div id="live" style="display:contents"></div></div></div>
+<div class="composer-wrap"><div class="col"><form class="composer" id="composer" onsubmit="return false">
+  <button class="ic" type="button" aria-label="Attach"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+  <input id="box" placeholder="Message Link" aria-label="Message Link" autocomplete="off">
+  <button class="ic" type="button" aria-label="Voice"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+  <button class="send" type="submit" aria-label="Send"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+</form></div></div></div></div>
+<script>
+const $=(s,r=document)=>r.querySelector(s);
+const sc=$('#scroll'), feed=$('#feed');
+const bottom=()=>{ if(sc) sc.scrollTop=sc.scrollHeight; };
+const add=(html,where=feed)=>{ const t=document.createElement('template'); t.innerHTML=html.trim(); const n=t.content.firstElementChild; n.classList.add('fadein'); where.appendChild(n); bottom(); return n; };
+const wait=(ms)=>new Promise(r=>setTimeout(r,ms));
+const LINK="<svg class=\"linkface\" width=\"28\" height=\"28\" viewBox=\"0 0 100 100\" aria-label=\"Link\" role=\"img\" style=\"flex:none\"><defs><linearGradient id=\"lg28idle\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#F7E7CB\"/><stop offset=\"1\" stop-color=\"#EBC896\"/></linearGradient></defs><path d=\"M50 22 L50 9\" stroke=\"#1F2228\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><circle cx=\"50\" cy=\"8\" r=\"6.5\" fill=\"#F0A73A\" opacity=\"0.0625\"/><circle cx=\"50\" cy=\"8\" r=\"5\" fill=\"#F0A73A\" stroke=\"#1F2228\" stroke-width=\"2.6\"/><path d=\"M50 22 C83 22 90 29 90 57 C90 85 83 92 50 92 C17 92 10 85 10 57 C10 29 17 22 50 22 Z\" fill=\"url(#lg28idle)\" stroke=\"#1F2228\" stroke-width=\"3.4\"/><ellipse cx=\"37\" cy=\"48\" rx=\"5.2\" ry=\"6.4\" fill=\"#1F2228\"/><ellipse cx=\"63\" cy=\"48\" rx=\"5.2\" ry=\"6.4\" fill=\"#1F2228\"/><circle cx=\"38.6\" cy=\"45.6\" r=\"1.7\" fill=\"#fff\"/><circle cx=\"64.6\" cy=\"45.6\" r=\"1.7\" fill=\"#fff\"/><path d=\"M44 62 Q50 66 56 62\" fill=\"none\" stroke=\"#1F2228\" stroke-width=\"3.2\" stroke-linecap=\"round\"/><ellipse cx=\"27\" cy=\"62\" rx=\"5\" ry=\"3\" fill=\"#F2A08A\" opacity=\".45\"/><ellipse cx=\"73\" cy=\"62\" rx=\"5\" ry=\"3\" fill=\"#F2A08A\" opacity=\".45\"/></svg>", LINKW="<svg class=\"linkface\" width=\"28\" height=\"28\" viewBox=\"0 0 100 100\" aria-label=\"Link\" role=\"img\" style=\"flex:none\"><defs><linearGradient id=\"lg28waiting\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#F7E7CB\"/><stop offset=\"1\" stop-color=\"#EBC896\"/></linearGradient></defs><path d=\"M50 22 L50 9\" stroke=\"#1F2228\" stroke-width=\"3.4\" stroke-linecap=\"round\"/><circle cx=\"50\" cy=\"8\" r=\"8\" fill=\"#F0A73A\" opacity=\"0.25\"/><circle cx=\"50\" cy=\"8\" r=\"5\" fill=\"#F0A73A\" stroke=\"#1F2228\" stroke-width=\"2.6\"/><path d=\"M50 22 C83 22 90 29 90 57 C90 85 83 92 50 92 C17 92 10 85 10 57 C10 29 17 22 50 22 Z\" fill=\"url(#lg28waiting)\" stroke=\"#1F2228\" stroke-width=\"3.4\"/><ellipse cx=\"37\" cy=\"48\" rx=\"5.2\" ry=\"6.4\" fill=\"#1F2228\"/><ellipse cx=\"63\" cy=\"48\" rx=\"5.2\" ry=\"6.4\" fill=\"#1F2228\"/><circle cx=\"38.6\" cy=\"45.6\" r=\"1.7\" fill=\"#fff\"/><circle cx=\"64.6\" cy=\"45.6\" r=\"1.7\" fill=\"#fff\"/><ellipse cx=\"50\" cy=\"63\" rx=\"4\" ry=\"4.6\" fill=\"#1F2228\"/><ellipse cx=\"27\" cy=\"62\" rx=\"5\" ry=\"3\" fill=\"#F2A08A\" opacity=\".45\"/><ellipse cx=\"73\" cy=\"62\" rx=\"5\" ry=\"3\" fill=\"#F2A08A\" opacity=\".45\"/></svg>", CC="<svg width=\"16\" height=\"16\" viewBox=\"0 0 20 20\" style=\"flex:none\" aria-label=\"Claude Code\"><rect width=\"20\" height=\"20\" rx=\"6\" fill=\"#D97757\"/><path d=\"M10 4.2v11.6M4.2 10h11.6M5.9 5.9l8.2 8.2M14.1 5.9l-8.2 8.2\" stroke=\"#fff\" stroke-width=\"1.9\" stroke-linecap=\"round\"/></svg>";
+const esc=(s)=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const think=async(ms=1100,label='Reading your message')=>{ const n=add('<div class="thinking">'+LINK+'<span class="shimmer">'+label+'</span></div>'); await wait(ms); n.remove(); };
+let runId=0;
+addEventListener('load',bottom);
+
+const live=$('#live');
+
+const go=async()=>{ live.innerHTML=''; runId++; const my=runId; const ok=()=>my===runId;
+  add('<div class="msg me"><div class="bubble">should we drop Safari 16?</div></div>',live); await wait(500); if(!ok())return;
+  await think(1200); if(!ok())return;
+  
+  add('<div class="msg link">'+LINK+'<div class="bubble"><p><b>Not yet.</b> Safari 16 was 3.8% of checkout visits last week, and keeping it costs one small polyfill now that the cart no longer uses <code>structuredClone</code>.</p><p>I\'d look again when it\'s under 2%.</p></div></div>',live);
+  const acts=add('<div class="hoveracts"><button class="ha"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/></svg></button><button class="ha"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 6 6v3"/></svg> Reply</button><button class="ha strong" id="mk"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h5"/></svg> Make it a task</button></div>',live);
+  acts.querySelector('#mk').addEventListener('click',()=>{ acts.remove(); add('<div class="event"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h5"/></svg> Made a task: <b>Decide whether to drop Safari 16</b> <a>Open</a></div>',live); });
+
+};
+$('#replay').addEventListener('click',go); setTimeout(go,400);
+$('#composer').addEventListener('submit',()=>{ $('#box').value=''; go(); });</script></body></html>

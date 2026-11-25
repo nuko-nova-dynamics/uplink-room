@@ -1,0 +1,864 @@
+<title>Board, Machines and Agents</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;500;700&family=Atkinson+Hyperlegible+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400;500;600;700&family=Host+Grotesk:wght@400;500;600&family=Martian+Mono:wdth,wght@87.5,400;87.5,500&family=Familjen+Grotesk:wght@400;500;600&family=Fragment+Mono&family=Atkinson+Hyperlegible+Next:wght@400;500;700&family=Atkinson+Hyperlegible+Mono:wght@400;500&family=Atkinson+Hyperlegible+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: one reading column of decisions. Each decision = context, a dark stage with the real UI (film or live HTML), then choices that save on click. Sticky bar: progress, save state, Send to Claude. */
+:root{
+  --bg:#f6f7f8;--surface:#ffffff;--fg:#15171a;--muted:#5a606a;--line:#e1e4e8;--accent:#2f62d6;--accent-fg:#ffffff;--pick:#e9effc;--ok:#1d7f4f;--warn:#a86200;
+  --stage:#0e1012;
+  --page:"Schibsted Grotesk",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111316;--surface:#181b1f;--fg:#e8e9eb;--muted:#9da2ab;--line:#2a2e34;--accent:#7aa2f7;--accent-fg:#0d1320;--pick:#1b2436;--ok:#4cc28d;--warn:#f2a93b;--stage:#0b0c0e;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111316;--surface:#181b1f;--fg:#e8e9eb;--muted:#9da2ab;--line:#2a2e34;--accent:#7aa2f7;--accent-fg:#0d1320;--pick:#1b2436;--ok:#4cc28d;--warn:#f2a93b;--stage:#0b0c0e;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.55 var(--page);-webkit-font-smoothing:antialiased}
+::selection{background:color-mix(in srgb,var(--accent) 30%,transparent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 96px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid var(--line)}
+.bar-in{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.bar b{font-weight:600}
+.prog{flex:1 1 140px;min-width:100px;height:6px;border-radius:99px;background:var(--line);overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .4s cubic-bezier(.22,1,.36,1)}
+.count,.save{font-size:13px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.save[data-s="ok"]{color:var(--ok)}.save[data-s="err"]{color:var(--warn)}
+.send{font:inherit;font-size:13px;font-weight:600;padding:6px 12px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-fg);cursor:pointer;white-space:nowrap}
+.send:disabled{background:none;color:var(--muted);border-color:var(--line);cursor:default}
+header.top{padding-block:40px 8px}
+h1{font:700 32px/1.12 var(--page);letter-spacing:-.015em;margin:0 0 10px;text-wrap:balance}
+.intro{max-width:64ch;color:var(--muted);margin:0}
+.intro b{color:var(--fg);font-weight:600}
+.q{margin-top:22px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px clamp(16px,3vw,26px) 20px;scroll-margin-top:70px}
+.q[data-answered] .qn{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.qh{display:flex;gap:12px;align-items:flex-start}
+.qn{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:600;font-size:12.5px;border:1.5px solid var(--line);color:var(--muted);margin-top:1px;transition:background .25s,color .25s,border-color .25s}
+.qh h3{font:600 19px/1.3 var(--page);margin:2px 0 4px;text-wrap:balance}
+.ctx{margin:0;color:var(--muted);max-width:66ch}
+.ctx b{color:var(--fg);font-weight:600}
+.stage{margin:16px 0 0;background:var(--stage);border-radius:var(--r);padding:16px;color:#e7e8ea;overflow:hidden}
+.stage img{display:block;width:100%;height:auto;border-radius:6px}
+.stage+.stage{margin-top:10px}
+.slab{color:#e7e8ea;font-size:13px;font-weight:600;margin:0 0 10px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.slab span{color:#989ca4;font:600 12px var(--mono)}
+.slab em{font-style:normal;color:#989ca4;font-weight:400}
+.pending{border:1px dashed #2a2e33;border-radius:8px;padding:28px 16px;text-align:center;color:#989ca4;font-size:13px}
+.opts{display:grid;gap:8px;margin-top:16px}
+.opt{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:start;padding:11px 14px;border:1px solid var(--line);border-radius:var(--r);cursor:pointer;background:var(--surface);transition:background .15s,border-color .15s}
+.opt:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.opt input{margin:4px 0 0;accent-color:var(--accent);width:16px;height:16px}
+.opt .ot{font-weight:600;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline}
+.opt .ok{font:600 12px var(--mono);color:var(--muted)}
+.opt .rec{font-size:11.5px;font-weight:600;color:var(--ok)}
+.opt .od{grid-column:2;color:var(--muted);font-size:14px}
+.opt:has(input:checked){background:var(--pick);border-color:var(--accent)}
+textarea{width:100%;font:14px/1.5 var(--page);color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;resize:vertical;min-height:42px}
+.note{margin-top:12px}
+.note label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+.foot{margin-top:40px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;color:var(--muted);font-size:14px}
+/* --- live inbox rows --- */
+.lv{--bg:#121315;--raised:#18191c;--line2:#26282c;--fg2:#ebecee;--mu:#8f939b;--faint:#5d6168;--wait:#F0A73A;--work:#9DB0D8;--done:#5FC38F;--ui:"Host Grotesk";--mn:"Martian Mono";--rowpad:9px;--fs:13px;--av:20px;
+  background:var(--bg);border:1px solid var(--line2);border-radius:8px;color:var(--fg2);font:400 var(--fs)/1.4 var(--ui),ui-sans-serif,system-ui,sans-serif;overflow:hidden}
+.lv.f-b{--ui:"Familjen Grotesk";--mn:"Fragment Mono"}
+.lv.f-c{--ui:"Atkinson Hyperlegible Next";--mn:"Atkinson Hyperlegible Mono"}
+.lv.d-compact{--rowpad:7px;--fs:12.5px;--av:18px}
+.lv.d-default{--rowpad:11px;--fs:13.5px;--av:22px}
+.lv.d-spacious{--rowpad:15px;--fs:14px;--av:26px}
+.lv .lh{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line2);font-weight:600}
+.lv .lh small{font-weight:400;color:var(--mu)}
+.lv .sec{font-size:11.5px;font-weight:500;color:var(--mu);padding:10px 12px 4px;display:flex;gap:6px;align-items:center}
+.lv .row{display:grid;grid-template-columns:var(--av) minmax(0,1fr) auto;gap:2px 10px;align-items:center;padding:var(--rowpad) 12px;border-top:1px solid color-mix(in srgb,var(--line2) 55%,transparent)}
+.lv .row.focus{background:var(--raised)}
+.lv .av{width:var(--av);height:var(--av);border-radius:50%;display:grid;place-items:center;font-size:9.5px;font-weight:600;background:#2a2c31;color:var(--fg2)}
+.lv .av.sq{border-radius:5px;background:#23262c}
+.lv .t{min-width:0;overflow:hidden}
+.lv .t b{font-weight:500;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lv .t>span{color:var(--mu);font-size:.93em;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lv code,.lv .mn{font:400 .86em var(--mn),ui-monospace,monospace;font-stretch:87.5%}
+.lv .r{display:flex;align-items:center;gap:8px;color:var(--mu);font-size:.9em;white-space:nowrap;font-variant-numeric:tabular-nums}
+.lv .dot{width:8px;height:8px;border-radius:50%;flex:none}
+.lv .kbd{font:500 10.5px var(--ui),ui-sans-serif,sans-serif;color:var(--mu);border:1px solid var(--line2);border-bottom-width:2px;border-radius:4px;padding:0 5px;line-height:15px;min-width:18px;text-align:center;display:inline-block}
+.lv .keys{display:none;gap:14px;padding:8px 12px;border-top:1px solid var(--line2);font-size:11.5px;color:var(--mu);flex-wrap:wrap}
+.lv .keys span{display:inline-flex;gap:6px;align-items:center}
+.lv.k-footer .keys{display:flex}
+.lv .rowkeys{display:none;gap:6px}
+.lv.k-row .row.focus .rowkeys{display:inline-flex}
+.lv .menu{display:none}
+.lv.k-menu .menu{display:block;position:absolute;right:16px;top:58px;background:#1c1e22;border:1px solid var(--line2);border-radius:8px;padding:4px;min-width:170px;box-shadow:0 12px 28px -12px #000}
+.lv .menu div{display:flex;justify-content:space-between;gap:16px;padding:5px 8px;border-radius:5px;font-size:12px}
+.lv .menu div:first-child{background:#26292e}
+.lvwrap{position:relative}
+.steps{color:var(--faint);font-size:.88em;margin-top:2px}
+.bar2{height:3px;border-radius:2px;background:var(--line2);overflow:hidden;margin-top:5px;width:120px}
+.bar2 i{display:block;height:100%;width:40%;background:var(--work);border-radius:2px;animation:prog 9s linear infinite}
+@keyframes prog{from{width:5%}to{width:95%}}
+.arc{width:12px;height:12px;border-radius:50%;border:1.8px solid color-mix(in srgb,var(--work) 30%,transparent);border-top-color:var(--work);animation:spin 1s linear infinite;flex:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.zero{padding:36px 16px;text-align:center;color:var(--mu)}
+.zero b{display:block;color:var(--fg2);font-weight:500;margin-bottom:4px}
+.zero.reward{background:#1b1e24;padding:56px 16px}
+.zero.reward b{font-size:17px}
+.zero .sum{display:flex;justify-content:center;gap:18px;margin-top:10px;font-size:12px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.sw{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.sw i{width:40px;height:28px;border-radius:6px;border:1px solid #ffffff14}
+.cap{color:#989ca4;font-size:12.5px;margin:8px 0 0}
+
+/* --- agents as teammates --- */
+.refrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;align-items:start}
+.refrow figure{margin:0}
+.refrow figcaption{color:#989ca4;font-size:12px;margin-top:6px}
+.refrow img{border-radius:6px;background:#000}
+.gh-sec{font:600 13px var(--page);color:var(--muted);margin:52px 0 0;letter-spacing:.02em}
+.gh-sec+.ctx{margin-top:6px}
+.avs{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px}
+.avc{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 8px;border:1px solid #23262b;border-radius:8px;background:#121315}
+.avc span{font-size:12px;color:#989ca4}
+.ag{position:relative;width:44px;height:44px;border-radius:12px;background:#262a31;display:grid;place-items:center;font:600 13px "Host Grotesk",ui-sans-serif,sans-serif;color:#ebecee}
+.ag::after{content:"";position:absolute;inset:-4px;border-radius:15px;border:2px solid transparent}
+.ag.working::after{border-color:#9DB0D8 transparent transparent transparent;animation:spin 1.6s linear infinite}
+.ag.thinking{animation:breathe 2.4s ease-in-out infinite}
+.ag.waiting::after{border-color:#F0A73A}
+.ag.waiting{animation:nudge 3s cubic-bezier(.22,1,.36,1) infinite}
+.ag.blocked::after{border-color:#EF6F6C;border-style:dashed}
+.ag.done::after{border-color:#5FC38F}
+.ag.done .ck{position:absolute;right:-6px;bottom:-6px;width:16px;height:16px;border-radius:50%;background:#5FC38F;color:#0e1012;font-size:10px;display:grid;place-items:center}
+@keyframes breathe{50%{transform:scale(.94);opacity:.8}}
+@keyframes nudge{0%,70%,100%{transform:none}75%{transform:translateY(-3px)}80%{transform:none}85%{transform:translateY(-2px)}}
+.hov{font-size:11.5px;color:#989ca4;text-align:center;min-height:2.6em}
+.chat{display:flex;flex-direction:column;gap:6px;padding:12px;background:#121315;border:1px solid #23262b;border-radius:8px;font:13px/1.4 "Host Grotesk",ui-sans-serif,sans-serif;color:#ebecee;min-height:250px}
+.chat .meta{align-self:center;color:#6b7078;font-size:11px;margin:4px 0}
+.chat .ev{align-self:center;color:#8f939b;font-size:11.5px;border:1px solid #26282c;border-radius:99px;padding:2px 10px}
+.bub{max-width:82%;padding:7px 11px;border-radius:16px;background:#22252a}
+.bub.me{align-self:flex-end;background:#2f4f8f}
+.bub+.bub.me,.bub.me+.bub.me{margin-top:-2px}
+.rowsx .m{display:grid;grid-template-columns:22px 1fr;gap:8px}
+.rowsx .m b{font-weight:600}.rowsx .m small{color:#6b7078;font-weight:400;margin-left:6px}
+.rowsx .m i{width:22px;height:22px;border-radius:6px;background:#262a31;font:600 9.5px/22px "Host Grotesk",sans-serif;text-align:center;font-style:normal}
+.rowsx .m i.p{border-radius:50%}
+.card{align-self:stretch;border:1px solid #2c3036;border-radius:10px;padding:10px 12px;background:#17191c}
+.card .ch{display:flex;justify-content:space-between;color:#8f939b;font-size:11.5px;margin-bottom:6px}
+.card code{font:11.5px "Martian Mono",ui-monospace,monospace;font-stretch:87.5%;color:#ebecee}
+.card .cb{display:flex;gap:6px;margin-top:9px}
+.card .cb span{font-size:12px;padding:4px 10px;border-radius:6px;border:1px solid #2c3036}
+.card .cb span:first-child{background:#ebecee;color:#121315;border-color:#ebecee;font-weight:600}
+.lvls{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.lvl{border:1px solid #23262b;border-radius:8px;background:#121315;padding:10px;font-size:12px;color:#989ca4}
+.lvl b{display:block;color:#ebecee;font-weight:600;margin-bottom:6px}
+.win{height:84px;border:1px solid #2c3036;border-radius:6px;background:#16181b;position:relative;overflow:hidden}
+.win .tb{height:14px;border-bottom:1px solid #2c3036;display:flex;align-items:center;gap:3px;padding:0 5px}
+.win .tb i{width:5px;height:5px;border-radius:50%;background:#3a3e45}
+.win .tb .ic{margin-left:auto;width:16px;height:8px;border-radius:2px;background:#9DB0D8}
+.win .side{position:absolute;right:0;top:14px;bottom:0;width:42%;background:#23262b;border-left:1px solid #2c3036}
+.win .side::after,.win.full::after{content:"build-linux";position:absolute;left:6px;top:5px;font:9px "Martian Mono",monospace;color:#8f939b}
+.win.full{background:#23262b}
+.win.full .pill{position:absolute;left:6px;bottom:6px;font-size:9.5px;color:#fff;background:#2f62d6;border-radius:99px;padding:1px 7px}
+@media (max-width:620px){.lvls{grid-template-columns:1fr}}
+
+
+.cast{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px}
+.cell{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 6px 10px;border:1px solid #23262b;border-radius:10px;background:#121315}
+.cell span{font-size:12px;color:#989ca4}
+.ch{position:relative;width:76px;height:76px;display:grid;place-items:center}
+.ch img{width:76px;height:76px;transform-origin:50% 90%}
+.ch::after{content:"";position:absolute;inset:-3px;border-radius:50%;border:2px solid transparent;transition:border-color .3s}
+.st-working img{animation:bob 1.6s ease-in-out infinite}
+.st-waiting::after{border-color:#F0A73A}
+.st-waiting img{animation:nudge 3.2s cubic-bezier(.22,1,.36,1) infinite}
+.st-blocked::after{border-color:#EF6F6C;border-style:dashed}
+.st-blocked img{transform:rotate(-6deg) translateY(2px)}
+.st-done::after{border-color:#5FC38F}
+.st-done img{animation:hop 2.8s cubic-bezier(.22,1,.36,1) infinite}
+.lively .st-working img{animation:bobL 1.1s ease-in-out infinite}
+.lively .st-waiting img{animation:nudgeL 2.4s cubic-bezier(.22,1,.36,1) infinite}
+.lively .st-done img{animation:hopL 2.4s cubic-bezier(.22,1,.36,1) infinite}
+.lively .st-idle img{animation:breathe 4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-2px)}}
+@keyframes bobL{25%{transform:translateY(-5px) rotate(-2deg)}75%{transform:translateY(-1px) rotate(2deg)}}
+@keyframes nudge{0%,70%,100%{transform:none}75%{transform:translateY(-4px)}80%{transform:none}85%{transform:translateY(-2px)}}
+@keyframes nudgeL{0%,60%,100%{transform:none}66%{transform:translateY(-9px) rotate(-4deg)}72%{transform:none}78%{transform:translateY(-5px) rotate(3deg)}84%{transform:none}}
+@keyframes hop{0%,30%,100%{transform:none}10%{transform:translateY(-6px)}}
+@keyframes hopL{0%,35%,100%{transform:none}8%{transform:translateY(-12px) scale(1.04,.96)}16%{transform:translateY(0) scale(.97,1.03)}22%{transform:none}}
+@keyframes breathe{50%{transform:scale(1.02,.98)}}
+.seg{display:inline-flex;gap:2px;background:#1b1e22;border:1px solid #2a2e33;border-radius:8px;padding:2px;margin-bottom:12px}
+.seg button{font:inherit;font-size:12.5px;border:0;background:none;color:#989ca4;padding:5px 12px;border-radius:6px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:#2a2e33;color:#e7e8ea}
+.roster{display:grid;gap:2px;max-width:360px;background:#0f1012;border:1px solid #23262b;border-radius:10px;padding:8px;font:13px/1.35 "Atkinson Hyperlegible Next",ui-sans-serif,sans-serif}
+.rr{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:center;padding:5px 6px;border-radius:6px}
+.rr .ch{width:30px;height:30px}.rr .ch img{width:30px;height:30px}.rr .ch::after{inset:-2px;border-width:1.5px}
+.rr b{font-weight:500;color:#ebecee;display:block}.rr small{color:#8f939b;font-size:12px}
+.vec{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;align-items:end}
+.vec figure{margin:0;text-align:center;color:#989ca4;font-size:12px}
+.vec img{display:block;margin:0 auto 6px}
+@media (prefers-reduced-motion:reduce){.ch img{animation:none!important}}
+
+
+.hero{display:grid;grid-template-columns:minmax(0,300px) 1fr;gap:20px;align-items:center}
+.hero .stagec{display:grid;place-items:center;min-height:300px;background:#101215;border:1px solid #1f2226;border-radius:10px}
+.ctl{display:flex;flex-direction:column;gap:12px}
+.ctl .row{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font:inherit;font-size:13px;padding:6px 12px;border-radius:99px;border:1px solid #2a2e33;background:#16181b;color:#e7e8ea;cursor:pointer}
+.pill[aria-pressed="true"]{background:#F0A73A;border-color:#F0A73A;color:#16181b;font-weight:600}
+.pill:focus-visible{outline:2px solid #F0A73A;outline-offset:2px}
+.lab{font-size:12px;color:#989ca4}
+.castg{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}@media (max-width:760px){.castg{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.castg .cell{cursor:pointer;background:#121315;border:1px solid #23262b;border-radius:10px;display:flex;flex-direction:column;align-items:center;padding:8px 6px 10px;color:#989ca4;font-size:12px}
+.castg .cell b{color:#e7e8ea;font-weight:500;font-size:13px}
+.ctx2{display:grid;grid-template-columns:240px 1fr;border:1px solid #23262b;border-radius:10px;overflow:hidden;background:#121315;font:13px/1.35 "Atkinson Hyperlegible Next",ui-sans-serif,sans-serif;color:#ebecee}
+.ctx2 aside{background:#0f1012;border-right:1px solid #23262b;padding:10px 8px;display:flex;flex-direction:column;gap:2px}
+.ctx2 .top{display:flex;align-items:center;gap:8px;padding:2px 6px 10px;font-weight:700}
+.ctx2 .icon{width:30px;height:30px;border-radius:8px;background:#1d2025;border:1px solid #2a2e33;display:grid;place-items:center;overflow:visible}
+.ctx2 .gh{font-size:11.5px;color:#8f939b;padding:10px 6px 4px}
+.ctx2 .rr{display:grid;grid-template-columns:30px 1fr;gap:8px;align-items:center;padding:4px 6px;border-radius:6px}
+.ctx2 .rr small{color:#8f939b;font-size:11.5px;display:block}
+.ctx2 main{display:grid;place-items:center;padding:24px}
+.zero{display:flex;align-items:center;gap:10px;color:#8f939b}
+.zero b{color:#ebecee;font-weight:500}
+.sizes{display:flex;gap:18px;align-items:end;flex-wrap:wrap;color:#989ca4;font-size:12px}
+.sizes div{display:flex;flex-direction:column;align-items:center;gap:6px}
+@media (max-width:620px){.hero,.ctx2{grid-template-columns:1fr}}
+
+body.hide-done .q[data-answered]{display:none}
+@media (prefers-reduced-motion:reduce){.arc,.bar2 i{animation:none}.prog i{transition:none}}
+@media (max-width:620px){.bar b{display:none}}
+</style>
+
+<div class="bar"><div class="bar-in">
+  <b>Round 8</b>
+  <div class="prog" aria-hidden="true"><i id="progbar"></i></div>
+  <span class="count" id="count">0 of 0 answered</span>
+  <span class="save" id="save" data-s="idle">Connecting</span>
+  <button class="send" type="button" id="sendTop" disabled>Send answers to Claude</button>
+</div></div>
+
+<style>
+/* Round 8: board, machine settings, agent builder. Graphite + amber, Atkinson Hyperlegible, the code-built cast. */
+.r8{--bg:#121315;--side:#0f1012;--raised:#18191c;--hover:#1d1f22;--line:#26282c;--fg:#ebecee;--mu:#8f939b;--faint:#5d6168;--amber:#F0A73A;--work:#9DB0D8;--done:#5FC38F;--fail:#EF6F6C;
+  font:13px/1.45 "Atkinson Hyperlegible Next",ui-sans-serif,system-ui,sans-serif;color:var(--fg)}
+.r8 .mono{font-family:"Atkinson Hyperlegible Mono",ui-monospace,monospace}
+.r8 button{font:inherit;color:inherit;cursor:pointer}
+.r8 :focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.win8{background:var(--bg);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.wh8{display:flex;align-items:center;gap:10px;height:46px;padding:0 14px;border-bottom:1px solid var(--line)}
+.wh8 b{font-size:14px}
+.wh8 .grow{flex:1}
+.b8{height:30px;padding:0 12px;border-radius:7px;border:1px solid var(--line);background:var(--raised);font-size:12.5px}
+.b8.pri{background:var(--fg);color:#121315;border-color:var(--fg);font-weight:700}
+.b8:disabled{opacity:.45;cursor:default}
+.scroll8{overflow-x:auto}
+/* board */
+.board{display:grid;grid-template-columns:repeat(4,minmax(170px,1fr));gap:10px;padding:12px;min-width:740px}
+.col8{background:#0f1012;border:1px solid #1f2125;border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:8px;min-height:300px}
+.colh{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--mu);padding:2px 4px 4px}
+.colh b{color:var(--fg);font-weight:600}
+.colh .n8{margin-left:auto}
+.sdot{width:8px;height:8px;border-radius:50%;flex:none}
+.tcard{background:var(--raised);border:1px solid var(--line);border-radius:9px;padding:9px 10px;display:flex;flex-direction:column;gap:7px}
+.tcard .tt{font-weight:600;line-height:1.3}
+.tcard .meta{display:flex;align-items:center;gap:6px;color:var(--mu);font-size:12px}
+.face8{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:9.5px;font-weight:700;color:#0f1012;flex:none}
+.runs8{display:flex;gap:6px;flex-wrap:wrap}
+.run8{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--mu);border:1px solid var(--line);border-radius:99px;padding:1px 8px 1px 2px}
+.hm8{width:20px;height:20px;border-radius:6px;background:#23262b;border:1px solid #33373e;display:grid;place-items:center}
+.hm8 svg{width:12px;height:12px;color:#c9ccd1}
+.emp{color:var(--faint);font-size:12px;padding:4px}
+/* machine */
+.mtabs{display:flex;gap:2px;margin-left:8px}
+.mtabs button{border:0;background:none;color:var(--mu);font-size:12.5px;padding:5px 10px;border-radius:6px}
+.mtabs button[aria-pressed="true"]{background:var(--hover);color:var(--fg)}
+.mgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0}
+.mset{padding:14px 16px;display:flex;flex-direction:column;gap:16px;border-right:1px solid var(--line)}
+.mset h6{margin:0 0 6px;font-size:12px;color:var(--mu);font-weight:600}
+.lvls8{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:#0f1012;border:1px solid var(--line);border-radius:9px;padding:3px}
+.lvls8 button{border:0;background:none;border-radius:7px;padding:6px 4px;font-size:12.5px;color:var(--mu)}
+.lvls8 button[aria-pressed="true"]{background:var(--fg);color:#121315;font-weight:700}
+.lvdesc{margin-top:6px;color:var(--mu);font-size:12px;min-height:2.6em}
+.step{display:flex;align-items:center;gap:8px}
+.step button{width:30px;height:30px;border-radius:7px;border:1px solid var(--line);background:var(--raised);font-size:15px}
+.step .v{min-width:24px;text-align:center;font-weight:700;font-size:15px}
+.sel8{height:30px;border-radius:7px;border:1px solid var(--line);background:var(--raised);color:var(--fg);padding:0 8px;font:inherit;font-size:12.5px}
+.terms{padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.terms h6{margin:0;font-size:12px;color:var(--mu);font-weight:600}
+.trow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;align-items:center;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:var(--raised)}
+.trow .nm8{font-family:"Atkinson Hyperlegible Mono",monospace;font-size:12px}
+.trow .sub8{grid-column:1;color:var(--mu);font-size:12px;display:flex;gap:6px;align-items:center}
+.acc8{grid-row:1/3;grid-column:2;display:inline-flex;align-items:center;gap:5px;font-size:12px;border:1px solid var(--line);border-radius:99px;padding:2px 9px;white-space:nowrap;transition:background .3s,border-color .3s}
+.acc8.cl{border-color:var(--amber);color:var(--amber)}
+.acc8 svg{width:12px;height:12px}
+.slotsbar{display:flex;gap:4px;margin-top:6px}
+.slotsbar i{width:22px;height:8px;border-radius:3px;background:#2a2e33}
+.slotsbar i.use{background:var(--work)}
+/* builder */
+.bld{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:440px}
+.prev8{background:#0f1012;border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:14px}
+.prev8 .pn{font-weight:700;font-size:16px}
+.prev8 .ps{color:var(--mu);font-size:12px}
+.form8{padding:14px 16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.form8 h6{margin:0 0 6px;font-size:12px;color:var(--mu);font-weight:600}
+.in8{height:32px;border-radius:7px;border:1px solid var(--line);background:#0f1012;color:var(--fg);padding:0 10px;font:inherit;width:100%;max-width:280px}
+.opts8{display:flex;flex-wrap:wrap;gap:6px}
+.opts8 button{border:1px solid var(--line);background:var(--raised);border-radius:8px;padding:4px;display:grid;place-items:center}
+.opts8 button[aria-pressed="true"]{border-color:var(--amber);box-shadow:0 0 0 1px var(--amber)}
+.opts8 .txt{padding:5px 10px;font-size:12.5px}
+.sw8{width:26px;height:26px;border-radius:50%;border:2px solid #0000}
+.chk8{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 14px}
+.chk8 label{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;cursor:pointer}
+.chk8 input{accent-color:var(--amber);margin-top:2px}
+.chk8 small{display:block;color:var(--mu);font-size:11.5px}
+.acct{display:flex;align-items:center;gap:8px;color:var(--mu);font-size:12.5px;border-top:1px solid var(--line);padding-top:12px;flex-wrap:wrap}
+.acct .grow{flex:1}
+.rost8{display:flex;gap:12px;flex-wrap:wrap;padding:12px 16px;border-top:1px solid var(--line);align-items:end;min-height:92px}
+.rost8 span{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11.5px;color:var(--mu)}
+@media (max-width:720px){.mgrid,.bld{grid-template-columns:1fr}.mset{border-right:0;border-bottom:1px solid var(--line)}.prev8{border-right:0;border-bottom:1px solid var(--line)}.chk8{grid-template-columns:1fr}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-term" viewBox="0 0 16 16"><rect x="2" y="3" width="12" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M5 6.5l2 1.6-2 1.6M8.5 10h2.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-eye" viewBox="0 0 16 16"><path d="M1.5 8s2.4-4.5 6.5-4.5S14.5 8 14.5 8 12.1 12.5 8 12.5 1.5 8 1.5 8z" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="8" r="2" fill="currentColor"/></symbol>
+<symbol id="i-sug" viewBox="0 0 16 16"><path d="M2.5 4.5h11v6h-6l-3 2.5v-2.5h-2z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+<symbol id="i-wheel" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.75" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="8" r="1.6" fill="currentColor"/><path d="M2.4 7.2C4.4 6.6 6.2 6.4 8 6.4s3.6.2 5.6.8M8 9.6v4.1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+<symbol id="i-open" viewBox="0 0 16 16"><circle cx="5" cy="6" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="11" cy="6" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M1.8 13c.5-2 1.7-3 3.2-3s2.7 1 3.2 3M7.8 13c.5-2 1.7-3 3.2-3s2.7 1 3.2 3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+</defs></svg>
+
+<div class="wrap r8">
+<header class="top">
+  <h1>The board, machines, and adding an agent</h1>
+  <p class="intro">The last screens before building: a project's board, a machine's settings with access levels and slots, and the flow for adding an agent, where its owner builds its character from the system. Everything here follows <code>DESIGN.md</code> and the glossary. Press <b>Send answers to Claude</b> when you're done.</p>
+</header>
+
+<article class="q" id="h01"><div class="qh"><span class="qn">1</span><div><h3>A project's board</h3>
+<p class="ctx">Reef Runner's tasks. The research notes said "status comes from the runs' state, so nobody drags cards", so the columns are the run states and cards move on their own. Click <b>A run changes</b> to watch one move.</p></div></div>
+<div class="stage"><div class="win8"><div class="wh8"><b>Reef Runner</b><span style="color:#8f939b">Board</span><span class="grow"></span><button class="b8" type="button" id="simRun">A run changes</button></div>
+<div class="scroll8"><div class="board" id="board"></div></div></div></div>
+<div class="opts" data-q="h01"></div></article>
+
+<article class="q" id="h02"><div class="qh"><span class="qn">2</span><div><h3>What a card shows</h3>
+<p class="ctx">Each card above shows the task's owner and its runs, each run as the agent's character or the harness's mark with its state. The alternative is a count ("3 runs").</p></div></div>
+<div class="opts" data-q="h02"></div></article>
+
+<article class="q" id="h03"><div class="qh"><span class="qn">3</span><div><h3>A machine's settings</h3>
+<p class="ctx">Set by whoever the machine belongs to. Change the most open access: terminals above the new limit drop to it, marked in amber. Change the slots: terminals anyone may start without asking.</p></div></div>
+<div class="stage"><div class="win8"><div class="wh8"><b class="mono" id="mName">build-linux</b><span style="color:#8f939b" id="mOwner">Team machine</span><div class="mtabs" role="group" aria-label="Machine"><button type="button" data-m="team" aria-pressed="true">build-linux</button><button type="button" data-m="mine" aria-pressed="false">julio-mbp</button></div></div>
+<div class="mgrid"><div class="mset">
+ <div><h6>Most open access allowed</h6><div class="lvls8" id="lvls"></div><div class="lvdesc" id="lvdesc"></div></div>
+ <div><h6>Slots</h6><div class="step"><button type="button" id="sMinus" aria-label="Fewer slots">−</button><span class="v" id="sVal">3</span><button type="button" id="sPlus" aria-label="More slots">+</button><span style="color:#8f939b;font-size:12px" id="sUse">2 in use</span></div><div class="slotsbar" id="sBar"></div></div>
+ <div><h6>Profiles</h6><select class="sel8" id="prof"><option>Off: everyone uses the machine setup</option><option selected>Allowed, up to 7 days</option><option>Allowed, up to 30 days</option><option>Allowed, until the person removes it</option></select></div>
+</div>
+<div class="terms"><h6>Live terminals</h6><div id="terms"></div></div></div></div></div>
+<div class="opts" data-q="h03"></div></article>
+
+<article class="q" id="h04"><div class="qh"><span class="qn">4</span><div><h3>When the owner lowers the limit</h3>
+<p class="ctx">Above, lowering the most open access drops running terminals to the new limit right away. The bridge enforces it on the machine either way (ADR 0002).</p></div></div>
+<div class="opts" data-q="h04"></div></article>
+
+<article class="q" id="h05"><div class="qh"><span class="qn">5</span><div><h3>Adding an agent</h3>
+<p class="ctx">The person adding it builds its character from the system (round 3), picks what it may do, and stays accountable for it. Pick a body, a color and a tool; the preview cycles its states, so you see the tool come out when it works. Then <b>Add to team</b>.</p></div></div>
+<div class="stage"><div class="win8"><div class="wh8"><b>Add an agent</b><span style="color:#8f939b">Nuko Nova</span></div>
+<div class="bld"><div class="prev8"><div id="prevHost"></div><div class="pn" id="pName">Lookout</div><div class="ps" id="pState">idle</div></div>
+<div class="form8">
+ <div><h6>Name</h6><input class="in8" id="aName" value="Lookout" maxlength="24" aria-label="Agent name"></div>
+ <div><h6>Connects over</h6><div class="opts8" id="conn"></div></div>
+ <div><h6>Body</h6><div class="opts8" id="bodies"></div></div>
+ <div><h6>Color</h6><div class="opts8" id="colors"></div></div>
+ <div><h6>Tool</h6><div class="opts8" id="tools"></div></div>
+ <div><h6>What it may do</h6><div class="chk8" id="scopes"></div></div>
+ <div class="acct"><span class="face8" style="background:#7FA6E8">J</span><span>Added by Julio. It can do at most what you can, and you're accountable for it.</span><span class="grow"></span><button class="b8 pri" type="button" id="addAgent">Add to team</button></div>
+</div></div>
+<div class="rost8" id="rost"></div></div></div>
+<div class="opts" data-q="h05"></div></article>
+
+<article class="q" id="h06"><div class="qh"><span class="qn">6</span><div><h3>Can an agent answer approvals?</h3>
+<p class="ctx">Grok Bot lets a coordinating Bot route work so the person isn't a dispatcher. Muse keeps a person on anything hard to undo. A Chief of staff agent could clear routine approvals.</p></div></div>
+<div class="opts" data-q="h06"></div></article>
+
+<div class="foot"><button class="send" type="button" id="sendBottom" disabled>Send answers to Claude</button><span id="sendNote">Checking whether Claude can be reached from here.</span></div>
+</div>
+<script>
+/* Uplink Room character rig. Every character is one SVG built from numbers:
+   a superellipse body (width, height, roundness, top taper), two parametric eyes,
+   brows, a mouth, cheeks and, for Link, an antenna. States set target numbers;
+   springs carry every number there, so states and shapes morph into each other. */
+(function () {
+  const NS = 'http://www.w3.org/2000/svg', TAU = Math.PI * 2;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+  const BODIES = {
+    link:     { w: 128, h: 116, n: 4.2, taper: 1,    c1: '#F7E7CB', c2: '#EBC896', faceDy: -4,  antenna: 1 },
+    notetaker:{ w: 120, h: 112, n: 4.6, taper: 1,    c1: '#B5CBA3', c2: '#93AD81', faceDy: -4,  antenna: 0 },
+    deploy:   { w: 86,  h: 136, n: 3.0, taper: 1,    c1: '#7E9DEB', c2: '#5878D2', faceDy: -14, antenna: 0 },
+    hermes:   { w: 142, h: 124, n: 2.3, taper: 0.16, c1: '#F09A85', c2: '#D9725F', faceDy: 14,  antenna: 0 },
+    scribe:   { w: 122, h: 122, n: 2.0, taper: 1,    c1: '#BDA8EA', c2: '#987FD6', faceDy: -4,  antenna: 0 },
+    chief:    { w: 88,  h: 142, n: 6.0, taper: 1,    c1: '#F0DDBC', c2: '#D9BE93', faceDy: -18, antenna: 0 },
+    watch:    { w: 140, h: 108, n: 2.6, taper: 1,    c1: '#F6CD6E', c2: '#E2AC43', faceDy: -2,  antenna: 0 }
+  };
+
+  // Face poses per state. rx/ry: eye size. kt/kb: top and bottom lid curvature
+  // (kb below 0 bends the lower edge up into a happy crescent). tilt: inner corners up.
+  const POSES = {
+    idle:    { rx: 12.5, ry: 15,  kt: 1,   kb: 1,    tilt: 0,   lx: 0,  ly: 0,  brow: 0,   browT: 0,   mw: 18, mc: 6,  mo: 0,  cheek: .35, glow: .12, bend: 4,  sy: 1,   rot: 0 },
+    working: { rx: 13,   ry: 10,  kt: .75, kb: 1,    tilt: -5,  lx: -2, ly: 3,  brow: .75, browT: -10, mw: 11, mc: 1,  mo: 0,  cheek: .25, glow: .35, bend: 2,  sy: 1,   rot: 0 },
+    waiting: { rx: 14,   ry: 18,  kt: 1,   kb: 1,    tilt: 0,   lx: 0,  ly: -1, brow: .55, browT: 8,   mw: 10, mc: 2,  mo: 6,  cheek: .3,  glow: 1,   bend: 0,  sy: 1,   rot: 0 },
+    blocked: { rx: 12,   ry: 14,  kt: 1,   kb: 1,    tilt: 14,  lx: 0,  ly: 2,  brow: 1,   browT: 18,  mw: 16, mc: -6, mo: 0,  cheek: .08, glow: .04, bend: 20, sy: .97, rot: -4 },
+    done:    { rx: 13,   ry: 11,  kt: 1,   kb: -.55, tilt: 0,   lx: 0,  ly: -1, brow: 0,   browT: 0,   mw: 26, mc: 10, mo: 10, cheek: .6,  glow: .3,  bend: 3,  sy: 1,   rot: 0 }
+  };
+
+  // One accessory per agent, drawn in the same cel style: a fill, an ink outline, one highlight.
+  // Each part sits at an anchor given in body-relative units and rotates with the body.
+  const INK = '#1F2228';
+  // An agent takes its accessory out while it is active and puts it away when idle or done.
+  const ACTIVE = new Set(['working', 'waiting', 'blocked']);
+  const ACC = {
+    notetaker: [
+      { layer: 'front', band: true, from: [0, -26] },
+      { layer: 'front', at: (w, h) => [-w / 2 - 1, -4], from: [0, -26], svg: `<rect x="-9" y="-16" width="18" height="32" rx="8" fill="#4B505A" stroke="${INK}" stroke-width="3.2"/><rect x="-4.5" y="-10" width="5" height="20" rx="2.5" fill="#6E747F"/>` },
+      { layer: 'front', at: (w, h) => [w / 2 + 1, -4], from: [0, -26], svg: `<rect x="-9" y="-16" width="18" height="32" rx="8" fill="#4B505A" stroke="${INK}" stroke-width="3.2"/><rect x="-0.5" y="-10" width="5" height="20" rx="2.5" fill="#6E747F"/>` }
+    ],
+    deploy: [
+      { layer: 'back', at: (w, h) => [w / 2 - 2, -h / 2 + 18], rot: 36, k: 1.75, from: [-18, 30], svg: `<rect x="-5" y="-4" width="10" height="46" rx="5" fill="#C9CED6" stroke="${INK}" stroke-width="3.2"/><path d="M-6 -2 L-11 -8 A13 13 0 0 1 -6 -26 L-6 -16 L6 -16 L6 -26 A13 13 0 0 1 11 -8 L6 -2 Z" fill="#C9CED6" stroke="${INK}" stroke-width="3.2" stroke-linejoin="round"/><rect x="-2" y="4" width="3" height="30" rx="1.5" fill="#EEF1F5"/>` }
+    ],
+    hermes: [ { layer: 'front', glasses: true, from: [0, -30] } ],
+    scribe: [
+      { layer: 'back', at: (w, h) => [w * 0.22, -h / 2 + 14], rot: 26, k: 1.45, from: [-10, 34], svg: `<rect x="-5.5" y="-40" width="11" height="44" fill="#F2C14E" stroke="${INK}" stroke-width="3.2"/><path d="M-5.5 -40L0 -54L5.5 -40Z" fill="#F4D9A8" stroke="${INK}" stroke-width="3.2" stroke-linejoin="round"/><path d="M-1.8 -49.5L0 -54L1.8 -49.5Z" fill="${INK}"/><rect x="-2" y="-36" width="3" height="34" fill="#F8DA8A"/>` }
+    ],
+    chief: [
+      { layer: 'front', at: (w, h) => [w / 2 - 6, h / 2 - 32], rot: 9, k: 1.4, from: [10, 40], svg: `<rect x="-16" y="-20" width="32" height="40" rx="3.5" fill="#B07D45" stroke="${INK}" stroke-width="3.2"/><rect x="-11" y="-13" width="22" height="28" rx="1.5" fill="#F3EEE4"/><rect x="-7" y="-24" width="14" height="7" rx="2" fill="#9AA1AB" stroke="${INK}" stroke-width="2.6"/><path d="M-7 -5h14M-7 1h14M-7 7h9" stroke="#9AA1AB" stroke-width="2.2" stroke-linecap="round"/>` }
+    ],
+    watch: [
+      { layer: 'front', at: (w, h) => [w / 2 + 12, 2], k: 1.55, from: [26, -18], swing: true, svg: `<circle cx="0" cy="10" r="15" fill="#FFC961" opacity=".28"/><path d="M-6 -6a6 6 0 0 1 12 0" fill="none" stroke="${INK}" stroke-width="3"/><rect x="-9" y="-4" width="18" height="24" rx="4" fill="#3E434C" stroke="${INK}" stroke-width="3.2"/><rect x="-5" y="0" width="10" height="15" rx="2.5" fill="#FFD27A"/><rect x="-3" y="1.5" width="2.5" height="9" rx="1.2" fill="#FFF1C9"/>` }
+    ]
+  };
+  const KEYS = Object.keys(POSES.idle);
+
+  function el(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+  let uid = 0;
+
+  class Char {
+    constructor(host, opts = {}) {
+      this.kind = opts.kind || 'link';
+      this.accKind = opts.acc || null; // an accessory set chosen apart from the body (used by the agent builder)
+      this.state = opts.state || 'idle';
+      this.lively = opts.lively !== false;
+      this.size = opts.size || 160;
+      this.seed = Math.random() * 100;
+      const id = 'c' + (++uid);
+      const svg = el('svg', { viewBox: '0 0 200 200', width: this.size, height: this.size, role: 'img', 'aria-label': opts.label || this.kind });
+      svg.style.overflow = 'visible';
+      const defs = el('defs', {}, svg);
+      this.grad = el('linearGradient', { id: id + 'g', x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+      this.s1 = el('stop', { offset: '0' }, this.grad); this.s2 = el('stop', { offset: '1' }, this.grad);
+      const blur = el('filter', { id: id + 'b', x: '-1', y: '-1', width: '3', height: '3' }, defs);
+      el('feGaussianBlur', { stdDeviation: 6 }, blur);
+      this.shadow = el('ellipse', { cx: 100, cy: 172, rx: 50, ry: 6, fill: '#000', opacity: .22 }, svg);
+      this.g = el('g', {}, svg);
+      this.stalkO = el('path', { fill: 'none', stroke: '#7A4E1E', 'stroke-width': 9, 'stroke-linecap': 'round' }, this.g);
+      this.stalk = el('path', { fill: 'none', stroke: '#E8AE55', 'stroke-width': 4.5, 'stroke-linecap': 'round' }, this.g);
+      this.halo = el('circle', { r: 16, fill: '#F0A73A', filter: `url(#${id}b)` }, this.g);
+      this.dot = el('circle', { r: 8.5, fill: '#F0A73A', stroke: '#7A4E1E', 'stroke-width': 3.5 }, this.g);
+      this.accBack = el('g', {}, this.g);
+      this.clip = el('clipPath', { id: id + 'k' }, defs); this.clipP = el('path', {}, this.clip);
+      this.bodyG = el('g', { 'clip-path': `url(#${id}k)` }, this.g);
+      this.shade = el('path', {}, this.bodyG); this.lit = el('path', {}, this.bodyG);
+      this.hiB = el('ellipse', {}, this.bodyG);
+      this.outline = el('path', { fill: 'none', 'stroke-width': 4.5, 'stroke-linejoin': 'round' }, this.g);
+      this.cheekL = el('ellipse', { rx: 11, ry: 6.5, fill: '#F28B7E' }, this.g);
+      this.cheekR = el('ellipse', { rx: 11, ry: 6.5, fill: '#F28B7E' }, this.g);
+      this.browL = el('path', { fill: 'none', stroke: '#3A2A1C', 'stroke-width': 3.2, 'stroke-linecap': 'round' }, this.g);
+      this.browR = el('path', { fill: 'none', stroke: '#3A2A1C', 'stroke-width': 3.2, 'stroke-linecap': 'round' }, this.g);
+      this.eyeL = el('path', { fill: '#2B1D12' }, this.g);
+      this.eyeR = el('path', { fill: '#2B1D12' }, this.g);
+      this.hiL = el('circle', { fill: '#fff' }, this.g); this.hiR = el('circle', { fill: '#fff' }, this.g);
+      this.mouth = el('path', { fill: '#3A2416', stroke: '#3A2416', 'stroke-width': 3.4, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, this.g);
+      this.accFront = el('g', {}, this.g);
+      this.parts = [];
+      for (const kind in ACC) for (const part of ACC[kind]) {
+        const parent = part.layer === 'back' ? this.accBack : this.accFront;
+        const g = el('g', {}, parent), rec = { kind, part, g };
+        if (part.svg) g.innerHTML = part.svg;
+        if (part.band) { rec.bo = el('path', { fill: 'none', stroke: INK, 'stroke-width': 10, 'stroke-linecap': 'round' }, g); rec.bi = el('path', { fill: 'none', stroke: '#5A606B', 'stroke-width': 4.5, 'stroke-linecap': 'round' }, g); }
+        if (part.glasses) { rec.gl = el('circle', { fill: 'rgba(255,255,255,.14)', stroke: '#3A2416', 'stroke-width': 3.4 }, g); rec.gr = el('circle', { fill: 'rgba(255,255,255,.14)', stroke: '#3A2416', 'stroke-width': 3.4 }, g); rec.br = el('path', { fill: 'none', stroke: '#3A2416', 'stroke-width': 3.4, 'stroke-linecap': 'round' }, g); }
+        this.parts.push(rec);
+      }
+      host.appendChild(svg);
+      this.svg = svg;
+      // spring state
+      const b = BODIES[this.kind], p = POSES[this.state];
+      this.cur = {}; this.vel = {};
+      const init = { ...p, w: b.w, h: b.h, n: b.n, taper: b.taper, faceDy: b.faceDy, ant: b.antenna, y: 0, sx: 1, ...this.cols(b), ...this.accT() };
+      for (const k in init) { this.cur[k] = init[k]; this.vel[k] = 0; }
+      this.blinkAt = 1 + Math.random() * 3; this.blink = 0; this.enteredAt = 0; this.t = 0;
+      Char.all.push(this);
+    }
+    accT() { const on = ACTIVE.has(this.state), ak = this.accKind || this.kind, o = {}; for (const k in ACC) o['acc_' + k] = (k === ak && on) ? 1 : 0; return o; }
+    setAcc(a) { this.accKind = a; }
+    cols(b) { const a = hex(b.c1), c = hex(b.c2); return { r1: a[0], g1: a[1], b1: a[2], r2: c[0], g2: c[1], b2: c[2] }; }
+    setState(s) { if (s === this.state) return; this.state = s; this.enteredAt = this.t; if (!reduce) { this.vel.sy = (this.vel.sy || 0) - 2.2; this.vel.y = (this.vel.y || 0) - 60; } }
+    setKind(k) { if (k === this.kind) return; this.kind = k; if (!reduce) this.vel.sx = (this.vel.sx || 0) + 1.5; }
+    targets() {
+      const b = BODIES[this.kind], p = POSES[this.state], t = this.t - this.enteredAt, T = this.t + this.seed;
+      const o = { ...p, w: b.w, h: b.h, n: b.n, taper: b.taper, faceDy: b.faceDy, ant: b.antenna, y: 0, sx: 1, ...this.cols(b), ...this.accT() };
+      if (reduce) return o;
+      const L = this.lively ? 1 : 0.45;
+      switch (this.state) {
+        case 'idle':
+          o.sy = 1 + 0.018 * Math.sin(T * 1.7) * L; o.lx = 2.2 * Math.sin(T * 0.45) * L; o.ly = 0.8 * Math.sin(T * 0.3);
+          break;
+        case 'working': {
+          o.y = -2.6 * Math.abs(Math.sin(T * 6.2)) * L; o.rot = 2.2 * Math.sin(T * 3.1) * L;
+          const scan = (T * 0.9) % 1; o.lx = -4 + 8 * scan; o.ly = 3; o.glow = .3 + .1 * Math.sin(T * 4);
+          break; }
+        case 'waiting': {
+          const ph = (T % 2.6) / 2.6;
+          const hop = ph < .12 ? Math.sin(ph / .12 * Math.PI) : (ph > .18 && ph < .28 ? .55 * Math.sin((ph - .18) / .1 * Math.PI) : 0);
+          o.y = -14 * hop * L; o.rot = (ph < .28 ? 5 * Math.sin(ph / .28 * TAU) : 0) * L;
+          o.glow = .75 + .25 * Math.sin(T * 5); o.sy = 1 + (hop > 0 ? .04 * hop : 0) * L;
+          break; }
+        case 'blocked':
+          o.rot = -4 + 3 * Math.sin(T * 1.3) * L; o.lx = 1.5 * Math.sin(T * .8);
+          if ((T % 4.2) < .25) o.sx = 1 + .03 * Math.sin(T * 60) * L;
+          break;
+        case 'done':
+          o.rot = 2.4 * Math.sin(T * 1.6) * L; o.y = t < .5 ? -18 * Math.sin(t / .5 * Math.PI) * L : 0;
+          break;
+      }
+      return o;
+    }
+    step(dt) {
+      this.t += dt;
+      const tg = this.targets();
+      if (reduce) {
+        // Reduced motion: no springs, every number goes straight to its target.
+        for (const key in tg) { this.cur[key] = tg[key]; this.vel[key] = 0; }
+      } else {
+        // Springs, integrated in small fixed substeps so a slow frame can't make them diverge.
+        const k = 190, c = 17, steps = Math.max(1, Math.ceil(dt / (1 / 240))), h = dt / steps;
+        for (const key in tg) if (this.cur[key] === undefined) { this.cur[key] = tg[key]; this.vel[key] = 0; }
+        for (let i = 0; i < steps; i++) for (const key in tg) {
+          const a = (tg[key] - this.cur[key]) * k - this.vel[key] * c;
+          this.vel[key] += a * h; this.cur[key] += this.vel[key] * h;
+        }
+      }
+      // blink
+      if (this.state !== 'done' && this.t > this.blinkAt) { this.blink = 1; this.blinkAt = this.t + 2.4 + Math.random() * 3.2; }
+      this.blink = Math.max(0, this.blink - dt * 7);
+      this.draw();
+    }
+    draw() {
+      const p = this.cur, cx = 100, bottom = 168 + p.y;
+      const w = p.w * p.sx, h = p.h * clamp(p.sy, .8, 1.2), n = clamp(p.n, 1.6, 9);
+      const cy = bottom - h / 2;
+      // local frame: origin at the body's bottom center, rotated by p.rot; y given relative to body center
+      const rad = p.rot * Math.PI / 180, cr = Math.cos(rad), sr = Math.sin(rad);
+      const P = (x, y) => { const Y = y - h / 2; return [cx + x * cr - Y * sr, bottom + x * sr + Y * cr]; };
+      // body
+      const N = 96, pts = [];
+      for (let i = 0; i < N; i++) {
+        const t = i / N * TAU, co = Math.cos(t), si = Math.sin(t);
+        let x = Math.sign(co) * Math.pow(Math.abs(co), 2 / n) * w / 2;
+        const y = Math.sign(si) * Math.pow(Math.abs(si), 2 / n) * h / 2;
+        const up = Math.max(0, -y / (h / 2)); x *= 1 - (1 - clamp(p.taper, .05, 1)) * Math.pow(up, 0.85);
+        pts.push(P(x, y));
+      }
+      const toD = arr => arr.map(([X, Y], i) => (i ? 'L' : 'M') + X.toFixed(2) + ' ' + Y.toFixed(2)).join('') + 'Z';
+      const d = toD(pts);
+      // cel shading: the light is fixed up-left in the scene, so the hard shadow band
+      // slides across the body as the character tilts and hops.
+      const [bcx, bcy] = P(0, 0), ox = -w * 0.11, oy = -h * 0.13;
+      const litD = toD(pts.map(([X, Y]) => [bcx + (X - bcx) * 0.95 + ox, bcy + (Y - bcy) * 0.95 + oy]));
+      this.clipP.setAttribute('d', d); this.shade.setAttribute('d', d); this.lit.setAttribute('d', litD);
+      const c1 = [p.r1, p.g1, p.b1], c2 = [p.r2, p.g2, p.b2];
+      const rgb = c => `rgb(${clamp(c[0], 0, 255) | 0},${clamp(c[1], 0, 255) | 0},${clamp(c[2], 0, 255) | 0})`;
+      this.lit.setAttribute('fill', rgb(c1)); this.shade.setAttribute('fill', rgb(c2));
+      this.hiB.setAttribute('fill', rgb(c1.map(v => v + (255 - v) * 0.55)));
+      this.hiB.setAttribute('cx', (bcx - w * 0.22).toFixed(1)); this.hiB.setAttribute('cy', (bcy - h * 0.27).toFixed(1));
+      this.hiB.setAttribute('rx', (w * 0.13).toFixed(1)); this.hiB.setAttribute('ry', (h * 0.065).toFixed(1));
+      this.hiB.setAttribute('transform', `rotate(-28 ${(bcx - w * 0.22).toFixed(1)} ${(bcy - h * 0.27).toFixed(1)})`);
+      this.outline.setAttribute('d', d); this.outline.setAttribute('stroke', rgb(c2.map(v => v * 0.5)));
+      const lift = clamp(-p.y / 20, 0, 1);
+      this.shadow.setAttribute('rx', (w * 0.42 * (1 - .3 * lift)).toFixed(1));
+      this.shadow.setAttribute('opacity', (.22 * (1 - .5 * lift)).toFixed(2));
+      // antenna
+      const ant = clamp(p.ant, 0, 1);
+      const topY = -h / 2, baseL = P(6, topY + 3);
+      const tip = P(14 + p.bend * .8, topY - 28 + p.bend * .9), ctrl = P(10 + p.bend * .2, topY - 16);
+      this.stalk.setAttribute('d', `M${baseL[0].toFixed(1)} ${baseL[1].toFixed(1)} Q${ctrl[0].toFixed(1)} ${ctrl[1].toFixed(1)} ${tip[0].toFixed(1)} ${tip[1].toFixed(1)}`);
+      this.stalk.setAttribute('opacity', ant); this.stalkO.setAttribute('d', this.stalk.getAttribute('d')); this.stalkO.setAttribute('opacity', ant);
+      for (const c of [this.dot, this.halo]) { c.setAttribute('cx', tip[0].toFixed(1)); c.setAttribute('cy', tip[1].toFixed(1)); }
+      const g = clamp(p.glow, 0, 1);
+      this.dot.setAttribute('opacity', ant);
+      this.dot.setAttribute('fill', `rgb(${lerp(205, 240, g) | 0},${lerp(150, 167, g) | 0},${lerp(80, 58, g) | 0})`);
+      this.halo.setAttribute('opacity', (ant * g * .85).toFixed(2));
+      // face
+      const fy = p.faceDy - 2, sp = clamp(w * 0.21, 18, 30);
+      const open = clamp(1 - this.blink, 0, 1);
+      const eye = (side, path, hi, brow, cheek) => {
+        const ex = side * sp + p.lx * .6, ey = fy + p.ly * .5;
+        const rx = p.rx, ry = Math.max(.6, p.ry * open), kt = p.kt, kb = lerp(.08, p.kb, open);
+        const tilt = side * p.tilt * Math.PI / 180, ct = Math.cos(tilt), st = Math.sin(tilt);
+        const Q = (x, y) => P(ex + x * ct - y * st, ey + x * st + y * ct);
+        const K = .5523;
+        const pts = [[-rx, 0], [-rx, -ry * kt * K], [-rx * K, -ry * kt], [0, -ry * kt], [rx * K, -ry * kt], [rx, -ry * kt * K], [rx, 0],
+          [rx, ry * kb * K], [rx * K, ry * kb], [0, ry * kb], [-rx * K, ry * kb], [-rx, ry * kb * K], [-rx, 0]].map(([x, y]) => Q(x, y).map(v => v.toFixed(2)));
+        path.setAttribute('d', `M${pts[0]}C${pts[1]} ${pts[2]} ${pts[3]}C${pts[4]} ${pts[5]} ${pts[6]}C${pts[7]} ${pts[8]} ${pts[9]}C${pts[10]} ${pts[11]} ${pts[12]}Z`);
+        (this.eyeC || (this.eyeC = {}))[side] = { c: Q(0, 0), r: p.rx };
+        const hp = Q(rx * .32 + p.lx * .25, -ry * kt * .42 + p.ly * .2);
+        hi.setAttribute('cx', hp[0].toFixed(2)); hi.setAttribute('cy', hp[1].toFixed(2));
+        hi.setAttribute('r', (rx * .3).toFixed(2));
+        hi.setAttribute('opacity', clamp((ry * Math.min(kt, kb + 1) - 4) / 6, 0, 1).toFixed(2));
+        const bt = -side * p.browT * Math.PI / 180, by = -p.ry * p.kt - 8;
+        const b1 = Q(-rx * .9 * Math.cos(bt), by - rx * .9 * Math.sin(bt) * -1), b2 = Q(rx * .9 * Math.cos(bt), by - rx * .9 * Math.sin(bt)), bm = Q(0, by - 2.5);
+        brow.setAttribute('d', `M${b1[0].toFixed(1)} ${b1[1].toFixed(1)}Q${bm[0].toFixed(1)} ${bm[1].toFixed(1)} ${b2[0].toFixed(1)} ${b2[1].toFixed(1)}`);
+        brow.setAttribute('opacity', clamp(p.brow, 0, 1).toFixed(2));
+        const ck = P(side * (sp + 10), fy + 19);
+        cheek.setAttribute('cx', ck[0].toFixed(1)); cheek.setAttribute('cy', ck[1].toFixed(1));
+        cheek.setAttribute('opacity', clamp(p.cheek, 0, 1).toFixed(2));
+      };
+      eye(-1, this.eyeL, this.hiL, this.browL, this.cheekL);
+      eye(1, this.eyeR, this.hiR, this.browR, this.cheekR);
+      // mouth
+      const my = fy + 25, mw = p.mw, mc = p.mc, mo = Math.max(0, p.mo);
+      const m1 = P(-mw / 2 + p.lx * .3, my), m2 = P(mw / 2 + p.lx * .3, my), mt = P(p.lx * .3, my + mc * .9 - mo * .15), mb = P(p.lx * .3, my + mc * .9 + mo);
+      this.mouth.setAttribute('d', `M${m1[0].toFixed(1)} ${m1[1].toFixed(1)}Q${mt[0].toFixed(1)} ${mt[1].toFixed(1)} ${m2[0].toFixed(1)} ${m2[1].toFixed(1)}Q${mb[0].toFixed(1)} ${mb[1].toFixed(1)} ${m1[0].toFixed(1)} ${m1[1].toFixed(1)}Z`);
+      // accessories
+      for (const r of this.parts) {
+        const vis = clamp(p['acc_' + r.kind] || 0, 0, 1);
+        r.g.setAttribute('opacity', vis.toFixed(2));
+        if (vis < 0.01) continue;
+        if (r.part.at) {
+          const off = r.part.from || [0, 0], away = 1 - vis;
+          const [ax, ay] = r.part.at(w, h), [X, Y] = P(ax + off[0] * away, ay + off[1] * away);
+          const swing = r.part.swing ? 14 * Math.sin(this.t * 2.2) * vis * (this.lively ? 1 : .4) + 40 * away : 0;
+          r.g.setAttribute('transform', `translate(${X.toFixed(1)} ${Y.toFixed(1)}) rotate(${(p.rot + (r.part.rot || 0) + swing).toFixed(1)}) scale(${((0.6 + 0.4 * vis) * (r.part.k || 1)).toFixed(3)})`);
+        }
+        if (r.part.band) {
+          const dy = (r.part.from || [0, 0])[1] * (1 - vis);
+          const a = P(-w / 2 - 1, -12 + dy), b2 = P(w / 2 + 1, -12 + dy), c1 = P(-w / 2 - 4, -h / 2 - 26 + dy), c2 = P(w / 2 + 4, -h / 2 - 26 + dy);
+          const dd = `M${a[0].toFixed(1)} ${a[1].toFixed(1)}C${c1[0].toFixed(1)} ${c1[1].toFixed(1)} ${c2[0].toFixed(1)} ${c2[1].toFixed(1)} ${b2[0].toFixed(1)} ${b2[1].toFixed(1)}`;
+          r.bo.setAttribute('d', dd); r.bi.setAttribute('d', dd);
+        }
+        if (r.part.glasses && this.eyeC) {
+          const gy = (r.part.from || [0, 0])[1] * (1 - vis);
+          const L = { c: [this.eyeC[-1].c[0], this.eyeC[-1].c[1] + gy], r: this.eyeC[-1].r }, R = { c: [this.eyeC[1].c[0], this.eyeC[1].c[1] + gy], r: this.eyeC[1].r }, rr = (L.r + 6).toFixed(1);
+          r.gl.setAttribute('cx', L.c[0].toFixed(1)); r.gl.setAttribute('cy', L.c[1].toFixed(1)); r.gl.setAttribute('r', rr);
+          r.gr.setAttribute('cx', R.c[0].toFixed(1)); r.gr.setAttribute('cy', R.c[1].toFixed(1)); r.gr.setAttribute('r', rr);
+          const m = [(L.c[0] + R.c[0]) / 2, (L.c[1] + R.c[1]) / 2 - 3];
+          r.br.setAttribute('d', `M${(L.c[0] + L.r + 6).toFixed(1)} ${L.c[1].toFixed(1)}Q${m[0].toFixed(1)} ${m[1].toFixed(1)} ${(R.c[0] - R.r - 6).toFixed(1)} ${R.c[1].toFixed(1)}`);
+        }
+      }
+    }
+  }
+  Char.all = [];
+  let last = performance.now();
+  function loop(now) {
+    const dt = Math.min(.05, (now - last) / 1000); last = now;
+    for (const c of Char.all) if (c.svg.isConnected) c.step(dt);
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  window.UplinkCast = { Char, BODIES, POSES };
+})();
+
+(function () {
+  const { Char, BODIES } = UplinkCast;
+  const $ = id => document.getElementById(id);
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const COL = { work: '#9DB0D8', wait: '#F0A73A', done: '#5FC38F', fail: '#EF6F6C', none: '#5d6168' };
+  const PEOPLE = { J: '#7FA6E8', A: '#E3967A', D: '#79C2A3' };
+
+  /* ---------- board ---------- */
+  const COLS = [['start', 'Not started', 'none'], ['need', 'Needs someone', 'wait'], ['working', 'Working', 'work'], ['done', 'Done', 'done']];
+  const tasks = [
+    { id: 't1', title: 'Fix double jump on ledges', owner: 'J', runs: [['cc', 'Claude Code', 'work'], ['cx', 'Codex', 'work']] },
+    { id: 't2', title: 'Level 3 layout', owner: 'A', runs: [['cx', 'Codex', 'wait']] },
+    { id: 't3', title: 'Playtest build 0.4.2', owner: 'D', runs: [['hermes', 'Hermes', 'work']] },
+    { id: 't4', title: 'Menu music loop', owner: 'D', runs: [['cc', 'Claude Code', 'fail']] },
+    { id: 't5', title: 'Coyote time tuning', owner: 'J', runs: [['gb', 'Grok Build', 'done']] },
+    { id: 't6', title: 'Release notes for 0.4.2', owner: 'A', runs: [['scribe', 'Scribe', 'done']] },
+    { id: 't7', title: 'Save slots on the title screen', owner: 'J', runs: [] }
+  ];
+  // A task's column is the most urgent state among its runs: Waiting, Failed, Working, Done.
+  function column(t) {
+    const s = t.runs.map(r => r[2]);
+    if (!s.length) return 'start';
+    if (s.includes('wait') || s.includes('fail')) return 'need';
+    if (s.includes('work')) return 'working';
+    return 'done';
+  }
+  const AGENT_KINDS = { hermes: 'hermes', scribe: 'scribe' };
+  const STATE_OF = { work: 'working', wait: 'waiting', done: 'done', fail: 'blocked' };
+  function renderBoard() {
+    const first = {}; if (!reduce) document.querySelectorAll('#board .tcard').forEach(c => first[c.dataset.id] = c.getBoundingClientRect());
+    const b = $('board'); b.innerHTML = '';
+    for (const [key, label, c] of COLS) {
+      const col = document.createElement('div'); col.className = 'col8';
+      const items = tasks.filter(t => column(t) === key);
+      col.innerHTML = `<div class="colh"><span class="sdot" style="background:${COL[c]}"></span><b>${label}</b><span class="n8">${items.length}</span></div>`;
+      if (!items.length) col.insertAdjacentHTML('beforeend', '<div class="emp">Nothing here</div>');
+      for (const t of items) {
+        const card = document.createElement('div'); card.className = 'tcard'; card.dataset.id = t.id;
+        card.innerHTML = `<div class="tt"></div><div class="meta"><span class="face8" style="background:${PEOPLE[t.owner]}">${t.owner}</span><span>${t.runs.length ? t.runs.length + (t.runs.length > 1 ? ' runs' : ' run') : 'No runs yet'}</span></div><div class="runs8"></div>`;
+        card.querySelector('.tt').textContent = t.title;
+        const rs = card.querySelector('.runs8');
+        for (const [k, name, st] of t.runs) {
+          const pill = document.createElement('span'); pill.className = 'run8';
+          const av = document.createElement('span'); pill.appendChild(av);
+          if (AGENT_KINDS[k]) new Char(av, { kind: AGENT_KINDS[k], state: STATE_OF[st], size: 20, label: name });
+          else av.outerHTML = `<span class="hm8"><svg><use href="#i-term"/></svg></span>`;
+          pill.insertAdjacentHTML('beforeend', `<span class="sdot" style="background:${COL[st]};width:6px;height:6px"></span>`);
+          pill.append(name); rs.appendChild(pill);
+        }
+        col.appendChild(card);
+      }
+      b.appendChild(col);
+    }
+    if (!reduce) document.querySelectorAll('#board .tcard').forEach(c => {
+      const f = first[c.dataset.id], l = c.getBoundingClientRect();
+      if (f && (Math.abs(f.left - l.left) > 1 || Math.abs(f.top - l.top) > 1)) c.animate([{ transform: `translate(${f.left - l.left}px,${f.top - l.top}px)` }, { transform: 'none' }], { duration: 520, easing: 'cubic-bezier(.22,1,.36,1)' });
+    });
+  }
+  const STEPS = [() => { tasks[1].runs[0][2] = 'work'; }, () => { tasks[0].runs.forEach(r => r[2] = 'done'); }, () => { tasks[6].runs.push(['hermes', 'Hermes', 'work']); }, () => { tasks[3].runs[0][2] = 'work'; }, () => { tasks[2].runs[0][2] = 'wait'; }];
+  const SNAP = JSON.stringify(tasks); let si = 0;
+  $('simRun').onclick = () => { if (si >= STEPS.length) { const o = JSON.parse(SNAP); tasks.splice(0, tasks.length, ...o); si = 0; } else STEPS[si++](); renderBoard(); };
+  renderBoard();
+
+  /* ---------- machine ---------- */
+  const LV = [['Watch', 'i-eye', 'Teammates can see terminals on this machine.'], ['Suggest', 'i-sug', 'Teammates can propose commands; the driver decides whether to send them.'], ['Drive', 'i-wheel', 'One driver at a time; others ask for the wheel.'], ['Open', 'i-open', 'Anyone can take the wheel, one keyboard at a time.']];
+  const M = {
+    team: { name: 'build-linux', owner: 'Team machine', max: 2, slots: 3, terms: [['reef-runner · claude', 'Claude Code', 'J', 2], ['reef-runner · codex', 'Codex', 'A', 2], ['ops · deploy', 'tmux', 'D', 1]] },
+    mine: { name: 'julio-mbp', owner: "Julio's machine", max: 1, slots: 1, terms: [['website · claude', 'Claude Code', 'J', 1]] }
+  };
+  M.team.terms[0][0] = 'reef-runner/claude'; M.team.terms[1][0] = 'reef-runner/codex'; M.team.terms[2][0] = 'ops/deploy'; M.mine.terms[0][0] = 'website/claude';
+  let cur = 'team';
+  const lv = $('lvls');
+  LV.forEach(([n], i) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = n; b.onclick = () => { M[cur].max = i; renderMachine(true); }; lv.appendChild(b); });
+  function renderMachine(changed) {
+    const m = M[cur];
+    $('mName').textContent = m.name; $('mOwner').textContent = m.owner;
+    [...lv.children].forEach((b, i) => b.setAttribute('aria-pressed', String(i === m.max)));
+    $('lvdesc').textContent = LV[m.max][2];
+    $('sVal').textContent = m.slots;
+    const used = Math.min(m.terms.length, m.slots); $('sUse').textContent = `${used} in use`;
+    $('sBar').innerHTML = Array.from({ length: m.slots }, (_, i) => `<i class="${i < used ? 'use' : ''}"></i>`).join('');
+    const tl = $('terms'); tl.innerHTML = '';
+    for (const [name, tool, who, want] of m.terms) {
+      const eff = Math.min(want, m.max), clamped = eff < want;
+      const row = document.createElement('div'); row.className = 'trow';
+      row.innerHTML = `<span class="nm8"></span><span class="acc8${clamped ? ' cl' : ''}"><svg><use href="#${LV[eff][1]}"/></svg>${LV[eff][0]}${clamped ? ` <span style="opacity:.8">(was ${LV[want][0]})</span>` : ''}</span><span class="sub8"><span class="face8" style="background:${PEOPLE[who]};width:16px;height:16px;font-size:8.5px">${who}</span>${tool}</span>`;
+      row.querySelector('.nm8').textContent = name;
+      if (clamped && changed && !reduce) row.querySelector('.acc8').animate([{ transform: 'scale(1.08)' }, { transform: 'none' }], { duration: 380, easing: 'cubic-bezier(.22,1,.36,1)' });
+      tl.appendChild(row);
+    }
+  }
+  $('sMinus').onclick = () => { M[cur].slots = Math.max(0, M[cur].slots - 1); renderMachine(); };
+  $('sPlus').onclick = () => { M[cur].slots = Math.min(8, M[cur].slots + 1); renderMachine(); };
+  document.querySelectorAll('.mtabs button').forEach(b => b.onclick = () => { cur = b.dataset.m; document.querySelectorAll('.mtabs button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); renderMachine(); });
+  renderMachine();
+
+  /* ---------- builder ---------- */
+  const SHAPES = ['notetaker', 'deploy', 'hermes', 'scribe', 'chief', 'watch'];
+  const SHAPE_NAMES = { notetaker: 'Squircle', deploy: 'Pill', hermes: 'Rounded triangle', scribe: 'Circle', chief: 'Tall', watch: 'Blob' };
+  const COLORS = [['#B5CBA3', '#93AD81'], ['#7E9DEB', '#5878D2'], ['#F09A85', '#D9725F'], ['#BDA8EA', '#987FD6'], ['#F0DDBC', '#D9BE93'], ['#F6CD6E', '#E2AC43'], ['#86D0C4', '#5DB0A3'], ['#EFA6BC', '#D47F99']];
+  const TOOLS = [['notetaker', 'Headphones'], ['deploy', 'Wrench'], ['hermes', 'Glasses'], ['scribe', 'Pencil'], ['chief', 'Clipboard'], ['watch', 'Lantern'], [null, 'None']];
+  const look = { shape: 'watch', color: 6, tool: 'watch' };
+  BODIES.custom = { ...BODIES[look.shape], c1: COLORS[look.color][0], c2: COLORS[look.color][1] };
+  const prev = new Char($('prevHost'), { kind: 'custom', state: 'idle', size: 170, acc: look.tool, label: 'New agent' });
+  function applyLook() {
+    const s = BODIES[look.shape];
+    Object.assign(BODIES.custom, { w: s.w, h: s.h, n: s.n, taper: s.taper, faceDy: s.faceDy, c1: COLORS[look.color][0], c2: COLORS[look.color][1] });
+    prev.setAcc(look.tool); prev.setState('working'); $('pState').textContent = 'working';
+  }
+  function group(id, items, render, isOn, pick) {
+    const g = $(id); g.innerHTML = '';
+    items.forEach((it, i) => { const b = document.createElement('button'); b.type = 'button'; render(b, it, i); b.setAttribute('aria-pressed', String(isOn(it, i))); b.onclick = () => { pick(it, i); [...g.children].forEach((x, j) => x.setAttribute('aria-pressed', String(isOn(items[j], j)))); applyLook(); }; g.appendChild(b); });
+  }
+  group('bodies', SHAPES, (b, k) => { b.title = SHAPE_NAMES[k]; b.setAttribute('aria-label', SHAPE_NAMES[k]); new Char(b, { kind: k, state: 'idle', size: 40, label: SHAPE_NAMES[k] }); }, k => k === look.shape, k => look.shape = k);
+  group('colors', COLORS, (b, c, i) => { b.setAttribute('aria-label', 'Color ' + (i + 1)); b.innerHTML = `<span class="sw8" style="background:linear-gradient(135deg,${c[0]} 50%,${c[1]} 50%)"></span>`; }, (c, i) => i === look.color, (c, i) => look.color = i);
+  group('tools', TOOLS, (b, t) => { b.className = 'txt'; b.textContent = t[1]; }, t => t[0] === look.tool, t => look.tool = t[0]);
+  const conn = $('conn'); let connOn = 'A2A';
+  ['A2A', 'MCP', 'HTTP'].forEach(c => { const b = document.createElement('button'); b.type = 'button'; b.className = 'txt'; b.textContent = c; b.setAttribute('aria-pressed', String(c === connOn)); b.onclick = () => { connOn = c; [...conn.children].forEach(x => x.setAttribute('aria-pressed', String(x.textContent === c))); }; conn.appendChild(b); });
+  const SC = [['Post messages', 'In channels and threads it is added to', 1], ['Read projects', 'Tasks, runs and files', 1], ['Start runs', 'Start agents on tasks', 0], ['Answer approvals', 'Allow or deny commands for others', 0], ['Invite people', 'Send invites to the team', 0], ['Change machine settings', 'Slots, access, profiles', 0]];
+  $('scopes').innerHTML = SC.map(([t, d, on], i) => `<label><input type="checkbox" id="sc${i}" ${on ? 'checked' : ''}><span>${t}<small>${d}</small></span></label>`).join('');
+  $('aName').addEventListener('input', e => { $('pName').textContent = e.target.value || 'New agent'; });
+  const cyc = ['idle', 'working', 'waiting', 'done']; let ci = 0;
+  setInterval(() => { ci = (ci + 1) % cyc.length; prev.setState(cyc[ci]); $('pState').textContent = cyc[ci]; }, 2200);
+  // the team's roster, with the new agent added at the end
+  const rost = $('rost');
+  [['notetaker', 'Notetaker'], ['deploy', 'Deploy bot'], ['hermes', 'Hermes'], ['scribe', 'Scribe']].forEach(([k, n]) => { const s = document.createElement('span'); const h = document.createElement('div'); s.appendChild(h); s.append(n); rost.appendChild(s); new Char(h, { kind: k, state: 'idle', size: 44, label: n }); });
+  let added = 0;
+  $('addAgent').onclick = () => {
+    const key = 'custom' + (++added);
+    BODIES[key] = { ...BODIES.custom };
+    const s = document.createElement('span'); const h = document.createElement('div'); s.appendChild(h); s.append($('aName').value || 'New agent'); rost.appendChild(s);
+    const c = new Char(h, { kind: key, state: 'done', size: 44, acc: look.tool, label: $('aName').value || 'New agent' });
+    setTimeout(() => c.setState('idle'), 1600);
+    if (!reduce) s.animate([{ opacity: 0, transform: 'translateY(8px) scale(.9)' }, { opacity: 1, transform: 'none' }], { duration: 420, easing: 'cubic-bezier(.22,1,.36,1)' });
+  };
+})();
+
+</script><script>
+const Q={
+ h01:[["a","Columns are the run states; cards move on their own","Not started, Needs someone, Working, Done. Nobody drags cards.",1],["b","Your own columns, and you drag cards","Linear and Trello style."]],
+ h02:[["a","Owner and each run","Each run as the agent's character or the harness mark, with its state.",1],["b","Owner and a run count","\"3 runs\" only."]],
+ h03:[["a","Personal machines start at Suggest, team machines at Drive","The owner can open them further.",1],["b","Every machine starts at Watch","The owner opens each one up."],["c","Every machine starts at Drive","Most open by default."]],
+ h04:[["a","Running terminals drop to the new limit right away","Marked in amber so people see what changed.",1],["b","Running terminals keep their level until they end","Only new terminals get the new limit."]],
+ h05:[["a","Start with the smallest set","Post messages and read projects; the owner adds more.",1],["b","Start with everything its role allows","The owner removes what it shouldn't do."]],
+ h06:[["a","No, only people answer approvals","An agent can ask, never approve.",1],["b","Yes for actions that can be undone, with the scope","Hard-to-undo actions still need a person."],["c","Yes for any action, with the scope","The owner decides."]]
+};
+const IDS=Object.keys(Q),state={};
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+for(const id of IDS){
+ const box=document.querySelector(`.opts[data-q="${id}"]`);box.setAttribute('role','radiogroup');
+ box.innerHTML=Q[id].map(([k,t,d,rec])=>`<label class="opt"><input type="radio" name="${id}" value="${k}" id="${id}-${k}"><span class="ot"><span class="ok">${k}</span>${esc(t)}${rec?'<span class="rec">Recommended</span>':''}</span><span class="od">${esc(d)}</span></label>`).join('');
+ box.insertAdjacentHTML('afterend',`<div class="note"><label for="${id}-note">Note for Claude (optional)</label><textarea id="${id}-note" rows="1" placeholder="Anything to add, change or ask"></textarea></div>`);
+}
+/* save */
+const saveEl=document.getElementById('save');
+function setSave(s,t){saveEl.dataset.s=s;saveEl.textContent=t}
+function refresh(){let n=0;for(const id of IDS){const a=state[id],art=document.getElementById(id);if(a&&a.choice){n++;art.setAttribute('data-answered','')}else art.removeAttribute('data-answered')}
+ document.getElementById('count').textContent=`${n} of ${IDS.length} answered`;document.getElementById('progbar').style.width=(n/IDS.length*100)+'%'}
+function applyToForm(id){const a=state[id]||{};const r=a.choice?document.getElementById(`${id}-${a.choice}`):null;if(r)r.checked=true;const nt=document.getElementById(`${id}-note`);if(nt&&document.activeElement!==nt&&a.note!=null)nt.value=a.note}
+let db=null;const timers={};
+function local(){try{return JSON.parse(localStorage.getItem('ur8-answers')||'{}')}catch{return{}}}
+function saveLocal(){try{localStorage.setItem('ur8-answers',JSON.stringify(state))}catch{}}
+function queue(id,delay){clearTimeout(timers[id]);timers[id]=setTimeout(async()=>{saveLocal();if(!db){setSave('err','Saved in this browser only');return}
+ setSave('busy','Saving');try{const a=state[id]||{};await db.doc('answers/'+id).set({choice:a.choice||null,note:a.note||'',question:document.querySelector(`#${id} h3`).textContent,label:a.choice?(Q[id].find(o=>o[0]===a.choice)||[])[1]||'':'',at:new Date().toISOString()});setSave('ok','Saved')}catch(e){setSave('err',"Couldn't save: "+(e&&e.code||'error'))}},delay)}
+document.addEventListener('change',e=>{const t=e.target;if(t.type!=='radio')return;state[t.name]={...(state[t.name]||{}),choice:t.value};refresh();queue(t.name,0)});
+document.addEventListener('input',e=>{const m=e.target.id&&e.target.id.match(/^([a-z]\d\d)-note$/);if(!m)return;state[m[1]]={...(state[m[1]]||{}),note:e.target.value};queue(m[1],700)});
+Object.assign(state,local());IDS.forEach(applyToForm);refresh();
+(async()=>{
+ try{db=await window.claude.use('db')}catch{db=null}
+ if(!db){setSave('err','Saved in this browser only')}else{
+  setSave('ok','Connected');let first=true;
+  db.collection('answers').onSnapshot(snap=>{
+   if(first){first=false;const have=new Set(snap.docs.map(d=>d.id));for(const id of IDS){if(state[id]&&state[id].choice&&!have.has(id))queue(id,0)}}
+   const focus=(document.activeElement&&document.activeElement.id)||'';
+   for(const d of snap.docs){if(focus.startsWith(d.id+'-'))continue;const v=d.data()||{};state[d.id]={choice:v.choice||null,note:v.note||''};applyToForm(d.id)}
+   saveLocal();refresh();
+  },err=>setSave('err',"Couldn't load answers: "+(err&&err.code||'error')));
+ }
+ /* send to Claude */
+ const note=document.getElementById('sendNote'),btns=[document.getElementById('sendTop'),document.getElementById('sendBottom')];
+ let cm=null;try{cm=await window.claude.use('comments')}catch{cm=null}
+ async function check(){
+  if(!cm){note.textContent='Sending from the page is not available here. Tell Claude in the chat instead.';return}
+  let s='off';try{s=await cm.canSendToClaude()}catch{s='off'}
+  const ok=s==='available';btns.forEach(b=>b.disabled=!ok);
+  note.textContent=ok?'Posts a short comment that brings Claude in to read your answers.':s==='no_session'?'No Claude session is listening right now. Tell Claude in the chat instead.':s==='writers_only'?'Only editors can send to Claude. Tell Claude in the chat instead.':'Sending from the page is not available here. Tell Claude in the chat instead.';
+ }
+ await check();setInterval(check,20000);
+ for(const b of btns)b.addEventListener('click',async()=>{
+  const n=IDS.filter(id=>state[id]&&state[id].choice).length;
+  b.disabled=true;note.textContent='Sending';
+  try{const anchor=await cm.anchorFor(document.querySelector('.foot'));
+   await cm.sendToClaude({anchor,text:`Round 8 answers are in (${n} of ${IDS.length} answered). Read them from the answers collection.`});
+   note.textContent='Sent. Claude will reply in the comment thread and in the chat.';}
+  catch(e){note.textContent="Couldn't send: "+(e&&e.code||'error')+'. Tell Claude in the chat instead.';b.disabled=false}
+ });
+})();
+</script>

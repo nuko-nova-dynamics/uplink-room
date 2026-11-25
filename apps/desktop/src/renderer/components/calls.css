@@ -1,0 +1,647 @@
+/* Call surfaces use the shared control geometry and states. */
+
+/* Even label advances keep each segmented button's edge on the pixel grid. */
+.call-quality-label {
+  width: calc-size(max-content, round(up, size, var(--pixel-pair)));
+}
+.call-dock-where {
+  min-height: var(--ctl-small);
+  padding-block: var(--space-3);
+}
+.proposal-actions .btn {
+  gap: var(--space-6);
+}
+.proposal-actions {
+  gap: var(--space-8);
+}
+
+/* A preview's aspect ratio can otherwise put the following panel edge on half a pixel. */
+.calls-settings .camera-frame {
+  height: calc-size(auto, round(down, size, var(--border-hairline)));
+}
+
+/* Three even tracks preserve crisp preview glyphs in the supported dialog widths. */
+.screen-picker .source-grid {
+  grid-template-columns: repeat(
+    3,
+    round(down, calc((100% - var(--space-20)) / 3), var(--pixel-pair))
+  );
+}
+.screen-picker .source-thumb {
+  height: calc-size(auto, round(down, size, var(--pixel-pair)));
+}
+.call-stage:not(.compact):not(.has-screen) .tile {
+  height: calc-size(auto, round(down, size, var(--pixel-pair)));
+}
+
+/* The ring lives inside the face's box, so neighboring rows cannot cover it. */
+:root .call-face {
+  position: relative;
+  padding: var(--space-4);
+  flex: none;
+  box-shadow: none;
+}
+:root .call-faces .call-face.speaking {
+  box-shadow: none;
+}
+:root .call-face.speaking::after {
+  content: "";
+  position: absolute;
+  inset: var(--space-1);
+  border: var(--space-2) solid var(--text);
+  border-radius: var(--radius-pill);
+  pointer-events: none;
+}
+:root .call-face .face:not(.agent) {
+  --face: var(--space-24);
+  font-size: var(--font-13);
+}
+:root .call-members {
+  margin-block: var(--space-4);
+}
+:root .call-member {
+  height: var(--ctl-stage);
+  gap: var(--space-4);
+  padding-left: calc(var(--space-28) - var(--space-2));
+}
+:root .call-member .is-muted,
+:root .tile .is-muted {
+  color: var(--muted);
+}
+:root :is(.call-dock-controls, .stage-controls) .btn:is(.is-off, .is-on) {
+  background: var(--hover);
+  border-color: var(--faint);
+  color: var(--text);
+}
+:root :is(.call-dock-controls, .stage-controls) .btn.leave {
+  background: var(--ground);
+  color: var(--text);
+  border-color: var(--line);
+}
+:root :is(.call-dock-controls, .stage-controls) .btn.leave:hover {
+  background: var(--hover);
+  border-color: var(--faint);
+}
+:root :is(.call-dock-controls, .stage-controls) .btn:active:not(:disabled) {
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--faint);
+}
+:root .tile.speaking {
+  border-color: var(--text);
+  box-shadow: none;
+}
+/* A single continuous edge, inset into the tile, stays visible over video too. */
+:root .tile.speaking::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: var(--space-2) solid var(--text);
+  border-radius: inherit;
+  pointer-events: none;
+}
+:root .tile-face .face:not(.agent) {
+  --face: calc(var(--space-32) * 2);
+  font-size: var(--font-20);
+}
+:root .call-stage.compact .tile-face .face:not(.agent) {
+  font-size: var(--font-20);
+}
+
+/* A popover (UI SDK) that places itself; it scrolls when the window is too short for it. */
+:root .call-settings {
+  width: min(calc(var(--space-40) * 8), calc(100vw - var(--space-28)));
+  max-height: var(--available-height);
+}
+/* The body is only a wrapper: its children are the popover's rows. */
+.call-settings-body {
+  display: contents;
+}
+.call-settings > *,
+.call-settings-body > * {
+  flex-shrink: 0;
+}
+.call-settings-scroll-cue {
+  position: sticky;
+  bottom: 0;
+  background: var(--raised);
+  border-top: var(--border-hairline) solid var(--line);
+  color: var(--muted);
+  text-align: center;
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+  padding-block: var(--space-4);
+}
+.screen-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+/* Dialog title actions use the same 28 px target as the other title controls. */
+:root .dialog:has(.screen-picker) > .dialog-head > .icon-btn {
+  width: var(--ctl-h);
+  height: var(--ctl-h);
+  border-radius: var(--radius-control);
+}
+:root .screen-picker :is(.label, .hint) {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+.source-placeholder {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-16);
+  text-align: center;
+  color: var(--muted);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+  width: 100%;
+}
+.source-placeholder > svg {
+  align-self: flex-start;
+  position: relative;
+  left: round(nearest, calc((100% - var(--icon-14)) / 2), var(--border-hairline));
+}
+
+/* A video is a contained tile even when it has no parent call tile. */
+:root .tile-video {
+  position: relative;
+  inset: auto;
+  width: min(100%, calc(var(--space-40) * 4));
+  height: auto;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-card);
+  border: var(--border-hairline) solid var(--line);
+  overflow: hidden;
+  background: var(--raised);
+}
+:root .tile > .tile-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: inherit;
+}
+:root .tile-video > video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+:root .tile-video.ready > video {
+  opacity: 1;
+}
+.tile-video.cover > video {
+  object-fit: cover;
+}
+.tile-video.contain > video {
+  object-fit: contain;
+}
+.tile-video > video.mirror {
+  transform: scaleX(-1);
+}
+.track-placeholder {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+  padding: var(--space-8);
+}
+.track-placeholder .face:not(.agent) {
+  --face: var(--space-24);
+  font-size: var(--font-13);
+}
+.tile .track-placeholder > span:not(.face) {
+  display: none;
+}
+
+:root .proposals-head {
+  padding-inline: 0;
+}
+:root .proposal-transcript {
+  padding-inline: 0;
+  /* Align the regular button's 14 px glyph ink with the card's left edge. */
+  margin-left: calc(-1 * var(--space-4));
+}
+:root .proposal-desc {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .settings-pane:has(> .calls-settings) {
+  padding: 0 var(--gutter) var(--space-40);
+}
+.calls-settings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-18);
+}
+.calls-settings .pane-title {
+  height: var(--head-h);
+}
+.calls-mic-test .mic-level {
+  flex: 1;
+}
+
+/* Call state is carried by the glyph or outline, on the graphite palette. */
+:root .tile.agent {
+  background: var(--raised);
+}
+:root .proposal.answered.accepted > svg {
+  color: var(--text);
+}
+:root :is(.calls-settings, .call-settings) .device-error {
+  color: var(--muted);
+}
+:root :is(.calls-settings, .call-settings) .mic-level span {
+  background: var(--text);
+}
+
+/* These surfaces share the 13 px interface size and 28 px action/field row. */
+:root :is(.calls-settings, .call-settings, .screen-picker) :is(.label, .hint, .camera-frame-note),
+:root
+  :is(
+    .call-faces,
+    .call-dock-note,
+    .tile-name,
+    .tile-tag,
+    .tile-tools-label,
+    .tile-select,
+    .quality-note,
+    .quality-rate,
+    .quality-foot,
+    .timeline-event,
+    .proposal-owner
+  ) {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .calls-settings .pane-title h2 {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .call-more,
+:root .call-stage.compact .tile:not(.screen) .tile-name {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .call-stage.compact .tile:not(.screen) .tile-name {
+  align-items: flex-start;
+}
+:root .call-stage.compact .tile:not(.screen) .tile-name > svg {
+  margin-top: var(--space-1);
+}
+:root :is(.calls-settings, .call-settings, .proposal-edit) :is(.input, .select),
+:root .tile-select {
+  height: var(--ctl-h);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+
+/* Flexible text must give its row's other content room, even without spaces. */
+:is(
+  .calls-settings,
+  .call-settings,
+  .screen-picker,
+  .quality-pop,
+  .call-dock,
+  .proposal,
+  .proposals-head,
+  .track-placeholder
+) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+:is(.call-dock, .source, .track-placeholder) > .truncate {
+  max-width: 100%;
+}
+.call-member-icons {
+  flex: none;
+}
+.call-dock-where b {
+  flex: none;
+}
+:root .timeline-event {
+  max-width: 100%;
+  align-items: flex-start;
+}
+/* Center the event glyph on the 13 px text's cap band rather than its line box. */
+:root .timeline-event > svg {
+  margin-top: var(--space-1);
+}
+.proposal {
+  grid-template-columns: minmax(0, 1fr) fit-content(50%);
+}
+.proposal-main,
+.proposal-side,
+.proposal-owner {
+  min-width: 0;
+  max-width: 100%;
+}
+.proposal-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.proposal.answered {
+  flex-wrap: wrap;
+}
+.transcript-line > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Reserve the scroll track before it is needed, without native arrow controls. */
+:root
+  :is(
+    .call-stage,
+    .call-settings,
+    .transcript,
+    .dialog-body:has(.screen-picker),
+    .main-body:has(.calls-settings)
+  ) {
+  scrollbar-gutter: stable;
+  scrollbar-width: auto;
+  scrollbar-color: auto;
+}
+:is(
+  .call-stage,
+  .call-settings,
+  .transcript,
+  .dialog-body:has(.screen-picker),
+  .main-body:has(.calls-settings)
+)::-webkit-scrollbar {
+  width: var(--space-8);
+  height: var(--space-8);
+}
+:is(
+  .call-stage,
+  .call-settings,
+  .transcript,
+  .dialog-body:has(.screen-picker),
+  .main-body:has(.calls-settings)
+)::-webkit-scrollbar-button {
+  display: none;
+}
+:is(
+  .call-stage,
+  .call-settings,
+  .transcript,
+  .dialog-body:has(.screen-picker),
+  .main-body:has(.calls-settings)
+)::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: var(--radius-pill);
+}
+:is(
+    .call-stage,
+    .call-settings,
+    .transcript,
+    .dialog-body:has(.screen-picker),
+    .main-body:has(.calls-settings)
+  ):hover::-webkit-scrollbar-thumb {
+  background: var(--line);
+}
+
+/* The call bar (DESIGN.md, Calls): one pill under the channel's title with who's in the call, how
+   long it has run, and Join or your controls. Voice alone takes no more room than this. */
+:root .channel-col .call-bar {
+  padding: var(--space-4) var(--space-18) var(--space-8);
+}
+:root .stage-bar .call-pill {
+  max-width: 100%;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4);
+}
+.call-who,
+.call-menu-wrap {
+  position: relative;
+}
+:root .call-pill .call-faces {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: var(--ctl-stage);
+  padding: 0 var(--space-8) 0 var(--space-2);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+:root .call-pill .call-faces:hover {
+  background: var(--chip);
+}
+.call-face-stack {
+  display: inline-flex;
+  align-items: center;
+}
+:root .call-face-stack .call-face {
+  padding: 0;
+}
+:root .call-face-stack .call-face + .call-face {
+  margin-left: calc(-1 * var(--space-2));
+}
+/* A ring in the pill's color keeps overlapping faces apart; a face is filled so the one behind
+   doesn't show through it. */
+:root .call-face-stack .call-face .face {
+  box-shadow: 0 0 0 var(--space-2) var(--raised);
+}
+:root .call-face-stack .call-face .face:not(.agent) {
+  background: color-mix(in srgb, var(--text) 10%, var(--raised));
+  color: var(--text);
+  font-size: var(--font-11);
+}
+/* The speaking ring sits inside the face's edge, so it never covers the face beside it. */
+:root .call-face-stack .call-face.speaking::after {
+  inset: 0;
+}
+.call-time {
+  padding: 0 var(--space-6);
+  color: var(--muted);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+  font-variant-numeric: tabular-nums;
+}
+.call-notes {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding-right: var(--space-6);
+  color: var(--muted);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+  white-space: nowrap;
+}
+.call-bar-sep {
+  width: var(--border-hairline);
+  height: var(--space-20);
+  margin: 0 var(--space-4);
+  background: var(--line);
+}
+:root .stage-bar .call-pill .btn.call-join {
+  display: inline-flex;
+  align-items: center;
+  height: var(--ctl-stage);
+  padding: 0 var(--space-18);
+  border-radius: var(--radius-pill);
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--ground);
+}
+:root .stage-bar .call-pill .btn.call-join:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--text) 86%, var(--ground));
+}
+/* Menus and popovers (UI SDK) place themselves beside their buttons. */
+:root .call-menu,
+:root .call-people {
+  width: calc(var(--space-40) * 7.5);
+}
+:root .call-menu.quality-choices {
+  width: calc(var(--space-40) * 8.5);
+}
+/* The menu lines up with its button's end, near the pill's right end, so a narrow window doesn't cut
+   it off; in a short window or with many agents it scrolls. */
+:root .call-menu {
+  max-height: min(var(--available-height), calc(100vh - var(--space-40) * 3));
+  overflow-y: auto;
+}
+:root .call-people {
+  max-height: min(var(--available-height), 60vh);
+  overflow: auto;
+}
+/* A trigger that stands in for a native select: its value, then a chevron. */
+:root :is(.tile-select, .proposal-owner-select)[data-slot="select-trigger"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  text-align: left;
+}
+:root .proposal-owner-select[data-slot="select-trigger"] {
+  width: 100%;
+}
+:root .call-people .call-members {
+  margin: 0;
+}
+:root .call-people .call-member {
+  padding-left: var(--space-8);
+}
+.call-menu-note {
+  padding: var(--space-6) var(--space-8);
+}
+
+/* Tasks proposed from a call, in the Inbox: the call's line, then its proposals to answer. */
+:root .from-call-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+/* A narrow channel column (the shared browser beside it, a small window; DESIGN.md, Calls): the
+   controls, the call's status and the notes icon never give way. The time and the words "Taking
+   notes" sit on strips one line tall that wrap what doesn't fit out of sight, so each shows whole or
+   not at all: "Taking notes" goes first, then the time. When even that isn't enough, the controls
+   move as one group to a second line. The faces give way last, down to one; they still list
+   everyone on a click. */
+:root .call-pill > * {
+  flex: none;
+}
+:root .call-pill > .call-drop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  min-width: 0;
+  height: var(--ctl-stage);
+  overflow: hidden;
+}
+/* An empty first item, so a real one either fits beside it, whole, or wraps out of sight: never
+   half shown. */
+:root .call-pill > .call-drop::before {
+  content: "";
+  width: 0;
+  height: var(--ctl-stage);
+}
+:root .call-drop > * {
+  display: inline-flex;
+  align-items: center;
+  height: var(--ctl-stage);
+  white-space: nowrap;
+}
+/* The strips take only the room left on the line (a zero basis, so they never push the controls to the
+   next one), the time before the words "Taking notes", each up to its own width. */
+:root .call-pill > .call-drop {
+  flex-basis: 0;
+  flex-shrink: 1;
+  max-width: max-content;
+}
+:root .call-pill > .call-drop-time {
+  flex-grow: 1000;
+}
+:root .call-pill > .call-drop-notes {
+  flex-grow: 1;
+}
+/* Your controls (the separator, Mute, Share, the menu and Leave) stay together. When the faces, the
+   status and the notes icon leave no room for them, they wrap as one group under the faces. */
+:root .stage-bar .call-pill {
+  flex-wrap: wrap;
+  justify-content: center;
+  row-gap: var(--space-2);
+}
+:root .call-pill > .call-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+:root .call-drop-notes > .call-notes-label {
+  padding-right: var(--space-6);
+  color: var(--muted);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+.call-status {
+  padding: 0 var(--space-6);
+  color: var(--muted);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+  white-space: nowrap;
+}
+:root .call-pill > .call-notes {
+  padding: 0 var(--space-4) 0 var(--space-2);
+}
+:root .call-pill > .call-who {
+  display: flex;
+  min-width: var(--space-32);
+  max-width: 100%;
+}
+:root .call-pill .call-who > .call-faces {
+  flex-wrap: wrap;
+  align-content: flex-start;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  padding-block: var(--space-6);
+}
+:root .call-pill .call-faces > .call-face-stack {
+  display: contents;
+}
+:root .call-pill .call-faces > *,
+:root .call-pill .call-faces .call-face {
+  height: var(--space-24);
+}
+:root .call-pill .call-faces .call-face + .call-face {
+  margin-left: calc(-1 * var(--space-2));
+}
+:root .call-pill .call-faces-more {
+  display: inline-flex;
+  align-items: center;
+  padding-left: var(--space-4);
+}

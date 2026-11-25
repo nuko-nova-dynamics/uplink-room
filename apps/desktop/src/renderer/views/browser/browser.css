@@ -1,0 +1,175 @@
+.browser-btn:active,
+.browser-btn[aria-pressed="true"] {
+  background: var(--hover);
+  border-color: var(--faint);
+}
+.browser-panel {
+  height: 100%;
+}
+.browser-panel .browser-stage {
+  background: var(--ground);
+}
+.browser-panel .browser-stage-note {
+  color: var(--muted);
+}
+:root
+  .browser-panel
+  :is(
+    .label,
+    .hint,
+    .note,
+    .btn.small,
+    .saved-login-meta,
+    .saved-login-controls,
+    .browser-logins,
+    .browser-list h2,
+    .browser-status,
+    .browser-cmd
+  ),
+:root .browser-panel .saved-login-controls :is(.input, .select),
+:root .browser-panel .browser-url .input {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .browser-url .input {
+  font-family: var(--ui);
+  height: var(--ctl-h);
+}
+.browser-panel .driver-pill {
+  border-color: var(--text);
+  color: var(--text);
+}
+.browser-panel .driver-pill > svg {
+  color: var(--text);
+}
+.browser-connection,
+.browser-end-confirm {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  color: var(--muted);
+}
+.browser-end-confirm {
+  flex-wrap: wrap;
+}
+.browser-handoff .face.agent > * {
+  transform: scale(1.5);
+}
+
+.browser-connection {
+  width: calc-size(fit-content, round(up, size, var(--pixel-pair)));
+}
+/* Align the font's cap box rather than its extra line leading. */
+:root .browser-panel .driver-pill {
+  align-items: center;
+}
+:root .browser-panel .driver-pill > svg {
+  margin-top: 0;
+}
+.browser-panel .browser-url {
+  align-items: flex-start;
+}
+:root .browser-url > svg {
+  position: static;
+  margin-top: var(--space-7);
+}
+@media (min-resolution: 1.5dppx) {
+  :root .browser-url > svg {
+    margin-top: var(--space-6);
+  }
+  :root .browser-panel .browser-logins-line > svg {
+    margin-top: var(--space-1);
+  }
+}
+
+.saved-login-controls .input,
+.saved-login-controls .select,
+:root .saved-login-controls .select[data-slot="select-trigger"] {
+  height: var(--ctl-h);
+}
+
+.saved-login-controls {
+  gap: var(--space-8);
+}
+
+/* Keep every access track on pixels, including the four tracks in the dock. */
+:root .browser-panel .seg:has(.segment-content) {
+  grid-auto-columns: max-content;
+  max-width: 100%;
+  grid-auto-flow: initial;
+  grid-template-columns: repeat(4, max-content);
+}
+:root .browser-panel .seg:has(.segment-content) button {
+  width: calc-size(fit-content, round(up, size, var(--pixel-pair)));
+}
+.browser-controls > .label {
+  width: calc-size(fit-content, round(up, size, var(--border-hairline)));
+  flex: none;
+}
+
+:root .saved-login-controls .select[data-slot="select-trigger"] {
+  padding-inline: var(--space-6);
+  background-image: none;
+  width: calc-size(auto, round(up, size, var(--border-hairline)));
+}
+
+/* The start form has room for two full permission labels per row. */
+:root .browser-panel .browser-intro .seg:has(.segment-content) {
+  grid-template-columns: repeat(2, max-content);
+}
+:root .browser-panel .seg .segment-content {
+  width: calc-size(max-content, round(up, size, var(--pixel-pair)));
+  white-space: nowrap;
+  flex: none;
+}
+:root .browser-panel .seg:has(.segment-content) button {
+  width: 100%;
+  min-width: max-content;
+}
+:root .browser-panel .seg .segment-content > span {
+  white-space: nowrap;
+}
+
+/* Disabled controls stay readable; a dashed edge identifies unavailable actions. A UI SDK toggle in
+   a group, or a button that's focusable while disabled, has data-disabled instead of :disabled, so
+   its hint can say why; hover and press leave it as it is. */
+:root .browser-panel :is(.seg button, .input, .btn):disabled,
+:root
+  .browser-panel
+  :is(.seg.surface-seg > [data-slot="toggle"], .btn)[data-disabled]:is(*, :hover, :active) {
+  opacity: 1;
+  color: var(--muted);
+  border-color: var(--line);
+  border-style: dashed;
+}
+:root .browser-panel .btn.primary:is(:disabled, [data-disabled]):is(*, :hover, :active) {
+  background: var(--raised);
+}
+:root .browser-panel .input:disabled::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+/* The shared customizable select supplies its one trailing chevron. */
+:root .saved-login-controls > .select[data-slot="select-trigger"] {
+  background-image: none;
+  padding-inline: var(--space-10);
+  gap: var(--space-10);
+  width: calc-size(max-content, round(up, size, var(--pixel-pair)));
+  min-width: max-content;
+  flex: none;
+}
+:root .saved-login-controls {
+  flex-wrap: wrap;
+}
+:root .saved-login-controls > .btn {
+  flex: none;
+  width: calc-size(max-content, round(up, size, var(--pixel-pair)));
+}
+:root .browser-panel .browser-cmd {
+  font-family: var(--mono);
+}
+
+.browser-title {
+  text-box: trim-both cap alphabetic;
+}

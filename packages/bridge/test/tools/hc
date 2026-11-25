@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+console.log(JSON.stringify({ jsonrpc: '2.0', method: 'event', params: { terminal: 't7', type: 'status', data: { status: { state: 'working' } } } }));
+console.log(JSON.stringify({ jsonrpc: '2.0', method: 'event', params: { terminal: 't7', type: 'status', data: { status: { state: 'blocked', kind: 'permission', msg: 'Approve build?' } } } }));
+setTimeout(() => console.log(JSON.stringify({ jsonrpc: '2.0', method: 'event', params: { terminal: 't7', type: 'finished', data: { exit_code: 0 } } })), 30);
+setTimeout(() => {}, 10000);

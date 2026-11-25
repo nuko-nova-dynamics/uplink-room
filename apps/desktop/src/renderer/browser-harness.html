@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Uplink Room: shared browser harness</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Atkinson+Hyperlegible+Next:wght@400;500;700&family=Atkinson+Hyperlegible+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* The sample web page inside the stage. It stands in for a real site, so it doesn't follow the app's theme. */
+      .sample-page { height: 100%; background: #ffffff; color: #1b2430; font: 14px/1.5 Georgia, serif; overflow: hidden; }
+      .sample-chrome { padding: 7px 12px; background: #e9edf2; border-bottom: 1px solid #d3d9e1; font-size: 11px; color: #3c4756; }
+      .sample-body { padding: 18px 26px; max-width: 560px; }
+      .sample-body h1 { font: 700 22px/1.2 Georgia, serif; margin: 0 0 4px; color: #0d3b52; }
+      .sample-build { margin: 0 0 12px; color: #55606e; font: 12px/1.4 system-ui, sans-serif; }
+      .sample-body p { margin: 0 0 12px; text-wrap: pretty; }
+      .sample-body table { border-collapse: collapse; font: 12.5px/1.4 system-ui, sans-serif; }
+      .sample-body td { padding: 5px 16px 5px 0; border-top: 1px solid #e3e7ec; }
+      .sample-body td:first-child { color: #55606e; }
+    </style>
+  </head>
+  <body>
+    <!-- Shared-browser screens with sample data, for review screenshots (scripts/browser-shots.ts). No sign-in, no backend. -->
+    <div id="root"></div>
+    <script type="module" src="./browser-harness.tsx"></script>
+  </body>
+</html>

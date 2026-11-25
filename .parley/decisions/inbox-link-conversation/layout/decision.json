@@ -1,0 +1,19 @@
+{
+  "ask": "inbox-link-conversation",
+  "question": "layout",
+  "prompt": "Where does your conversation with Link live, next to what needs you?",
+  "level": 3,
+  "revision": 2,
+  "choice": [
+    "one-timeline"
+  ],
+  "values": {},
+  "notes": "",
+  "options": {
+    "one-timeline": {
+      "label": "One timeline",
+      "detail": "Cards are Link's messages in the conversation, newest at the bottom, as in Grok Bot. Answered cards fold to receipts where they were.",
+      "folder": "one-timeline/"
+    }
+  }
+}

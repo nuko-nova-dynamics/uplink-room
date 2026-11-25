@@ -1,0 +1,16 @@
+{
+  "image_path": "research/design/mascot/r3-c-line.png",
+  "prompt": "Character design sheet of hand-inked line-art avatars for the AI agents of a team collaboration app, in the spirit of mid-century Japanese line illustration: thin, even, confident lines, generous white space, one spot color (cobalt blue) used sparingly for fills. At the top, larger: the house mascot, a rounded-square character with big round eyes, a small smile and a short antenna ending in a little dot. Below, one row of six smaller agent characters in the same system, each a simple body shape (rounded square, pill, circle, soft triangle, tall rounded rectangle, rounded hexagon) with the same eye style and one small accessory: headphones, a tiny wrench, round glasses, a pencil, a clipboard, a little lantern. Warm off-white paper background. No text, no letters, no logos.",
+  "revised_prompt": "Character design sheet of hand-inked line-art avatars for the AI agents of a team collaboration app, in the spirit of mid-century Japanese line illustration: thin, even, confident lines, generous white space, one spot color (cobalt blue) used sparingly for fills. At the top, larger: the house mascot, a rounded-square character with big round eyes, a small smile and a short antenna ending in a little dot. Below, one row of six smaller agent characters in the same system, each a simple body shape (rounded square, pill, circle, soft triangle, tall rounded rectangle, rounded hexagon) with the same eye style and one small accessory: headphones, a tiny wrench, round glasses, a pencil, a clipboard, a little lantern. Warm off-white paper background. No text, no letters, no logos.",
+  "size": "1536x1024",
+  "quality": "medium",
+  "format": "png",
+  "is_transparent": false,
+  "input_image": null,
+  "requested_image_model": null,
+  "ts": "2026-11-02T02:49:56Z",
+  "resolved_quality": "medium",
+  "image_model": "gpt-image-2-codex",
+  "resolved_background": "opaque",
+  "transparency_mode": null
+}

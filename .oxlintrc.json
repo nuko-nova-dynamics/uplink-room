@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "ignorePatterns": ["design/**", "concept/**", "research/**", "**/_generated/**", "**/out/**", "**/dist/**"],
+  "jsPlugins": ["./scripts/lint/oxlint-plugin.mjs"],
+  "rules": {
+    "room/entry-handles-closed-output": "error",
+    "room/public-functions-answer-refusals": "error",
+    "room/convex-calls-accept-refusals": "error",
+    "room/run-by-name-through-catalog": "error",
+    "room/room-api-reads-runs-through-access": "error",
+    "room/child-process-reports-start-failure": "error"
+  },
+  "overrides": [
+    {
+      "files": ["packages/backend/convex/inbox.ts"],
+      "rules": { "no-await-in-loop": "error" }
+    }
+  ]
+}

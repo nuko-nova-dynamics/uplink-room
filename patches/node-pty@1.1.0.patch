@@ -1,0 +1,42 @@
+diff --git a/lib/conpty_console_list_agent.js b/lib/conpty_console_list_agent.js
+index 8c4fca9022a6d6f015bca87f61625cde2278f428..87f2ad482a2b976dcfd891df6f91fc7714c9b541 100644
+--- a/lib/conpty_console_list_agent.js
++++ b/lib/conpty_console_list_agent.js
+@@ -10,7 +10,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
+ var utils_1 = require("./utils");
+ var getConsoleProcessList = utils_1.loadNativeModule('conpty_console_list').module.getConsoleProcessList;
+ var shellPid = parseInt(process.argv[2], 10);
+-var consoleProcessList = getConsoleProcessList(shellPid);
++// Patched (uplink-room #34, as node-pty 1.2.0-beta.18 does): AttachConsole fails when the
++// shell already exited. Uncaught, the agent died without answering and kill() fell back to
++// killing the shell's pid 5 s later, by which time Windows may have given it to another process.
++var consoleProcessList = [];
++if (shellPid > 0) {
++    try {
++        consoleProcessList = getConsoleProcessList(shellPid);
++    }
++    catch (_a) {
++        consoleProcessList = [];
++    }
++}
+ process.send({ consoleProcessList: consoleProcessList });
+ process.exit(0);
+ //# sourceMappingURL=conpty_console_list_agent.js.map
+\ No newline at end of file
+diff --git a/lib/windowsPtyAgent.js b/lib/windowsPtyAgent.js
+index a358ffb177357e177661033c1b092f9c9d0e5f5a..104ec8ae84f7d0b28e2f3149d742bb6707aeef2d 100644
+--- a/lib/windowsPtyAgent.js
++++ b/lib/windowsPtyAgent.js
+@@ -187,9 +187,10 @@ var WindowsPtyAgent = /** @class */ (function () {
+                 resolve(message.consoleProcessList);
+             });
+             var timeout = setTimeout(function () {
+-                // Something went wrong, just send back the shell PID
++                // Patched (uplink-room #34): the pseudoconsole and its shell were closed 5 s ago,
++                // so the shell's pid may now belong to an unrelated process. Kill nothing.
+                 agent.kill();
+-                resolve([_this._innerPid]);
++                resolve([]);
+             }, 5000);
+         });
+     };

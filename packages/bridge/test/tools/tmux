@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+console.log('%subscription-changed uplink $0 - - - : working||');
+console.log('%subscription-changed uplink $0 - - - : waiting|Approve build?|approval');
+setTimeout(() => console.log('%subscription-changed uplink $0 - - - : done||'), 30);
+setTimeout(() => {}, 10000);

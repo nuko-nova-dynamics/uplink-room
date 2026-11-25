@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600&family=Fragment+Mono&display=swap');
+
+.bb .ss-stage { background: #181512; border-radius: 14px; overflow: hidden; font-family: 'Familjen Grotesk', ui-sans-serif, system-ui, sans-serif; color: #efe9e2; }
+.bb-board { position: absolute; inset: 0; display: grid; grid-template-columns: 300px minmax(0, 1fr); }
+.bb-brand { padding: 36px 32px; border-right: 1px solid #2e2924; display: flex; flex-direction: column; }
+.bb-lockup { display: flex; align-items: center; gap: 14px; }
+.bb-word { white-space: nowrap; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1; }
+.bb-line { margin: 12px 0 0; font-size: 14px; color: #a69d92; }
+.bb-icons { margin-top: auto; display: flex; align-items: flex-end; gap: 16px; }
+.bb-icon { display: grid; place-items: center; background: #13110e; box-shadow: inset 0 0 0 1px #2e2924; }
+.bb-type { padding: 30px 32px; display: flex; flex-direction: column; gap: 18px; }
+.bb-spec { display: flex; flex-direction: column; gap: 4px; }
+.bb-name { font-size: 12px; color: #6f675e; }
+.bb-sample { font-size: 28px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.15; }
+.bb-body { font-size: 14px; color: #a69d92; line-height: 1.45; }
+.bb-mono { font-family: 'Fragment Mono', ui-monospace, monospace; font-size: 13px; color: #8ab4f8; }
+.bb-swatches { margin-top: auto; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px 8px; }
+.bb-sw { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: #a69d92; white-space: nowrap; }
+.bb-sw i { width: 14px; height: 14px; border-radius: 4px; flex: none; box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08); }

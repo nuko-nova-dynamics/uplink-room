@@ -1,0 +1,2275 @@
+[
+ {
+  "kind": "snapshot",
+  "snapshotSequence": 12,
+  "projection": {
+   "thread": {
+    "createdBy": "user",
+    "creationSource": "web",
+    "id": "uplink-room-view-1",
+    "projectId": "b50f8ada-9072-49c9-987e-c7a4381d1f62",
+    "title": "APPROVE then PLAN and TOOLS",
+    "providerInstanceId": "scripted",
+    "modelSelection": {
+     "instanceId": "scripted",
+     "model": "default"
+    },
+    "runtimeMode": "approval-required",
+    "interactionMode": "default",
+    "branch": null,
+    "worktreePath": null,
+    "pullRequests": [],
+    "activeProviderThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "lineage": {
+     "parentThreadId": null,
+     "relationshipToParent": null,
+     "rootThreadId": "uplink-room-view-1"
+    },
+    "forkedFrom": null,
+    "createdAt": "2026-11-04T21:10:32.438Z",
+    "updatedAt": "2026-11-04T21:10:32.470Z",
+    "archivedAt": null,
+    "settledOverride": null,
+    "settledAt": null,
+    "snoozedUntil": null,
+    "snoozedAt": null,
+    "lastVisitedAt": "2026-11-04T21:10:32.447Z",
+    "titleRegeneration": {
+     "requestId": "uplink-room:start-thread:view-1:initial-message",
+     "startedAt": "2026-11-04T21:10:32.448Z"
+    },
+    "deletedAt": null
+   },
+   "runs": [
+    {
+     "id": "run:thread:uplink-room-view-1:ordinal:1",
+     "threadId": "uplink-room-view-1",
+     "ordinal": 1,
+     "providerInstanceId": "scripted",
+     "modelSelection": {
+      "instanceId": "scripted",
+      "model": "default"
+     },
+     "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+     "userMessageId": "message:thread:uplink-room-view-1:ordinal:1:487a71a4-c27d-4205-822f-0e3206ec7028",
+     "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+     "activeAttemptId": "run-attempt:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:attempt:1",
+     "status": "preparing",
+     "queuePosition": null,
+     "requestedAt": "2026-11-04T21:10:32.448Z",
+     "startedAt": null,
+     "completedAt": null,
+     "checkpointId": null,
+     "contextHandoffId": null,
+     "workspacePreparation": {
+      "type": "root"
+     }
+    }
+   ],
+   "attempts": [
+    {
+     "id": "run-attempt:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:attempt:1",
+     "runId": "run:thread:uplink-room-view-1:ordinal:1",
+     "attemptOrdinal": 1,
+     "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+     "providerInstanceId": "scripted",
+     "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+     "providerTurnId": null,
+     "reason": "initial",
+     "status": "pending",
+     "startedAt": null,
+     "completedAt": null
+    }
+   ],
+   "nodes": [
+    {
+     "id": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+     "threadId": "uplink-room-view-1",
+     "runId": "run:thread:uplink-room-view-1:ordinal:1",
+     "parentNodeId": null,
+     "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+     "kind": "root_turn",
+     "status": "pending",
+     "countsForRun": true,
+     "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+     "providerTurnId": null,
+     "nativeItemRef": null,
+     "runtimeRequestId": null,
+     "checkpointScopeId": null,
+     "startedAt": null,
+     "completedAt": null
+    }
+   ],
+   "subagents": [],
+   "providerSessions": [],
+   "providerThreads": [
+    {
+     "id": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+     "driver": "acpRegistry",
+     "providerInstanceId": "scripted",
+     "providerSessionId": "provider-session:provider-instance:scripted:thread:uplink-room-view-1:dd83e631-b9a2-411f-957e-eeca9a5a0e71",
+     "appThreadId": "uplink-room-view-1",
+     "ownerNodeId": null,
+     "nativeThreadRef": null,
+     "nativeConversationHeadRef": null,
+     "status": "not_loaded",
+     "firstRunOrdinal": 1,
+     "lastRunOrdinal": 1,
+     "handoffIds": [],
+     "forkedFrom": null,
+     "pendingBackgroundTasks": [],
+     "contextUsage": null,
+     "nativeMetadata": null,
+     "goal": null,
+     "createdAt": "2026-11-04T21:10:32.448Z",
+     "updatedAt": "2026-11-04T21:10:32.448Z"
+    }
+   ],
+   "providerTurns": [],
+   "runtimeRequests": [],
+   "messages": [
+    {
+     "createdBy": "user",
+     "creationSource": "web",
+     "id": "message:thread:uplink-room-view-1:ordinal:1:487a71a4-c27d-4205-822f-0e3206ec7028",
+     "threadId": "uplink-room-view-1",
+     "runId": "run:thread:uplink-room-view-1:ordinal:1",
+     "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+     "role": "user",
+     "text": "APPROVE then PLAN and TOOLS",
+     "attachments": [],
+     "streaming": false,
+     "createdAt": "2026-11-04T21:10:32.448Z",
+     "updatedAt": "2026-11-04T21:10:32.448Z"
+    }
+   ],
+   "plans": [],
+   "turnItems": [
+    {
+     "id": "turn-item:message:message%3Athread%3Auplink-room-view-1%3Aordinal%3A1%3A487a71a4-c27d-4205-822f-0e3206ec7028",
+     "threadId": "uplink-room-view-1",
+     "runId": "run:thread:uplink-room-view-1:ordinal:1",
+     "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+     "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+     "providerTurnId": null,
+     "nativeItemRef": null,
+     "parentItemId": null,
+     "ordinal": 1000001,
+     "status": "completed",
+     "title": null,
+     "startedAt": "2026-11-04T21:10:32.448Z",
+     "completedAt": "2026-11-04T21:10:32.448Z",
+     "updatedAt": "2026-11-04T21:10:32.448Z",
+     "createdBy": "user",
+     "creationSource": "web",
+     "type": "user_message",
+     "messageId": "message:thread:uplink-room-view-1:ordinal:1:487a71a4-c27d-4205-822f-0e3206ec7028",
+     "inputIntent": "turn_start",
+     "text": "APPROVE then PLAN and TOOLS",
+     "attachments": []
+    },
+    {
+     "id": "turn-item:provider:acpRegistry:native-item:workspace-preparation%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+     "threadId": "uplink-room-view-1",
+     "runId": "run:thread:uplink-room-view-1:ordinal:1",
+     "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+     "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+     "providerTurnId": null,
+     "nativeItemRef": null,
+     "parentItemId": null,
+     "ordinal": 1000002,
+     "status": "running",
+     "title": "Preparing workspace",
+     "startedAt": "2026-11-04T21:10:32.448Z",
+     "completedAt": null,
+     "updatedAt": "2026-11-04T21:10:32.448Z",
+     "type": "command_execution",
+     "input": "Preparing workspace"
+    }
+   ],
+   "checkpointScopes": [],
+   "checkpoints": [],
+   "contextHandoffs": [],
+   "contextTransfers": [],
+   "visibleTurnItems": [
+    {
+     "position": 0,
+     "visibility": "local",
+     "sourceThreadId": "uplink-room-view-1",
+     "sourceItemId": "turn-item:message:message%3Athread%3Auplink-room-view-1%3Aordinal%3A1%3A487a71a4-c27d-4205-822f-0e3206ec7028",
+     "item": {
+      "id": "turn-item:message:message%3Athread%3Auplink-room-view-1%3Aordinal%3A1%3A487a71a4-c27d-4205-822f-0e3206ec7028",
+      "threadId": "uplink-room-view-1",
+      "runId": "run:thread:uplink-room-view-1:ordinal:1",
+      "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+      "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+      "providerTurnId": null,
+      "nativeItemRef": null,
+      "parentItemId": null,
+      "ordinal": 1000001,
+      "status": "completed",
+      "title": null,
+      "startedAt": "2026-11-04T21:10:32.448Z",
+      "completedAt": "2026-11-04T21:10:32.448Z",
+      "updatedAt": "2026-11-04T21:10:32.448Z",
+      "createdBy": "user",
+      "creationSource": "web",
+      "type": "user_message",
+      "messageId": "message:thread:uplink-room-view-1:ordinal:1:487a71a4-c27d-4205-822f-0e3206ec7028",
+      "inputIntent": "turn_start",
+      "text": "APPROVE then PLAN and TOOLS",
+      "attachments": []
+     }
+    },
+    {
+     "position": 1,
+     "visibility": "local",
+     "sourceThreadId": "uplink-room-view-1",
+     "sourceItemId": "turn-item:provider:acpRegistry:native-item:workspace-preparation%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+     "item": {
+      "id": "turn-item:provider:acpRegistry:native-item:workspace-preparation%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+      "threadId": "uplink-room-view-1",
+      "runId": "run:thread:uplink-room-view-1:ordinal:1",
+      "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+      "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+      "providerTurnId": null,
+      "nativeItemRef": null,
+      "parentItemId": null,
+      "ordinal": 1000002,
+      "status": "running",
+      "title": "Preparing workspace",
+      "startedAt": "2026-11-04T21:10:32.448Z",
+      "completedAt": null,
+      "updatedAt": "2026-11-04T21:10:32.448Z",
+      "type": "command_execution",
+      "input": "Preparing workspace"
+     }
+    }
+   ],
+   "updatedAt": "2026-11-04T21:10:32.470Z"
+  },
+  "historyCursor": null,
+  "hasMoreHistory": false,
+  "latestLocalTurnOrdinal": 1000002
+ },
+ {
+  "kind": "event",
+  "sequence": 13,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:command:uplink-room%3Astart-thread%3Aview-1%3Arelease:19e9ad4c-50c4-49f1-bc13-a8e66d4184b2",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.483Z",
+   "type": "checkpoint-scope.created",
+   "payload": {
+    "id": "checkpoint-scope:thread:uplink-room-view-1:name:root",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "parentScopeId": null,
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "kind": "root_run",
+    "ordinalWithinParent": 0,
+    "advancesAppRunCount": true,
+    "cwd": "/tmp/live/repo",
+    "createdAt": "2026-11-04T21:10:32.483Z"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 14,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:command:uplink-room%3Astart-thread%3Aview-1%3Arelease:ef848a23-904b-45af-b846-7d1d8c3f085f",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.483Z",
+   "type": "node.updated",
+   "payload": {
+    "id": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "parentNodeId": null,
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "kind": "root_turn",
+    "status": "pending",
+    "countsForRun": true,
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": null,
+    "nativeItemRef": null,
+    "runtimeRequestId": null,
+    "checkpointScopeId": "checkpoint-scope:thread:uplink-room-view-1:name:root",
+    "startedAt": null,
+    "completedAt": null
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 15,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:command:uplink-room%3Astart-thread%3Aview-1%3Arelease:1fdad709-c953-4995-8ef4-45ab9f51ef9d",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.483Z",
+   "type": "turn-item.updated",
+   "payload": {
+    "id": "turn-item:provider:acpRegistry:native-item:workspace-preparation%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": null,
+    "nativeItemRef": null,
+    "parentItemId": null,
+    "ordinal": 1000002,
+    "status": "completed",
+    "title": "Workspace ready",
+    "startedAt": "2026-11-04T21:10:32.448Z",
+    "completedAt": "2026-11-04T21:10:32.483Z",
+    "updatedAt": "2026-11-04T21:10:32.483Z",
+    "type": "command_execution",
+    "input": "Preparing workspace",
+    "outputOmitted": true,
+    "exitCode": 0
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 16,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:command:uplink-room%3Astart-thread%3Aview-1%3Arelease:9bab69f2-50fc-47a6-9fc2-9eaff07aedfb",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.483Z",
+   "type": "run.updated",
+   "payload": {
+    "id": "run:thread:uplink-room-view-1:ordinal:1",
+    "threadId": "uplink-room-view-1",
+    "ordinal": 1,
+    "providerInstanceId": "scripted",
+    "modelSelection": {
+     "instanceId": "scripted",
+     "model": "default"
+    },
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "userMessageId": "message:thread:uplink-room-view-1:ordinal:1:487a71a4-c27d-4205-822f-0e3206ec7028",
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "activeAttemptId": "run-attempt:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:attempt:1",
+    "status": "starting",
+    "queuePosition": null,
+    "requestedAt": "2026-11-04T21:10:32.448Z",
+    "startedAt": null,
+    "completedAt": null,
+    "checkpointId": null,
+    "contextHandoffId": null,
+    "workspacePreparation": {
+     "type": "root"
+    }
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 17,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:276aecd8-6bc5-4c06-ace9-6c67cfa9d264",
+   "threadId": "uplink-room-view-1",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.544Z",
+   "type": "provider-session.attached",
+   "payload": {
+    "id": "provider-session:provider-instance:scripted:thread:uplink-room-view-1:dd83e631-b9a2-411f-957e-eeca9a5a0e71",
+    "driver": "acpRegistry",
+    "providerInstanceId": "scripted",
+    "status": "ready",
+    "cwd": "/tmp/live/repo",
+    "model": "default",
+    "capabilities": {
+     "sessions": {
+      "supportsMultipleProviderThreadsPerSession": false,
+      "supportsModelSwitchInSession": false,
+      "supportsProviderSwitchingViaHandoff": true,
+      "supportsRuntimeModeSwitchInSession": false,
+      "pendingRequestsSurviveRestart": false
+     },
+     "threads": {
+      "canCreateEmptyThread": true,
+      "canReadThreadSnapshot": false,
+      "canRollbackThread": true,
+      "canForkThread": false,
+      "canForkFromTurn": false,
+      "canForkFromSubagentThread": false,
+      "exposesNativeThreadId": true
+     },
+     "turns": {
+      "exposesNativeTurnId": false,
+      "emitsTurnStarted": true,
+      "emitsTurnCompleted": true,
+      "supportsInterrupt": true,
+      "supportsActiveSteering": false,
+      "supportsSteeringByInterruptRestart": true,
+      "supportsQueuedMessages": true,
+      "terminalStatusQuality": "strong"
+     },
+     "streaming": {
+      "streamsAssistantText": true,
+      "streamsReasoning": true,
+      "streamsToolOutput": true,
+      "streamsPlanText": false,
+      "emitsMessageCompleted": true
+     },
+     "tools": {
+      "exposesToolItemIds": true,
+      "emitsToolStarted": true,
+      "emitsToolCompleted": true,
+      "emitsToolOutput": true,
+      "supportsMcpTools": true,
+      "supportsDynamicToolCallbacks": false
+     },
+     "approvals": {
+      "supportsCommandApproval": true,
+      "supportsFileReadApproval": true,
+      "supportsFileChangeApproval": true,
+      "supportsApplyPatchApproval": false,
+      "approvalsHaveNativeRequestIds": false,
+      "approvalCallbacksAreLiveOnly": true,
+      "approvalsCanOriginateFromSubagents": false
+     },
+     "planning": {
+      "emitsPlanUpdated": true,
+      "emitsTodoList": true,
+      "emitsProposedPlan": false,
+      "supportsStructuredQuestions": true,
+      "planDeltasHaveItemIds": false
+     },
+     "subagents": {
+      "supportsSubagents": false,
+      "exposesSubagentThreadIds": false,
+      "emitsSubagentLifecycle": false,
+      "canWaitForSubagents": false,
+      "canCloseSubagents": false,
+      "canForkSubagentThread": false
+     },
+     "context": {
+      "acceptsSystemContext": false,
+      "acceptsDeveloperContext": false,
+      "acceptsSyntheticUserContext": true,
+      "canGenerateSummaries": true,
+      "canConsumeHandoffSummaries": true,
+      "supportsDeltaHandoff": true,
+      "supportsFullThreadHandoff": true,
+      "maxRecommendedHandoffChars": null
+     },
+     "checkpointing": {
+      "appCanCheckpointFilesystem": true,
+      "supportsNestedCheckpointScopes": true,
+      "providerCanRollbackConversation": true,
+      "providerRollbackReturnsSnapshot": true,
+      "providerCanReadConversationSnapshot": false
+     },
+     "identity": {
+      "nativeThreadIds": "strong",
+      "nativeTurnIds": "weak",
+      "nativeItemIds": "weak",
+      "nativeRequestIds": "weak"
+     },
+     "runtimePolicy": {
+      "enforcement": "client-boundary"
+     }
+    },
+    "createdAt": "2026-11-04T21:10:32.544Z",
+    "updatedAt": "2026-11-04T21:10:32.544Z",
+    "lastError": null
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 18,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:bc0cb990-538f-4495-b019-baecdbdbbb43",
+   "threadId": "uplink-room-view-1",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.548Z",
+   "type": "provider-session.updated",
+   "payload": {
+    "id": "provider-session:provider-instance:scripted:thread:uplink-room-view-1:dd83e631-b9a2-411f-957e-eeca9a5a0e71",
+    "driver": "acpRegistry",
+    "providerInstanceId": "scripted",
+    "status": "ready",
+    "cwd": "/tmp/live/repo",
+    "model": "default",
+    "capabilities": {
+     "sessions": {
+      "supportsMultipleProviderThreadsPerSession": false,
+      "supportsModelSwitchInSession": false,
+      "supportsProviderSwitchingViaHandoff": true,
+      "supportsRuntimeModeSwitchInSession": false,
+      "pendingRequestsSurviveRestart": false
+     },
+     "threads": {
+      "canCreateEmptyThread": true,
+      "canReadThreadSnapshot": false,
+      "canRollbackThread": true,
+      "canForkThread": false,
+      "canForkFromTurn": false,
+      "canForkFromSubagentThread": false,
+      "exposesNativeThreadId": true
+     },
+     "turns": {
+      "exposesNativeTurnId": false,
+      "emitsTurnStarted": true,
+      "emitsTurnCompleted": true,
+      "supportsInterrupt": true,
+      "supportsActiveSteering": false,
+      "supportsSteeringByInterruptRestart": true,
+      "supportsQueuedMessages": true,
+      "terminalStatusQuality": "strong"
+     },
+     "streaming": {
+      "streamsAssistantText": true,
+      "streamsReasoning": true,
+      "streamsToolOutput": true,
+      "streamsPlanText": false,
+      "emitsMessageCompleted": true
+     },
+     "tools": {
+      "exposesToolItemIds": true,
+      "emitsToolStarted": true,
+      "emitsToolCompleted": true,
+      "emitsToolOutput": true,
+      "supportsMcpTools": true,
+      "supportsDynamicToolCallbacks": false
+     },
+     "approvals": {
+      "supportsCommandApproval": true,
+      "supportsFileReadApproval": true,
+      "supportsFileChangeApproval": true,
+      "supportsApplyPatchApproval": false,
+      "approvalsHaveNativeRequestIds": false,
+      "approvalCallbacksAreLiveOnly": true,
+      "approvalsCanOriginateFromSubagents": false
+     },
+     "planning": {
+      "emitsPlanUpdated": true,
+      "emitsTodoList": true,
+      "emitsProposedPlan": false,
+      "supportsStructuredQuestions": true,
+      "planDeltasHaveItemIds": false
+     },
+     "subagents": {
+      "supportsSubagents": false,
+      "exposesSubagentThreadIds": false,
+      "emitsSubagentLifecycle": false,
+      "canWaitForSubagents": false,
+      "canCloseSubagents": false,
+      "canForkSubagentThread": false
+     },
+     "context": {
+      "acceptsSystemContext": false,
+      "acceptsDeveloperContext": false,
+      "acceptsSyntheticUserContext": true,
+      "canGenerateSummaries": true,
+      "canConsumeHandoffSummaries": true,
+      "supportsDeltaHandoff": true,
+      "supportsFullThreadHandoff": true,
+      "maxRecommendedHandoffChars": null
+     },
+     "checkpointing": {
+      "appCanCheckpointFilesystem": true,
+      "supportsNestedCheckpointScopes": true,
+      "providerCanRollbackConversation": true,
+      "providerRollbackReturnsSnapshot": true,
+      "providerCanReadConversationSnapshot": false
+     },
+     "identity": {
+      "nativeThreadIds": "strong",
+      "nativeTurnIds": "weak",
+      "nativeItemIds": "weak",
+      "nativeRequestIds": "weak"
+     },
+     "runtimePolicy": {
+      "enforcement": "client-boundary"
+     }
+    },
+    "createdAt": "2026-11-04T21:10:32.544Z",
+    "updatedAt": "2026-11-04T21:10:32.544Z",
+    "lastError": null
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 19,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:4f796e81-8179-4149-ae7f-2dfc7bfe1f30",
+   "threadId": "uplink-room-view-1",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.548Z",
+   "type": "provider-thread.updated",
+   "payload": {
+    "id": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "driver": "acpRegistry",
+    "providerInstanceId": "scripted",
+    "providerSessionId": "provider-session:provider-instance:scripted:thread:uplink-room-view-1:dd83e631-b9a2-411f-957e-eeca9a5a0e71",
+    "appThreadId": "uplink-room-view-1",
+    "ownerNodeId": null,
+    "nativeThreadRef": {
+     "driver": "acpRegistry",
+     "nativeId": "scripted-1",
+     "strength": "strong"
+    },
+    "nativeConversationHeadRef": null,
+    "status": "active",
+    "firstRunOrdinal": 1,
+    "lastRunOrdinal": 1,
+    "handoffIds": [],
+    "forkedFrom": null,
+    "pendingBackgroundTasks": [],
+    "contextUsage": null,
+    "nativeMetadata": {
+     "itemIdentityVersion": 2
+    },
+    "goal": null,
+    "createdAt": "2026-11-04T21:10:32.448Z",
+    "updatedAt": "2026-11-04T21:10:32.548Z"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 20,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:de8b5087-fcb9-45c5-bdbc-723f4ffc0f80",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.548Z",
+   "type": "run.updated",
+   "payload": {
+    "id": "run:thread:uplink-room-view-1:ordinal:1",
+    "threadId": "uplink-room-view-1",
+    "ordinal": 1,
+    "providerInstanceId": "scripted",
+    "modelSelection": {
+     "instanceId": "scripted",
+     "model": "default"
+    },
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "userMessageId": "message:thread:uplink-room-view-1:ordinal:1:487a71a4-c27d-4205-822f-0e3206ec7028",
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "activeAttemptId": "run-attempt:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:attempt:1",
+    "status": "running",
+    "queuePosition": null,
+    "requestedAt": "2026-11-04T21:10:32.448Z",
+    "startedAt": "2026-11-04T21:10:32.548Z",
+    "completedAt": null,
+    "checkpointId": null,
+    "contextHandoffId": null,
+    "workspacePreparation": {
+     "type": "root"
+    }
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 21,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:e7a51c88-1537-4b20-b5fc-3528e4141f19",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.548Z",
+   "type": "run-attempt.updated",
+   "payload": {
+    "id": "run-attempt:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:attempt:1",
+    "nativeThreadId": "scripted-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "attemptOrdinal": 1,
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "providerInstanceId": "scripted",
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": null,
+    "reason": "initial",
+    "status": "running",
+    "startedAt": "2026-11-04T21:10:32.548Z",
+    "completedAt": null
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 22,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:f9383889-4789-411d-a905-d5624ec7b322",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.548Z",
+   "type": "node.updated",
+   "payload": {
+    "id": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "parentNodeId": null,
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "kind": "root_turn",
+    "status": "running",
+    "countsForRun": true,
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": null,
+    "nativeItemRef": null,
+    "runtimeRequestId": null,
+    "checkpointScopeId": "checkpoint-scope:thread:uplink-room-view-1:name:root",
+    "startedAt": "2026-11-04T21:10:32.548Z",
+    "completedAt": null
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 23,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:e8a64786-d0eb-44d1-b69b-f2d12989bb5f",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.644Z",
+   "type": "provider-turn.updated",
+   "payload": {
+    "id": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "runAttemptId": "run-attempt:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:attempt:1",
+    "nativeTurnRef": {
+     "driver": "acpRegistry",
+     "nativeId": "scripted-1:turn:1",
+     "strength": "weak"
+    },
+    "ordinal": 1,
+    "status": "running",
+    "startedAt": "2026-11-04T21:10:32.642Z",
+    "completedAt": null
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 24,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:e49d2240-fa8f-4ed8-8875-36475339d5ee",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.645Z",
+   "type": "provider-thread.updated",
+   "payload": {
+    "id": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "driver": "acpRegistry",
+    "providerInstanceId": "scripted",
+    "providerSessionId": "provider-session:provider-instance:scripted:thread:uplink-room-view-1:dd83e631-b9a2-411f-957e-eeca9a5a0e71",
+    "appThreadId": "uplink-room-view-1",
+    "ownerNodeId": null,
+    "nativeThreadRef": {
+     "driver": "acpRegistry",
+     "nativeId": "scripted-1",
+     "strength": "strong"
+    },
+    "nativeConversationHeadRef": null,
+    "status": "active",
+    "firstRunOrdinal": 1,
+    "lastRunOrdinal": 1,
+    "handoffIds": [],
+    "forkedFrom": null,
+    "pendingBackgroundTasks": [],
+    "contextUsage": null,
+    "nativeMetadata": {
+     "itemIdentityVersion": 2
+    },
+    "goal": null,
+    "createdAt": "2026-11-04T21:10:32.448Z",
+    "updatedAt": "2026-11-04T21:10:32.642Z"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 25,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:8a606d1a-f332-40b2-a21e-67c0c14499b4",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aplan%3Alegacy",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.657Z",
+   "type": "node.updated",
+   "payload": {
+    "id": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aplan%3Alegacy",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "parentNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "kind": "todo_list",
+    "status": "running",
+    "countsForRun": false,
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "scripted-1:turn:1:plan:legacy",
+     "strength": "weak"
+    },
+    "runtimeRequestId": null,
+    "checkpointScopeId": null,
+    "startedAt": "2026-11-04T21:10:32.655Z",
+    "completedAt": null
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 26,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:adc42b80-ce16-4e6a-b7cc-d006fff2625e",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aplan%3Alegacy",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.658Z",
+   "type": "plan.updated",
+   "payload": {
+    "id": "plan:thread:uplink-room-view-1:provider:acpRegistry:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:ad10ba69-b1c5-4ab8-aebd-acbdb42cf707",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aplan%3Alegacy",
+    "status": "active",
+    "kind": "todo_list",
+    "steps": [
+     {
+      "id": "acp-step-1",
+      "text": "Read the invoice totals code",
+      "status": "completed"
+     },
+     {
+      "id": "acp-step-2",
+      "text": "Fix the rounding",
+      "status": "running",
+      "durationAnchorAt": "2026-11-04T21:10:32.658Z"
+     },
+     {
+      "id": "acp-step-3",
+      "text": "Run the tests",
+      "status": "pending",
+      "durationAnchorAt": "2026-11-04T21:10:32.658Z"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 27,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:43c77e05-32b7-4888-b31a-ab1e8d765543",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aplan%3Alegacy",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.660Z",
+   "type": "turn-item.updated",
+   "payload": {
+    "id": "turn-item:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aplan%3Alegacy",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aplan%3Alegacy",
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "scripted-1:turn:1:plan:legacy",
+     "strength": "weak"
+    },
+    "parentItemId": null,
+    "ordinal": 1000003,
+    "status": "running",
+    "title": null,
+    "startedAt": "2026-11-04T21:10:32.655Z",
+    "completedAt": null,
+    "updatedAt": "2026-11-04T21:10:32.655Z",
+    "type": "todo_list",
+    "planId": "plan:thread:uplink-room-view-1:provider:acpRegistry:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:ad10ba69-b1c5-4ab8-aebd-acbdb42cf707",
+    "steps": [
+     {
+      "id": "acp-step-1",
+      "text": "Read the invoice totals code",
+      "status": "completed"
+     },
+     {
+      "id": "acp-step-2",
+      "text": "Fix the rounding",
+      "status": "running"
+     },
+     {
+      "id": "acp-step-3",
+      "text": "Run the tests",
+      "status": "pending"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 28,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:10726b2b-98be-4977-b398-99238453a9e3",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-read",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.661Z",
+   "type": "node.updated",
+   "payload": {
+    "id": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-read",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "parentNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "kind": "tool_call",
+    "status": "running",
+    "countsForRun": true,
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "tool-read",
+     "strength": "strong"
+    },
+    "runtimeRequestId": null,
+    "checkpointScopeId": null,
+    "startedAt": "2026-11-04T21:10:32.656Z",
+    "completedAt": null
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 29,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:2eea8d02-6f2f-4b7f-8e4b-4005072e4099",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-read",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.661Z",
+   "type": "turn-item.updated",
+   "payload": {
+    "id": "turn-item:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-read",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-read",
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "tool-read",
+     "strength": "strong"
+    },
+    "parentItemId": null,
+    "ordinal": 1000004,
+    "status": "running",
+    "title": "Read file",
+    "startedAt": "2026-11-04T21:10:32.656Z",
+    "completedAt": null,
+    "updatedAt": "2026-11-04T21:10:32.656Z",
+    "type": "dynamic_tool",
+    "toolName": "Read",
+    "input": {
+     "command": "Read src/totals.ts"
+    }
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 30,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:6f539eaa-4ccd-4c54-af51-c821dfa06b42",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-read",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.807Z",
+   "type": "node.updated",
+   "payload": {
+    "id": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-read",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "parentNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "kind": "tool_call",
+    "status": "completed",
+    "countsForRun": true,
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "tool-read",
+     "strength": "strong"
+    },
+    "runtimeRequestId": null,
+    "checkpointScopeId": null,
+    "startedAt": "2026-11-04T21:10:32.656Z",
+    "completedAt": "2026-11-04T21:10:32.806Z"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 31,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:11326d59-e225-4251-8c82-5ba657f2638c",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-read",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.808Z",
+   "type": "turn-item.updated",
+   "payload": {
+    "id": "turn-item:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-read",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-read",
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "tool-read",
+     "strength": "strong"
+    },
+    "parentItemId": null,
+    "ordinal": 1000004,
+    "status": "completed",
+    "title": "Tool",
+    "startedAt": "2026-11-04T21:10:32.656Z",
+    "completedAt": "2026-11-04T21:10:32.806Z",
+    "updatedAt": "2026-11-04T21:10:32.806Z",
+    "type": "dynamic_tool",
+    "toolName": "Read",
+    "input": {
+     "command": "Read src/totals.ts"
+    },
+    "outputOmitted": true
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 32,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:03f41287-9cae-4ebf-9eea-7b09592bcdaa",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-test",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.809Z",
+   "type": "node.updated",
+   "payload": {
+    "id": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-test",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "parentNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "kind": "tool_call",
+    "status": "running",
+    "countsForRun": true,
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "tool-test",
+     "strength": "strong"
+    },
+    "runtimeRequestId": null,
+    "checkpointScopeId": null,
+    "startedAt": "2026-11-04T21:10:32.806Z",
+    "completedAt": null
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 33,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:ee1f1f60-c577-4a77-a3a7-a4eb5d6a853c",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-test",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.810Z",
+   "type": "turn-item.updated",
+   "payload": {
+    "id": "turn-item:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-test",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-test",
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "tool-test",
+     "strength": "strong"
+    },
+    "parentItemId": null,
+    "ordinal": 1000005,
+    "status": "running",
+    "title": "Ran command",
+    "startedAt": "2026-11-04T21:10:32.806Z",
+    "completedAt": null,
+    "updatedAt": "2026-11-04T21:10:32.806Z",
+    "type": "command_execution",
+    "input": "pnpm test"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 34,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:b1e721d9-1e25-4807-b453-7db4422c1454",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-test",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.965Z",
+   "type": "node.updated",
+   "payload": {
+    "id": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-test",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "parentNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "kind": "tool_call",
+    "status": "failed",
+    "countsForRun": true,
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "tool-test",
+     "strength": "strong"
+    },
+    "runtimeRequestId": null,
+    "checkpointScopeId": null,
+    "startedAt": "2026-11-04T21:10:32.806Z",
+    "completedAt": "2026-11-04T21:10:32.959Z"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 35,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:880552d5-414f-49e8-aca8-86d6875b2f8e",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-test",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.969Z",
+   "type": "turn-item.updated",
+   "payload": {
+    "id": "turn-item:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-test",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-test",
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "tool-test",
+     "strength": "strong"
+    },
+    "parentItemId": null,
+    "ordinal": 1000005,
+    "status": "failed",
+    "title": "Tool",
+    "startedAt": "2026-11-04T21:10:32.806Z",
+    "completedAt": "2026-11-04T21:10:32.959Z",
+    "updatedAt": "2026-11-04T21:10:32.959Z",
+    "type": "command_execution",
+    "input": "pnpm test",
+    "outputOmitted": true
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 36,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:86c9d970-f94a-4aba-b62e-4c0256378fab",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-search",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.973Z",
+   "type": "node.updated",
+   "payload": {
+    "id": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-search",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "parentNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "kind": "tool_call",
+    "status": "running",
+    "countsForRun": true,
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "tool-search",
+     "strength": "strong"
+    },
+    "runtimeRequestId": null,
+    "checkpointScopeId": null,
+    "startedAt": "2026-11-04T21:10:32.959Z",
+    "completedAt": null
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 37,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:c26cf06b-d602-419b-8245-6bba6f6b33d1",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-search",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:32.974Z",
+   "type": "turn-item.updated",
+   "payload": {
+    "id": "turn-item:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-search",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-search",
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "tool-search",
+     "strength": "strong"
+    },
+    "parentItemId": null,
+    "ordinal": 1000006,
+    "status": "running",
+    "title": "Searched files",
+    "startedAt": "2026-11-04T21:10:32.959Z",
+    "completedAt": null,
+    "updatedAt": "2026-11-04T21:10:32.959Z",
+    "type": "file_search"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 38,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:1616d5dd-5513-464c-b36f-028e50b6f9eb",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-search",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.113Z",
+   "type": "node.updated",
+   "payload": {
+    "id": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-search",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "parentNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "kind": "tool_call",
+    "status": "completed",
+    "countsForRun": true,
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "tool-search",
+     "strength": "strong"
+    },
+    "runtimeRequestId": null,
+    "checkpointScopeId": null,
+    "startedAt": "2026-11-04T21:10:32.959Z",
+    "completedAt": "2026-11-04T21:10:33.110Z"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 39,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:3bfc6044-45d5-48b2-8f8e-603a71920372",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-search",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.114Z",
+   "type": "turn-item.updated",
+   "payload": {
+    "id": "turn-item:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-search",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Atool-search",
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "tool-search",
+     "strength": "strong"
+    },
+    "parentItemId": null,
+    "ordinal": 1000006,
+    "status": "completed",
+    "title": "Tool",
+    "startedAt": "2026-11-04T21:10:32.959Z",
+    "completedAt": "2026-11-04T21:10:33.110Z",
+    "updatedAt": "2026-11-04T21:10:33.110Z",
+    "type": "file_search"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 40,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:15a961f8-3b59-4166-82d7-d441ba8b9380",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Aprobe-1793826633109",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.115Z",
+   "type": "node.updated",
+   "payload": {
+    "id": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Aprobe-1793826633109",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "parentNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "kind": "tool_call",
+    "status": "running",
+    "countsForRun": true,
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "probe-1793826633109",
+     "strength": "strong"
+    },
+    "runtimeRequestId": null,
+    "checkpointScopeId": null,
+    "startedAt": "2026-11-04T21:10:33.111Z",
+    "completedAt": null
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 41,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:aba803af-53ef-40e9-91a1-8d6f9cb267ba",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Aprobe-1793826633109",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.115Z",
+   "type": "turn-item.updated",
+   "payload": {
+    "id": "turn-item:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Aprobe-1793826633109",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Aprobe-1793826633109",
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "probe-1793826633109",
+     "strength": "strong"
+    },
+    "parentItemId": null,
+    "ordinal": 1000007,
+    "status": "pending",
+    "title": "Ran command",
+    "startedAt": "2026-11-04T21:10:33.111Z",
+    "completedAt": null,
+    "updatedAt": "2026-11-04T21:10:33.111Z",
+    "type": "command_execution",
+    "input": "echo uplink-probe"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 42,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:72912e2e-37fd-4c6e-a02b-b27468bb401b",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:runtime-request:runtime-request%3Aprovider%3AacpRegistry%3Aprovider-turn%3Aprovider-turn%253Aprovider%253AacpRegistry%253Anative-turn%253Aprovider-instance%25253Ascripted%25253Ascripted-1%25253Aturn%25253A1%3Anative-request%3Aprobe-1793826633109%3A9e9bc066-fff1-4bca-82e0-64f95012a297",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.124Z",
+   "type": "node.updated",
+   "payload": {
+    "id": "node:runtime-request:runtime-request%3Aprovider%3AacpRegistry%3Aprovider-turn%3Aprovider-turn%253Aprovider%253AacpRegistry%253Anative-turn%253Aprovider-instance%25253Ascripted%25253Ascripted-1%25253Aturn%25253A1%3Anative-request%3Aprobe-1793826633109%3A9e9bc066-fff1-4bca-82e0-64f95012a297",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "parentNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "kind": "approval_request",
+    "status": "waiting",
+    "countsForRun": false,
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "probe-1793826633109",
+     "strength": "weak"
+    },
+    "runtimeRequestId": "runtime-request:provider:acpRegistry:provider-turn:provider-turn%3Aprovider%3AacpRegistry%3Anative-turn%3Aprovider-instance%253Ascripted%253Ascripted-1%253Aturn%253A1:native-request:probe-1793826633109:9e9bc066-fff1-4bca-82e0-64f95012a297",
+    "checkpointScopeId": null,
+    "startedAt": "2026-11-04T21:10:33.113Z",
+    "completedAt": null
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 43,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:4e8822a5-d67d-4aa0-b23e-f60c0654f65e",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:runtime-request:runtime-request%3Aprovider%3AacpRegistry%3Aprovider-turn%3Aprovider-turn%253Aprovider%253AacpRegistry%253Anative-turn%253Aprovider-instance%25253Ascripted%25253Ascripted-1%25253Aturn%25253A1%3Anative-request%3Aprobe-1793826633109%3A9e9bc066-fff1-4bca-82e0-64f95012a297",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.124Z",
+   "type": "runtime-request.updated",
+   "payload": {
+    "id": "runtime-request:provider:acpRegistry:provider-turn:provider-turn%3Aprovider%3AacpRegistry%3Anative-turn%3Aprovider-instance%253Ascripted%253Ascripted-1%253Aturn%253A1:native-request:probe-1793826633109:9e9bc066-fff1-4bca-82e0-64f95012a297",
+    "nodeId": "node:runtime-request:runtime-request%3Aprovider%3AacpRegistry%3Aprovider-turn%3Aprovider-turn%253Aprovider%253AacpRegistry%253Anative-turn%253Aprovider-instance%25253Ascripted%25253Ascripted-1%25253Aturn%25253A1%3Anative-request%3Aprobe-1793826633109%3A9e9bc066-fff1-4bca-82e0-64f95012a297",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeRequestRef": {
+     "driver": "acpRegistry",
+     "nativeId": "probe-1793826633109",
+     "strength": "weak"
+    },
+    "kind": "command",
+    "status": "pending",
+    "responseCapability": {
+     "type": "live",
+     "providerSessionId": "provider-session:provider-instance:scripted:thread:uplink-room-view-1:dd83e631-b9a2-411f-957e-eeca9a5a0e71"
+    },
+    "createdAt": "2026-11-04T21:10:33.113Z",
+    "resolvedAt": null
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 44,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:b3a76825-cfd4-4eba-a284-54a56dc5dc62",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:runtime-request:runtime-request%3Aprovider%3AacpRegistry%3Aprovider-turn%3Aprovider-turn%253Aprovider%253AacpRegistry%253Anative-turn%253Aprovider-instance%25253Ascripted%25253Ascripted-1%25253Aturn%25253A1%3Anative-request%3Aprobe-1793826633109%3A9e9bc066-fff1-4bca-82e0-64f95012a297",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.126Z",
+   "type": "turn-item.updated",
+   "payload": {
+    "id": "turn-item:runtime-request:runtime-request%3Aprovider%3AacpRegistry%3Aprovider-turn%3Aprovider-turn%253Aprovider%253AacpRegistry%253Anative-turn%253Aprovider-instance%25253Ascripted%25253Ascripted-1%25253Aturn%25253A1%3Anative-request%3Aprobe-1793826633109%3A9e9bc066-fff1-4bca-82e0-64f95012a297",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "nodeId": "node:runtime-request:runtime-request%3Aprovider%3AacpRegistry%3Aprovider-turn%3Aprovider-turn%253Aprovider%253AacpRegistry%253Anative-turn%253Aprovider-instance%25253Ascripted%25253Ascripted-1%25253Aturn%25253A1%3Anative-request%3Aprobe-1793826633109%3A9e9bc066-fff1-4bca-82e0-64f95012a297",
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "probe-1793826633109",
+     "strength": "weak"
+    },
+    "parentItemId": null,
+    "ordinal": 1000008,
+    "status": "waiting",
+    "title": null,
+    "startedAt": "2026-11-04T21:10:33.113Z",
+    "completedAt": null,
+    "updatedAt": "2026-11-04T21:10:33.113Z",
+    "type": "approval_request",
+    "requestId": "runtime-request:provider:acpRegistry:provider-turn:provider-turn%3Aprovider%3AacpRegistry%3Anative-turn%3Aprovider-instance%253Ascripted%253Ascripted-1%253Aturn%253A1:native-request:probe-1793826633109:9e9bc066-fff1-4bca-82e0-64f95012a297",
+    "requestKind": "command",
+    "prompt": "echo uplink-probe"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 45,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:command:uplink-room%3Aanswer%3Ab8f3b25e-8eac-438d-b841-022182633cbf:db2452b9-bd19-4099-9aa7-44d9c7a2d207",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:runtime-request:runtime-request%3Aprovider%3AacpRegistry%3Aprovider-turn%3Aprovider-turn%253Aprovider%253AacpRegistry%253Anative-turn%253Aprovider-instance%25253Ascripted%25253Ascripted-1%25253Aturn%25253A1%3Anative-request%3Aprobe-1793826633109%3A9e9bc066-fff1-4bca-82e0-64f95012a297",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.301Z",
+   "type": "runtime-request.updated",
+   "payload": {
+    "id": "runtime-request:provider:acpRegistry:provider-turn:provider-turn%3Aprovider%3AacpRegistry%3Anative-turn%3Aprovider-instance%253Ascripted%253Ascripted-1%253Aturn%253A1:native-request:probe-1793826633109:9e9bc066-fff1-4bca-82e0-64f95012a297",
+    "nodeId": "node:runtime-request:runtime-request%3Aprovider%3AacpRegistry%3Aprovider-turn%3Aprovider-turn%253Aprovider%253AacpRegistry%253Anative-turn%253Aprovider-instance%25253Ascripted%25253Ascripted-1%25253Aturn%25253A1%3Anative-request%3Aprobe-1793826633109%3A9e9bc066-fff1-4bca-82e0-64f95012a297",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeRequestRef": {
+     "driver": "acpRegistry",
+     "nativeId": "probe-1793826633109",
+     "strength": "weak"
+    },
+    "kind": "command",
+    "status": "resolved",
+    "responseCapability": {
+     "type": "live",
+     "providerSessionId": "provider-session:provider-instance:scripted:thread:uplink-room-view-1:dd83e631-b9a2-411f-957e-eeca9a5a0e71"
+    },
+    "createdAt": "2026-11-04T21:10:33.113Z",
+    "resolvedAt": "2026-11-04T21:10:33.301Z",
+    "decision": "accept"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 46,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:command:uplink-room%3Aanswer%3Ab8f3b25e-8eac-438d-b841-022182633cbf:88867c61-b20b-4e00-866b-d7bdfa7476a0",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:runtime-request:runtime-request%3Aprovider%3AacpRegistry%3Aprovider-turn%3Aprovider-turn%253Aprovider%253AacpRegistry%253Anative-turn%253Aprovider-instance%25253Ascripted%25253Ascripted-1%25253Aturn%25253A1%3Anative-request%3Aprobe-1793826633109%3A9e9bc066-fff1-4bca-82e0-64f95012a297",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.301Z",
+   "type": "node.updated",
+   "payload": {
+    "id": "node:runtime-request:runtime-request%3Aprovider%3AacpRegistry%3Aprovider-turn%3Aprovider-turn%253Aprovider%253AacpRegistry%253Anative-turn%253Aprovider-instance%25253Ascripted%25253Ascripted-1%25253Aturn%25253A1%3Anative-request%3Aprobe-1793826633109%3A9e9bc066-fff1-4bca-82e0-64f95012a297",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "parentNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "kind": "approval_request",
+    "status": "completed",
+    "countsForRun": false,
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "probe-1793826633109",
+     "strength": "weak"
+    },
+    "runtimeRequestId": "runtime-request:provider:acpRegistry:provider-turn:provider-turn%3Aprovider%3AacpRegistry%3Anative-turn%3Aprovider-instance%253Ascripted%253Ascripted-1%253Aturn%253A1:native-request:probe-1793826633109:9e9bc066-fff1-4bca-82e0-64f95012a297",
+    "checkpointScopeId": null,
+    "startedAt": "2026-11-04T21:10:33.113Z",
+    "completedAt": "2026-11-04T21:10:33.301Z"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 47,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:command:uplink-room%3Aanswer%3Ab8f3b25e-8eac-438d-b841-022182633cbf:08378821-3a3e-4fc0-96ad-ca7d3eaa4ed3",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:runtime-request:runtime-request%3Aprovider%3AacpRegistry%3Aprovider-turn%3Aprovider-turn%253Aprovider%253AacpRegistry%253Anative-turn%253Aprovider-instance%25253Ascripted%25253Ascripted-1%25253Aturn%25253A1%3Anative-request%3Aprobe-1793826633109%3A9e9bc066-fff1-4bca-82e0-64f95012a297",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.301Z",
+   "type": "turn-item.updated",
+   "payload": {
+    "id": "turn-item:runtime-request:runtime-request%3Aprovider%3AacpRegistry%3Aprovider-turn%3Aprovider-turn%253Aprovider%253AacpRegistry%253Anative-turn%253Aprovider-instance%25253Ascripted%25253Ascripted-1%25253Aturn%25253A1%3Anative-request%3Aprobe-1793826633109%3A9e9bc066-fff1-4bca-82e0-64f95012a297",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "nodeId": "node:runtime-request:runtime-request%3Aprovider%3AacpRegistry%3Aprovider-turn%3Aprovider-turn%253Aprovider%253AacpRegistry%253Anative-turn%253Aprovider-instance%25253Ascripted%25253Ascripted-1%25253Aturn%25253A1%3Anative-request%3Aprobe-1793826633109%3A9e9bc066-fff1-4bca-82e0-64f95012a297",
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "probe-1793826633109",
+     "strength": "weak"
+    },
+    "parentItemId": null,
+    "ordinal": 1000008,
+    "status": "completed",
+    "title": null,
+    "startedAt": "2026-11-04T21:10:33.113Z",
+    "completedAt": "2026-11-04T21:10:33.301Z",
+    "updatedAt": "2026-11-04T21:10:33.301Z",
+    "type": "approval_request",
+    "requestId": "runtime-request:provider:acpRegistry:provider-turn:provider-turn%3Aprovider%3AacpRegistry%3Anative-turn%3Aprovider-instance%253Ascripted%253Ascripted-1%253Aturn%253A1:native-request:probe-1793826633109:9e9bc066-fff1-4bca-82e0-64f95012a297",
+    "requestKind": "command",
+    "prompt": "echo uplink-probe"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 48,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:7ebd50dc-1836-4e8c-a866-0584aca01163",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Aprobe-1793826633109",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.307Z",
+   "type": "node.updated",
+   "payload": {
+    "id": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Aprobe-1793826633109",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "parentNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "kind": "tool_call",
+    "status": "completed",
+    "countsForRun": true,
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "probe-1793826633109",
+     "strength": "strong"
+    },
+    "runtimeRequestId": null,
+    "checkpointScopeId": null,
+    "startedAt": "2026-11-04T21:10:33.111Z",
+    "completedAt": "2026-11-04T21:10:33.306Z"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 49,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:a8bfd838-fbda-4a61-9008-304db650f211",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Aprobe-1793826633109",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.311Z",
+   "type": "turn-item.updated",
+   "payload": {
+    "id": "turn-item:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Aprobe-1793826633109",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Atool%3Aprobe-1793826633109",
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "probe-1793826633109",
+     "strength": "strong"
+    },
+    "parentItemId": null,
+    "ordinal": 1000007,
+    "status": "completed",
+    "title": "Tool",
+    "startedAt": "2026-11-04T21:10:33.111Z",
+    "completedAt": "2026-11-04T21:10:33.306Z",
+    "updatedAt": "2026-11-04T21:10:33.306Z",
+    "type": "command_execution",
+    "input": "echo uplink-probe",
+    "outputOmitted": true
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 50,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:47eefa8b-6350-4a19-86b9-9aa37851d1f0",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aassistant%3A0",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.358Z",
+   "type": "message.updated",
+   "payload": {
+    "createdBy": "agent",
+    "creationSource": "provider",
+    "id": "message:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aassistant%3A0",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aassistant%3A0",
+    "role": "assistant",
+    "text": "Approval outcome: allow. Echo: <t3_code_instructions>\n",
+    "attachments": [],
+    "streaming": true,
+    "createdAt": "2026-11-04T21:10:33.307Z",
+    "updatedAt": "2026-11-04T21:10:33.358Z"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 51,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:68d98ca5-f996-48f8-856e-17e16a72b12e",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aassistant%3A0",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.364Z",
+   "type": "turn-item.updated",
+   "payload": {
+    "id": "turn-item:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aassistant%3A0",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aassistant%3A0",
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "scripted-1:turn:1:assistant:0",
+     "strength": "weak"
+    },
+    "parentItemId": null,
+    "ordinal": 1000009,
+    "status": "running",
+    "title": null,
+    "startedAt": "2026-11-04T21:10:33.307Z",
+    "completedAt": null,
+    "updatedAt": "2026-11-04T21:10:33.358Z",
+    "type": "assistant_message",
+    "messageId": "message:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aassistant%3A0",
+    "text": "Approval outcome: allow. Echo: <t3_code_instructions>\n",
+    "streaming": true
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 52,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:14f06e39-e95c-44e4-a43e-adb2f4a18e3d",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aassistant%3A0",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.436Z",
+   "type": "node.updated",
+   "payload": {
+    "id": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aassistant%3A0",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "parentNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "kind": "assistant_message",
+    "status": "completed",
+    "countsForRun": false,
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "scripted-1:turn:1:assistant:0",
+     "strength": "weak"
+    },
+    "runtimeRequestId": null,
+    "checkpointScopeId": null,
+    "startedAt": "2026-11-04T21:10:33.307Z",
+    "completedAt": "2026-11-04T21:10:33.433Z"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 53,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:79eb27ea-da39-4fd2-b162-ef85b2f7d3c8",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aassistant%3A0",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.438Z",
+   "type": "message.updated",
+   "payload": {
+    "createdBy": "agent",
+    "creationSource": "provider",
+    "id": "message:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aassistant%3A0",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aassistant%3A0",
+    "role": "assistant",
+    "text": "Approval outcome: allow. Echo: <t3_code_instructions>\n## T3 Code interaction mode: Default\n\nPrefer making reasonable assumptions and carrying out the user's request. Ask a concise question only when a missing user decision would ma (1) (2)",
+    "attachments": [],
+    "streaming": false,
+    "createdAt": "2026-11-04T21:10:33.307Z",
+    "updatedAt": "2026-11-04T21:10:33.433Z"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 54,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:64433f7a-6c3a-405c-a067-21cab43bdb33",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aassistant%3A0",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.438Z",
+   "type": "turn-item.updated",
+   "payload": {
+    "id": "turn-item:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aassistant%3A0",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "nodeId": "node:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aassistant%3A0",
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "nativeItemRef": {
+     "driver": "acpRegistry",
+     "nativeId": "scripted-1:turn:1:assistant:0",
+     "strength": "weak"
+    },
+    "parentItemId": null,
+    "ordinal": 1000009,
+    "status": "completed",
+    "title": null,
+    "startedAt": "2026-11-04T21:10:33.307Z",
+    "completedAt": "2026-11-04T21:10:33.433Z",
+    "updatedAt": "2026-11-04T21:10:33.433Z",
+    "type": "assistant_message",
+    "messageId": "message:provider:acpRegistry:native-item:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1%3Aassistant%3A0",
+    "text": "Approval outcome: allow. Echo: <t3_code_instructions>\n## T3 Code interaction mode: Default\n\nPrefer making reasonable assumptions and carrying out the user's request. Ask a concise question only when a missing user decision would ma (1) (2)",
+    "streaming": false
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 55,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:b310bbf8-207e-4cb6-a432-edae235613ed",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.440Z",
+   "type": "provider-turn.updated",
+   "payload": {
+    "id": "provider-turn:provider:acpRegistry:native-turn:provider-instance%3Ascripted%3Ascripted-1%3Aturn%3A1",
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "runAttemptId": "run-attempt:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:attempt:1",
+    "nativeTurnRef": {
+     "driver": "acpRegistry",
+     "nativeId": "scripted-1:turn:1",
+     "strength": "weak"
+    },
+    "ordinal": 1,
+    "status": "completed",
+    "startedAt": "2026-11-04T21:10:32.642Z",
+    "completedAt": "2026-11-04T21:10:33.434Z",
+    "turnTokenUsage": {
+     "usageScope": "main_agent",
+     "hasSubagents": false,
+     "usageStatus": "unavailable"
+    }
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 56,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:provider-session:provider-session%3Aprovider-instance%3Ascripted%3Athread%3Auplink-room-view-1%3Add83e631-b9a2-411f-957e-eeca9a5a0e71:a49974cd-dd83-42f5-8e3f-a226a9107c64",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.442Z",
+   "type": "provider-thread.updated",
+   "payload": {
+    "id": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "driver": "acpRegistry",
+    "providerInstanceId": "scripted",
+    "providerSessionId": "provider-session:provider-instance:scripted:thread:uplink-room-view-1:dd83e631-b9a2-411f-957e-eeca9a5a0e71",
+    "appThreadId": "uplink-room-view-1",
+    "ownerNodeId": null,
+    "nativeThreadRef": {
+     "driver": "acpRegistry",
+     "nativeId": "scripted-1",
+     "strength": "strong"
+    },
+    "nativeConversationHeadRef": null,
+    "status": "active",
+    "firstRunOrdinal": 1,
+    "lastRunOrdinal": 1,
+    "handoffIds": [],
+    "forkedFrom": null,
+    "pendingBackgroundTasks": [],
+    "contextUsage": null,
+    "nativeMetadata": {
+     "itemIdentityVersion": 2
+    },
+    "goal": null,
+    "createdAt": "2026-11-04T21:10:32.448Z",
+    "updatedAt": "2026-11-04T21:10:33.434Z"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 57,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:da889968-1e46-4bc0-91ce-b29957c16b68",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.444Z",
+   "type": "run-attempt.updated",
+   "payload": {
+    "id": "run-attempt:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:attempt:1",
+    "nativeThreadId": "scripted-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "attemptOrdinal": 1,
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "providerInstanceId": "scripted",
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": null,
+    "reason": "initial",
+    "status": "completed",
+    "startedAt": "2026-11-04T21:10:32.548Z",
+    "completedAt": "2026-11-04T21:10:33.444Z"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 58,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:b520e18f-60e7-41c0-934c-cfd9b9429d14",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.444Z",
+   "type": "run.updated",
+   "payload": {
+    "id": "run:thread:uplink-room-view-1:ordinal:1",
+    "threadId": "uplink-room-view-1",
+    "ordinal": 1,
+    "providerInstanceId": "scripted",
+    "modelSelection": {
+     "instanceId": "scripted",
+     "model": "default"
+    },
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "userMessageId": "message:thread:uplink-room-view-1:ordinal:1:487a71a4-c27d-4205-822f-0e3206ec7028",
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "activeAttemptId": "run-attempt:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:attempt:1",
+    "status": "waiting",
+    "queuePosition": null,
+    "requestedAt": "2026-11-04T21:10:32.448Z",
+    "startedAt": "2026-11-04T21:10:32.548Z",
+    "completedAt": null,
+    "checkpointId": null,
+    "contextHandoffId": null,
+    "workspacePreparation": {
+     "type": "root"
+    }
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 59,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:344042db-ca01-4e80-9399-552ce2b1b6de",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.444Z",
+   "type": "node.updated",
+   "payload": {
+    "id": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "parentNodeId": null,
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "kind": "root_turn",
+    "status": "waiting",
+    "countsForRun": true,
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": null,
+    "nativeItemRef": null,
+    "runtimeRequestId": null,
+    "checkpointScopeId": "checkpoint-scope:thread:uplink-room-view-1:name:root",
+    "startedAt": "2026-11-04T21:10:32.548Z",
+    "completedAt": null
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 60,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:a4afe800-1ae3-454d-a91d-1b79120c8334",
+   "threadId": "uplink-room-view-1",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.444Z",
+   "type": "provider-thread.updated",
+   "payload": {
+    "id": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "driver": "acpRegistry",
+    "providerInstanceId": "scripted",
+    "providerSessionId": "provider-session:provider-instance:scripted:thread:uplink-room-view-1:dd83e631-b9a2-411f-957e-eeca9a5a0e71",
+    "appThreadId": "uplink-room-view-1",
+    "ownerNodeId": null,
+    "nativeThreadRef": {
+     "driver": "acpRegistry",
+     "nativeId": "scripted-1",
+     "strength": "strong"
+    },
+    "nativeConversationHeadRef": null,
+    "status": "idle",
+    "firstRunOrdinal": 1,
+    "lastRunOrdinal": 1,
+    "handoffIds": [],
+    "forkedFrom": null,
+    "pendingBackgroundTasks": [],
+    "contextUsage": null,
+    "nativeMetadata": {
+     "itemIdentityVersion": 2
+    },
+    "goal": null,
+    "createdAt": "2026-11-04T21:10:32.448Z",
+    "updatedAt": "2026-11-04T21:10:33.444Z"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 61,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:command:command%3Aeffect%3Acheckpoint.capture%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1:226ea5d7-54dc-4296-8dd5-12695d9fdbf8",
+   "threadId": "uplink-room-view-1",
+   "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.453Z",
+   "type": "checkpoint.captured",
+   "payload": {
+    "id": "checkpoint:scope:checkpoint-scope%3Athread%3Auplink-room-view-1%3Aname%3Aroot:name:0",
+    "threadId": "uplink-room-view-1",
+    "scopeId": "checkpoint-scope:thread:uplink-room-view-1:name:root",
+    "runId": null,
+    "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "parentCheckpointId": null,
+    "ordinalWithinScope": 0,
+    "appRunOrdinal": null,
+    "ref": "refs/t3/orchestration-v2/checkpoints/ODBiOGUwYmQ0MWIyZWM1MmUzYjIzYzg2NmNiYzAzZjg/ordinal/0",
+    "status": "ready",
+    "files": [],
+    "capturedAt": "2026-11-04T21:10:32.483Z"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 62,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:command:command%3Aeffect%3Acheckpoint.capture%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1:19a7c341-dc9e-41ac-8110-b12dddd3b1c5",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.453Z",
+   "type": "checkpoint.captured",
+   "payload": {
+    "id": "checkpoint:scope:checkpoint-scope%3Athread%3Auplink-room-view-1%3Aname%3Aroot:name:1",
+    "threadId": "uplink-room-view-1",
+    "scopeId": "checkpoint-scope:thread:uplink-room-view-1:name:root",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "parentCheckpointId": "checkpoint:scope:checkpoint-scope%3Athread%3Auplink-room-view-1%3Aname%3Aroot:name:0",
+    "ordinalWithinScope": 1,
+    "appRunOrdinal": 1,
+    "ref": "refs/t3/orchestration-v2/checkpoints/ODBiOGUwYmQ0MWIyZWM1MmUzYjIzYzg2NmNiYzAzZjg/ordinal/1",
+    "status": "ready",
+    "files": [
+     {
+      "path": "uplink-probe.txt",
+      "kind": "modified",
+      "additions": 1,
+      "deletions": 0
+     }
+    ],
+    "capturedAt": "2026-11-04T21:10:33.453Z"
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 63,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:command:command%3Aeffect%3Acheckpoint.capture%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1:d132cdfe-3f67-48a8-8e3d-b655330c18bc",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+   "driver": "acpRegistry",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.453Z",
+   "type": "turn-item.updated",
+   "payload": {
+    "id": "turn-item:provider:acpRegistry:native-item:checkpoint%3Acheckpoint%3Ascope%3Acheckpoint-scope%253Athread%253Auplink-room-view-1%253Aname%253Aroot%3Aname%3A1",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": null,
+    "nativeItemRef": null,
+    "parentItemId": null,
+    "ordinal": 1000010,
+    "status": "completed",
+    "title": null,
+    "startedAt": "2026-11-04T21:10:33.453Z",
+    "completedAt": "2026-11-04T21:10:33.453Z",
+    "updatedAt": "2026-11-04T21:10:33.453Z",
+    "type": "checkpoint",
+    "checkpointId": "checkpoint:scope:checkpoint-scope%3Athread%3Auplink-room-view-1%3Aname%3Aroot:name:1",
+    "scopeId": "checkpoint-scope:thread:uplink-room-view-1:name:root",
+    "files": [
+     {
+      "path": "uplink-probe.txt",
+      "kind": "modified",
+      "additions": 1,
+      "deletions": 0
+     }
+    ]
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 64,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:command:command%3Aeffect%3Acheckpoint.capture%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1:880f8c77-95ce-4747-aae3-2fac1cedc4ec",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.453Z",
+   "type": "run.updated",
+   "payload": {
+    "id": "run:thread:uplink-room-view-1:ordinal:1",
+    "threadId": "uplink-room-view-1",
+    "ordinal": 1,
+    "providerInstanceId": "scripted",
+    "modelSelection": {
+     "instanceId": "scripted",
+     "model": "default"
+    },
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "userMessageId": "message:thread:uplink-room-view-1:ordinal:1:487a71a4-c27d-4205-822f-0e3206ec7028",
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "activeAttemptId": "run-attempt:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:attempt:1",
+    "status": "completed",
+    "queuePosition": null,
+    "requestedAt": "2026-11-04T21:10:32.448Z",
+    "startedAt": "2026-11-04T21:10:32.548Z",
+    "completedAt": "2026-11-04T21:10:33.453Z",
+    "checkpointId": "checkpoint:scope:checkpoint-scope%3Athread%3Auplink-room-view-1%3Aname%3Aroot:name:1",
+    "contextHandoffId": null,
+    "workspacePreparation": {
+     "type": "root"
+    }
+   }
+  }
+ },
+ {
+  "kind": "event",
+  "sequence": 65,
+  "event": {
+   "id": "event:thread:uplink-room-view-1:command:command%3Aeffect%3Acheckpoint.capture%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1:f9d1392d-332d-47f3-9029-474b14fc36a8",
+   "threadId": "uplink-room-view-1",
+   "runId": "run:thread:uplink-room-view-1:ordinal:1",
+   "nodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+   "providerInstanceId": "scripted",
+   "occurredAt": "2026-11-04T21:10:33.453Z",
+   "type": "node.updated",
+   "payload": {
+    "id": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "threadId": "uplink-room-view-1",
+    "runId": "run:thread:uplink-room-view-1:ordinal:1",
+    "parentNodeId": null,
+    "rootNodeId": "node:run:run%3Athread%3Auplink-room-view-1%3Aordinal%3A1:root",
+    "kind": "root_turn",
+    "status": "completed",
+    "countsForRun": true,
+    "providerThreadId": "provider-thread:provider:acpRegistry:native-thread:pending%3Arun%3Athread%3Auplink-room-view-1%3Aordinal%3A1",
+    "providerTurnId": null,
+    "nativeItemRef": null,
+    "runtimeRequestId": null,
+    "checkpointScopeId": "checkpoint-scope:thread:uplink-room-view-1:name:root",
+    "startedAt": "2026-11-04T21:10:32.548Z",
+    "completedAt": "2026-11-04T21:10:33.453Z"
+   }
+  }
+ }
+]

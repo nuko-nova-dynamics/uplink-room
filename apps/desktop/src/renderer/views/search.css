@@ -1,0 +1,21 @@
+/* The search filter's chevron shares the select label's cap band. */
+@media (min-resolution: 1.5dppx) {
+  :root .search-view .search-filters .select-wrap > svg {
+    margin-top: var(--space-6);
+  }
+}
+:root .search-view .search-filters > .btn.small {
+  min-height: var(--ctl-small);
+  height: var(--ctl-small);
+  padding-block: var(--space-2);
+  border-radius: var(--radius-small);
+}
+
+/* A filter is a UI SDK select: its trigger is a button that reads like the box it replaced. */
+:root .search-view .search-filters [data-slot="select-trigger"].input {
+  display: inline-flex;
+  align-items: center;
+  text-align: start;
+  white-space: nowrap;
+  cursor: default;
+}

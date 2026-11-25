@@ -1,0 +1,54 @@
+diff --git a/dist/cli.bundle.cjs b/dist/cli.bundle.cjs
+index c7f6c6d9f62f47d68930aef184eeebbde7aca8dc..4046f3e1e8e7c24b3fae6da541c29a446c2cea2f 100644
+--- a/dist/cli.bundle.cjs
++++ b/dist/cli.bundle.cjs
+@@ -73519,7 +73519,18 @@ async function runLocalBackend(ctx, args) {
+   });
+   const cleanupHandle = ctx.registerCleanup(async () => {
+     logVerbose(`Stopping local backend on port ${ports.cloud}`);
+-    p.kill("SIGTERM");
++    // Patched (uplink-room): stop the backend with SIGINT, the only signal it shuts down cleanly on.
++    // On SIGTERM it exits at once, so its Node action executor (`node <tmp>/.tmpXXXX/local.cjs`)
++    // runs on with parent pid 1 and its temp folder stays (get-convex/convex-backend#580). Waits up
++    // to 10 s for it to exit, then sends SIGTERM.
++    if (p.exitCode !== null || p.signalCode !== null) return;
++    let timer;
++    const exited = new Promise((resolve) => p.once("exit", () => resolve(true)));
++    const late = new Promise((resolve) => (timer = setTimeout(resolve, 1e4, false)));
++    p.kill("SIGINT");
++    const stopped = await Promise.race([exited, late]);
++    clearTimeout(timer);
++    if (!stopped) p.kill("SIGTERM");
+   });
+   await ensureBackendRunning(ctx, {
+     cloudPort: ports.cloud,
+@@ -145384,20 +145395,23 @@ var OneoffContextImpl = class {
+ function installSigintHandler(ctx) {
+   const DUPLICATE_GRACE_MS = 500;
+   let cleanupStartTime = null;
+-  process.on("SIGINT", async () => {
++  // Patched (uplink-room): SIGTERM and SIGHUP clean up as SIGINT does. With no handler, Node exits
++  // at once on them and skips the cleanup that stops a local backend, which then runs on with
++  // parent pid 1. Agent timeouts, `timeout` and a closing terminal send these.
++  for (const [signal, exitCode] of [["SIGINT", 130], ["SIGTERM", 143], ["SIGHUP", 129]]) process.on(signal, async () => {
+     if (cleanupStartTime !== null) {
+       if (Date.now() - cleanupStartTime < DUPLICATE_GRACE_MS) {
+         logVerbose(
+-          "Received SIGINT during cleanup, ignoring duplicate signal..."
++          `Received ${signal} during cleanup, ignoring duplicate signal...`
+         );
+         return;
+       }
+-      logVerbose("Received SIGINT during cleanup, exiting immediately...");
+-      process.exit(130);
++      logVerbose(`Received ${signal} during cleanup, exiting immediately...`);
++      process.exit(exitCode);
+     }
+     cleanupStartTime = Date.now();
+-    logVerbose("Received SIGINT, cleaning up...");
+-    await ctx.flushAndExit(130);
++    logVerbose(`Received ${signal}, cleaning up...`);
++    await ctx.flushAndExit(exitCode);
+   });
+ }
+ var oneoffContext = async (args) => {

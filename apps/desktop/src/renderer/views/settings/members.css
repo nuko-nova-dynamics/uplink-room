@@ -1,0 +1,127 @@
+/* Settings, Members: the members table, the waiting invites list and the invite dialog (Members.tsx). */
+/* Column headings are text people read, so muted (about 6:1), not faint (about 3:1; DESIGN.md). */
+.table.members-table th {
+  color: var(--muted);
+}
+/* Keep the name, kind and action columns on whole pixels. The role column
+   takes the remainder, so its select does not inherit fractional text widths. */
+.members-table {
+  table-layout: fixed;
+}
+.members-table th:first-child {
+  width: round(nearest, 35%, var(--border-hairline));
+}
+.members-table th:nth-child(2) {
+  width: round(nearest, 14%, var(--border-hairline));
+}
+.members-table th:last-child {
+  width: round(nearest, 18%, var(--border-hairline));
+}
+.invite-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.invite-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  padding: 10px 12px;
+}
+.invite-row + .invite-row {
+  border-top: 1px solid var(--line);
+}
+.invite-main {
+  flex: 1 1 280px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.invite-who {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.invite-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 14px;
+  font-size: var(--font-12);
+  color: var(--muted);
+  line-height: var(--line-12);
+}
+.invite-meta > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.invite-failed {
+  color: var(--failed);
+}
+/* At the narrowest window the actions wrap under the invite, kept to its left edge. */
+.invite-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.invite-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  color: var(--muted);
+}
+.invite-status.invite-failed {
+  color: var(--failed);
+}
+.invite-status svg {
+  flex: none;
+  margin-top: 2px;
+}
+.invite-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Copy remains a compact row action in every invitation state. */
+:root .invite-actions {
+  /* The shared typography pass is separate; keep these 24px actions on the 12px scale. */
+  --font-12: 12px;
+}
+:root .invite-actions .btn.small {
+  height: var(--ctl-small);
+  min-height: var(--ctl-small);
+  border-radius: var(--radius-small);
+  padding-block: var(--space-2);
+  font-size: var(--font-12);
+}
+:root .invite-actions .btn.small > svg {
+  width: var(--icon-12);
+  height: var(--icon-12);
+  margin-top: var(--space-3);
+}
+
+/* A narrow member list keeps identity readable beside fixed-size role and action controls. */
+:root .members-table th:first-child {
+  width: auto;
+}
+:root .members-table th:nth-child(2) {
+  width: 18%;
+}
+:root .members-table th:nth-child(3) {
+  width: calc(var(--space-32) * 4);
+}
+:root .members-table th:last-child {
+  width: calc(var(--space-40) * 2);
+}
+:root .members-table .member-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+:root .members-table .select {
+  max-width: 100%;
+}

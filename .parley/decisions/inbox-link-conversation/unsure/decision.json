@@ -1,0 +1,19 @@
+{
+  "ask": "inbox-link-conversation",
+  "question": "unsure",
+  "prompt": "When Link can't tell if it's work (“should we drop Safari 16?”), what happens?",
+  "level": 3,
+  "revision": 2,
+  "choice": [
+    "just-answer"
+  ],
+  "values": {},
+  "notes": "",
+  "options": {
+    "just-answer": {
+      "label": "Just answer",
+      "detail": "Link answers as chat. Its message has a quiet Make it a task action if you want it tracked.",
+      "folder": "just-answer/"
+    }
+  }
+}

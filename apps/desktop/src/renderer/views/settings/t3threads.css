@@ -1,0 +1,106 @@
+/* Settings, Machines on this computer: its T3 Code threads, private until shared (views/settings/MachineT3Threads.tsx). */
+.t3-threads .hint,
+.t3-threads-state {
+  max-width: 68ch;
+  text-wrap: pretty;
+}
+.t3-threads-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-8);
+  flex-wrap: wrap;
+}
+.t3-threads-search {
+  position: relative;
+  max-width: calc(var(--space-48) * 8);
+}
+.t3-threads-search > svg {
+  position: absolute;
+  left: var(--space-10);
+  top: 50%;
+  width: var(--icon-14);
+  height: var(--icon-14);
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+}
+.t3-threads-search .input {
+  padding-left: var(--space-32);
+}
+/* Rows with hairlines between them, as the machine's terminals: a long list scrolls in place, so the
+   panel's other sections stay close. */
+.t3-thread-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  /* Short windows keep Save in view with the list's top rows. */
+  max-height: min(calc(var(--space-48) * 8), 45vh);
+  overflow-y: auto;
+  border-bottom: var(--border-hairline) solid var(--line);
+}
+.t3-thread {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-10);
+  border-top: var(--border-hairline) solid var(--line);
+  padding: var(--space-6) var(--space-6) var(--space-6) 0;
+}
+.t3-thread-pick {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-6);
+  flex: 1 1 calc(var(--space-48) * 4);
+  min-width: 0;
+  cursor: pointer;
+}
+.t3-thread-pick:has([data-slot="checkbox"]:disabled) {
+  cursor: default;
+}
+.t3-thread-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+  padding-top: var(--space-3);
+}
+.t3-thread-title {
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.t3-thread .sub {
+  color: var(--muted);
+  font-size: var(--font-12);
+  line-height: var(--line-12);
+}
+/* Beside the title, or under it when the row is narrow. */
+.t3-thread .chip {
+  flex: none;
+  margin-left: auto;
+}
+.t3-thread[data-shared] .chip {
+  color: var(--text);
+}
+.t3-threads-none,
+.t3-threads-foot,
+.t3-threads-retry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+  flex-wrap: wrap;
+}
+.t3-threads-foot .hint {
+  flex: 1 1 calc(var(--space-48) * 5);
+}
+/* A state with no list (no bridge, no threads, another environment): a line in the panel, in its text color. */
+.t3-threads-state {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+.t3-threads-error {
+  margin: 0;
+}

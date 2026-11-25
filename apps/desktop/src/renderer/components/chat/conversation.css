@@ -1,0 +1,182 @@
+/* Conversation content and controls follow the app's type and control scales. */
+:root .emoji-picker :is(.emoji-grid button, .emoji-foot-glyph),
+:root .msg-actions .icon-btn.quick-react,
+:root .reactions .reaction-emoji {
+  font-family: "Atkinson Hyperlegible Next", var(--emoji);
+}
+
+:root .run-line > .link-btn {
+  color: var(--accent);
+  border-radius: var(--radius-small);
+  width: calc-size(fit-content, round(up, size, var(--pixel-pair)));
+}
+
+:root :is(.channel-layout, .pair-view, .a2a-chat) .msg .bubble .md a {
+  color: var(--accent-text);
+}
+
+/* Keep a hovered row's toolbar clear of the preceding message. */
+:root .channel-col:not(.side-panel) > .messages .msg-actions {
+  top: 0;
+}
+:root .channel-col:not(.side-panel) > .messages .msg .bubble:not(.has-frame, .jumbo) {
+  max-width: min(var(--conversation-reading-width), calc(100% - var(--bar-room)));
+}
+.msg .bubble .md li {
+  text-wrap: pretty;
+}
+
+:root .channel-layout .pinned-panel .main-head h1 > .head-glyph {
+  transform: none;
+}
+@media (min-resolution: 1.5dppx) {
+  :root .channel-layout .main-head h1:has(> .head-glyph) {
+    align-items: flex-start;
+  }
+  :root .channel-layout .main-head h1 > .head-glyph {
+    margin-top: var(--space-3);
+    transform: none;
+  }
+}
+
+:root .mention-input > .mention-list {
+  width: calc-size(auto, round(up, size, var(--pixel-pair)));
+}
+
+:root .composer > .output-warn > svg {
+  margin-top: var(--space-2);
+}
+
+/* A search jump marks its destination with a fading overlay. It never moves content. */
+:root .messages .msg.highlight,
+:root .system-line.highlight {
+  position: relative;
+  animation: none;
+}
+:root .messages .msg.highlight::after,
+:root .system-line.highlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--text) 13%, transparent);
+  pointer-events: none;
+  animation: conversation-jump-fade var(--motion-jump-feedback) var(--ease-out) forwards;
+}
+@keyframes conversation-jump-fade {
+  0%,
+  40% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Keep actions in the tab order, revealing the toolbar as soon as one gains focus. */
+:root .msg-actions {
+  display: flex;
+  opacity: 0;
+  pointer-events: none;
+}
+:root .msg:hover .msg-actions,
+:root .msg:has(:focus-visible) .msg-actions,
+:root .msg-actions.picking {
+  opacity: 1;
+  pointer-events: auto;
+}
+/* The replies toolbar stays within the author row, clear of the previous message. */
+:root .side-panel .msg-actions {
+  top: 0;
+}
+:root .side-panel .msg:has(.msg-actions) .msg-head {
+  padding-right: var(--space-48);
+  min-height: var(--space-32);
+}
+/* One focus boundary belongs to the editable surface, not its enclosing toolbar. */
+:root .composer-box:focus-within {
+  border-color: var(--line);
+}
+:root .inline-editor .btn.primary {
+  color: var(--ground);
+  background: var(--text);
+  border-color: var(--text);
+}
+:root .inline-editor .btn.primary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--text) 90%, var(--ground));
+}
+.answer-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--icon-14);
+  height: var(--icon-14);
+  flex: none;
+}
+/* Character color belongs to the avatar; message surfaces remain graphite. */
+:root .messages .msg.agent-msg .bubble:not(.jumbo, .has-frame),
+:root[data-theme="light"]
+  :is(.channel-layout, .pair-view, .a2a-chat)
+  .messages
+  .msg.agent-msg
+  .bubble:not(.jumbo, .has-frame) {
+  background: var(--raised);
+  border-color: var(--line);
+}
+:root .msg-foot > button.chip.run-mention > svg {
+  width: var(--icon-16);
+  height: var(--icon-16);
+}
+/* The member list shows complete rows, with room inside for keyboard outlines. */
+:root .new-channel .pick-list {
+  max-height: calc(var(--space-48) * 5);
+  padding: var(--space-4);
+  scroll-padding-block: var(--space-4);
+}
+:root .pick-list button:focus-visible,
+:root .emoji-grid button:focus-visible,
+:root .emoji-tabs button:focus-visible {
+  outline-offset: calc(-1 * var(--focus-width));
+}
+@media (prefers-reduced-motion: reduce) {
+  :root .messages .msg.highlight::after,
+  :root .system-line.highlight::after {
+    animation: none;
+    opacity: 1;
+  }
+}
+/* Reading text keeps a comfortable measure while narrow columns keep their width. */
+.msg .md > p {
+  max-inline-size: calc(var(--reading-width) * 2 / 3);
+}
+.msg .delete-preview .bubble {
+  max-height: none;
+  overflow: visible;
+}
+
+/* Keep the enlarged run glyph on the text's cap band and pixel grid. */
+:root .msg-foot > button.chip.run-mention > svg {
+  margin-top: 0;
+}
+:root .attachment-image {
+  height: calc-size(auto, round(up, size, var(--border-hairline)));
+}
+:root .link-preview-title {
+  display: block;
+  min-height: var(--ctl-small);
+  padding-block: var(--space-3);
+}
+:root .members-pop .member-row > .icon-btn {
+  width: var(--ctl-small);
+  height: var(--ctl-small);
+  min-width: var(--ctl-small);
+  min-height: var(--ctl-small);
+  padding: 0;
+}
+:root .emoji-foot {
+  align-items: baseline;
+}
+:root .pair-view .md .code-copy {
+  min-height: var(--ctl-small);
+  min-width: var(--ctl-small);
+}

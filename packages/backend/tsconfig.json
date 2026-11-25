@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2024", "DOM"],
+    "types": ["vite/client"],
+    // tests/a2a/serve.ts runs under plain `node`, which needs the .ts extension on local imports.
+    "allowImportingTsExtensions": true
+  },
+  "include": ["convex", "emails", "tests", "vitest.config.ts"]
+}

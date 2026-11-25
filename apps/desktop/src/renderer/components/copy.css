@@ -1,0 +1,29 @@
+/* CopyButton (Copy.tsx): its label and "Copied" share one grid cell, so confirming never resizes it. */
+.copy-labels {
+  display: inline-grid;
+  text-align: left;
+}
+.copy-labels > span {
+  grid-area: 1 / 1;
+  visibility: hidden;
+}
+.copy-labels > span[data-shown] {
+  visibility: visible;
+}
+.copy-btn.copy-failed:not(.primary) {
+  color: var(--text);
+}
+
+:root .btn.small.copy-btn {
+  height: var(--ctl-small);
+  min-height: var(--ctl-small);
+  border-radius: var(--radius-small);
+  padding-block: var(--space-3);
+  font-size: var(--font-12);
+  line-height: var(--line-12);
+}
+:root .btn.small.copy-btn > svg {
+  width: var(--icon-12);
+  height: var(--icon-12);
+  margin-top: var(--space-2);
+}

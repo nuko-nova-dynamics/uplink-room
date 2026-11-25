@@ -1,0 +1,2 @@
+#!/usr/bin/env node
+console.log(JSON.stringify([{ threadId: 'working', status: 'running' }, { threadId: 'done', status: 'completed' }, { threadId: 'waiting', status: 'waiting' }]));

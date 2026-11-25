@@ -1,0 +1,28 @@
+{
+  "name": "@uplink-room/notetaker",
+  "license": "MIT",
+  "version": "0.2.27",
+  "private": true,
+  "description": "The Notetaker: an Uplink Room agent that transcribes calls and proposes tasks (ADR 0008).",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "bin": {
+    "uplink-notetaker": "./src/bin.ts"
+  },
+  "scripts": {
+    "start": "node src/bin.ts",
+    "test": "vitest run",
+    "eval": "node eval/run.ts",
+    "typecheck": "tsc-rs -p tsconfig.json"
+  },
+  "dependencies": {
+    "@livekit/rtc-node": "1.2.1",
+    "@uplink-room/room-client": "workspace:*"
+  },
+  "devDependencies": {
+    "livekit-server-sdk": "2.19.2",
+    "vitest": "5.0.5"
+  }
+}

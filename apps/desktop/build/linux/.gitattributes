@@ -1,0 +1,2 @@
+# Package scripts run by bash on Linux: LF line endings whatever the checkout.
+*.sh text eol=lf

@@ -1,0 +1,33 @@
+{
+  "name": "@uplink-room/room-client",
+  "license": "MIT",
+  "version": "0.2.27",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "uplink": "./src/cli.ts",
+    "uplink-mcp": "./src/mcp.ts"
+  },
+  "exports": {
+    ".": "./src/client.ts",
+    "./agentSetup": "./src/agentSetup.ts",
+    "./self": "./src/self.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc-rs -p tsconfig.json"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "@uplink-room/protocol": "workspace:*",
+    "commander": "15.0.0",
+    "convex": "1.49.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@edge-runtime/vm": "5.0.0",
+    "@uplink-room/backend": "workspace:*",
+    "convex-test": "0.0.66",
+    "vitest": "5.0.5"
+  }
+}

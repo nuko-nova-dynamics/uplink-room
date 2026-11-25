@@ -1,0 +1,16 @@
+{
+  "image_path": "research/design/mascot/r4-mascot-states.png",
+  "prompt": "Image 1 is the style and character reference. Draw ONLY the large house mascot from Image 1 (the cream rounded-square character with big brown eyes, small smile, little arms and legs, and a short antenna topped by an amber dot), keeping its exact proportions, colors, flat soft-shaded vector style and eye style. Show it five times in one evenly spaced horizontal row, same size, each a different state, all facing the viewer: 1) idle: relaxed, calm half-smile, antenna dot dim; 2) working: focused eyes looking down, typing on a tiny laptop, antenna dot steady; 3) waiting: looking straight at the viewer, one hand raised as if asking for attention, antenna dot glowing bright amber; 4) blocked: worried eyebrows, small frown, one hand on its head, antenna drooping slightly, dot dim; 5) done: eyes closed in a happy curve, big smile, both arms up, antenna dot steady. Isolated characters only, no scene, no floor, no text, no letters, no numbers, no logos.",
+  "revised_prompt": "Image 1 is the style and character reference. Draw ONLY the large house mascot from Image 1 (the cream rounded-square character with big brown eyes, small smile, little arms and legs, and a short antenna topped by an amber dot), keeping its exact proportions, colors, flat soft-shaded vector style and eye style. Show it five times in one evenly spaced horizontal row, same size, each a different state, all facing the viewer: 1) idle: relaxed, calm half-smile, antenna dot dim; 2) working: focused eyes looking down, typing on a tiny laptop, antenna dot steady; 3) waiting: looking straight at the viewer, one hand raised as if asking for attention, antenna dot glowing bright amber; 4) blocked: worried eyebrows, small frown, one hand on its head, antenna drooping slightly, dot dim; 5) done: eyes closed in a happy curve, big smile, both arms up, antenna dot steady. Isolated characters only, no scene, no floor, no text, no letters, no numbers, no logos. Output the isolated subject on a genuinely transparent background with actual alpha.",
+  "size": "1536x1024",
+  "quality": "high",
+  "format": "png",
+  "is_transparent": true,
+  "input_image": "research/design/mascot/r3-a-flat.png",
+  "requested_image_model": null,
+  "ts": "2026-11-02T03:29:53Z",
+  "resolved_quality": "medium",
+  "image_model": "gpt-image-2-codex",
+  "resolved_background": "transparent",
+  "transparency_mode": "native"
+}

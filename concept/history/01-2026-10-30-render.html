@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Malecón concept</title>
+<style>
+:root{
+  --svc-clerk:var(--chart-5);
+  --svc-convex:var(--chart-1);
+  --svc-livekit:var(--chart-2);
+  --svc-hyper:var(--chart-3);
+  --svc-agent:var(--chart-4);
+  --svc-app:var(--chart-6);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font-sans);color:var(--foreground);font-size:14.5px;line-height:1.55;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+::selection{background:color-mix(in srgb,var(--primary) 28%,transparent)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+svg.i{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.mono{font-family:var(--font-mono)}
+
+h1{font-size:34px;line-height:1.1;margin:6px 0 12px;letter-spacing:-0.02em;font-weight:650}
+.lede{font-size:16px;max-width:60ch;margin:0}
+.name-note{font-size:13px;color:var(--muted-foreground);margin:8px 0 0}
+.facts{display:flex;flex-wrap:wrap;gap:12px 28px;margin:22px 0 0}
+.facts div{display:flex;flex-direction:column;gap:1px}
+.facts dt{font-size:12.5px;color:var(--muted-foreground)}
+.facts dd{margin:0;font-weight:560}
+
+section{margin-top:52px}
+h2{font-size:20px;line-height:1.25;margin:0 0 6px;font-weight:620;letter-spacing:-0.01em}
+.sub{margin:0 0 18px;color:var(--muted-foreground);max-width:64ch}
+
+.mk{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;font:650 11px/1 var(--font-sans);color:var(--foreground);background:color-mix(in srgb,var(--c) 24%,var(--card));border:1.5px solid var(--c);flex:none}
+
+.win{border:1px solid var(--border);border-radius:calc(var(--radius) + 4px);background:var(--card);color:var(--card-foreground);box-shadow:0 18px 40px -22px color-mix(in srgb,var(--foreground) 40%,transparent);font-size:13px;line-height:1.45;overflow:hidden}
+.tb{display:flex;align-items:center;height:34px;padding:0 12px;border-bottom:1px solid var(--border);position:relative}
+.lights{display:flex;gap:7px}
+.lights i{width:11px;height:11px;border-radius:50%;background:var(--border)}
+.tb-title{position:absolute;left:0;right:0;text-align:center;font-size:12.5px;color:var(--muted-foreground);pointer-events:none}
+.panes{display:grid;grid-template-columns:184px minmax(0,1fr)}
+
+.side{background:color-mix(in srgb,var(--muted) 55%,var(--card));border-right:1px solid var(--border);display:flex;flex-direction:column;min-width:0}
+.team{padding:11px 14px;font-weight:620;border-bottom:1px solid var(--border)}
+.grp{padding:12px 8px 2px}
+.grp-h{display:flex;align-items:center;gap:6px;padding:0 6px 5px;font-size:12px;color:var(--muted-foreground);font-weight:560}
+.ch{display:flex;align-items:center;gap:6px;padding:4px 6px;border-radius:calc(var(--radius) - 2px);color:var(--muted-foreground)}
+.ch .h{font-family:var(--font-mono)}
+.ch.on{background:var(--accent);color:var(--accent-foreground);font-weight:560}
+.ch.unread{color:var(--foreground);font-weight:620}
+.vppl{list-style:none;margin:1px 0 4px;padding:0 0 0 20px}
+.vppl li{display:flex;align-items:center;gap:7px;padding:3px 6px;color:var(--foreground)}
+.live{font-size:11px;padding:0 6px;line-height:16px;border-radius:999px;background:color-mix(in srgb,var(--destructive) 26%,var(--card));border:1px solid var(--destructive);color:var(--foreground);font-weight:620;margin-left:auto}
+.agent{display:flex;align-items:center;gap:7px;padding:3px 6px}
+
+.av{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:650;background:color-mix(in srgb,var(--foreground) 14%,var(--card));color:var(--foreground);flex:none}
+.av.lg{width:32px;height:32px;font-size:13px}
+.av.bot{border-radius:7px;background:color-mix(in srgb,var(--svc-agent) 28%,var(--card))}
+.av.talk{box-shadow:0 0 0 2px var(--card),0 0 0 3.5px var(--success)}
+
+.dock{margin-top:auto;border-top:1px solid var(--border);padding:10px 10px 12px 14px}
+.dock-t{display:flex;flex-direction:column;line-height:1.35}
+.dock-t strong{font-size:12.5px;display:flex;align-items:center;gap:6px}
+.dock-t strong::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--success)}
+.dock-t span{font-size:12px;color:var(--muted-foreground);padding-left:13px}
+.dock-b{display:flex;gap:4px;margin-top:9px}
+.ib{display:grid;place-items:center;width:31px;height:28px;padding:0;border-radius:calc(var(--radius) - 2px);border:1px solid var(--border);background:var(--card);color:var(--foreground)}
+.ib.on{background:var(--primary);color:var(--primary-foreground);border-color:var(--primary)}
+
+.chan{display:flex;flex-direction:column;min-width:0}
+.ch-h{display:flex;align-items:center;gap:7px;padding:0 14px;height:44px;border-bottom:1px solid var(--border)}
+.ch-h .h{font-family:var(--font-mono);color:var(--muted-foreground);font-size:15px}
+.ch-h strong{font-size:14px}
+.tabs{display:flex;gap:2px;margin-left:10px;min-width:0}
+.tab{padding:4px 9px;border-radius:calc(var(--radius) - 2px);color:var(--muted-foreground);font-size:12.5px;white-space:nowrap}
+.tab.on{background:var(--secondary);color:var(--secondary-foreground);font-weight:560}
+.msgs{padding:14px 16px 4px;display:flex;flex-direction:column;gap:16px}
+.msg{display:grid;grid-template-columns:32px minmax(0,1fr);gap:10px}
+.meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.meta b{font-weight:620}
+.meta time{font-size:11.5px;color:var(--muted-foreground)}
+.badge{font-size:11px;padding:0 6px;line-height:17px;border-radius:4px;background:color-mix(in srgb,var(--svc-agent) 24%,var(--card));color:var(--foreground);font-weight:620}
+.msg p{margin:2px 0 0}
+
+.frame{margin-top:8px;border:1px solid var(--border);border-radius:var(--radius);max-width:400px;background:var(--background)}
+.fr-h{display:flex;align-items:center;gap:8px;padding:7px 10px;border-bottom:1px solid var(--border);font-size:12px;color:var(--muted-foreground)}
+.fr-h .mono{color:var(--foreground)}
+.fr-h .mk{margin-left:auto}
+.dep{padding:12px 14px 14px}
+.dep-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.dep-top strong{font-size:14px}
+.ok{font-size:12px;font-weight:620;display:inline-flex;align-items:center;gap:6px}
+.ok::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--success)}
+.dep dl{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;margin:10px 0 12px;font-size:12.5px}
+.dep dt{color:var(--muted-foreground)}
+.dep dd{margin:0}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:6px 12px;border-radius:calc(var(--radius) - 2px);border:1px solid var(--border);background:var(--card);font-size:12.5px;font-weight:560}
+.btn.pri{background:var(--primary);color:var(--primary-foreground);border-color:var(--primary)}
+
+.browser{margin-top:8px;border:1px solid var(--border);border-radius:var(--radius);max-width:440px;overflow:hidden}
+.br-h{display:flex;align-items:center;gap:8px;padding:6px 8px;border-bottom:1px solid var(--border);background:var(--muted);color:var(--muted-foreground)}
+.url{flex:1;min-width:0;font:12px var(--font-mono);padding:3px 9px;border-radius:999px;background:var(--card);color:var(--foreground);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.page{position:relative;padding:14px 16px 16px;background:var(--background)}
+.page h4{margin:0 0 8px;font-size:14px}
+.li{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:12.5px}
+.li.tot{font-weight:650;border-bottom:0}
+.pay{margin-top:10px;width:100%;padding:8px;border-radius:calc(var(--radius) - 2px);border:0;background:var(--foreground);color:var(--background);font-weight:620;font-size:12.5px}
+.cur{position:absolute;display:flex;align-items:flex-start;pointer-events:none}
+.cur svg{width:15px;height:15px;fill:var(--c);stroke:var(--background);stroke-width:1.3;stroke-linejoin:round}
+.cur span{font-size:11px;font-weight:620;padding:0 6px;line-height:17px;border-radius:4px;background:color-mix(in srgb,var(--c) 30%,var(--card));border:1px solid var(--c);color:var(--foreground);margin:11px 0 0 -3px}
+.br-f{display:flex;align-items:center;gap:10px;padding:7px 10px;border-top:1px solid var(--border);font-size:12px;color:var(--muted-foreground)}
+.stack{display:flex}
+.stack .av{width:21px;height:21px;box-shadow:0 0 0 2px var(--card);margin-left:-5px}
+.stack .av:first-child{margin-left:0}
+.br-f .btn{margin-left:auto;padding:4px 14px}
+
+.comp{margin:10px 16px 14px;display:flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--background);color:var(--muted-foreground);font-size:13px}
+.comp .k{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:12px;white-space:nowrap}
+.comp kbd{font:11.5px var(--font-mono);border:1px solid var(--border);border-radius:4px;padding:0 5px}
+
+.key{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 28px;font-size:13.5px}
+.key li{display:flex;gap:10px;align-items:flex-start}
+.key .mk{margin-top:1px}
+.sample{font-size:12.5px;color:var(--muted-foreground);margin:12px 0 0}
+
+.client{border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;background:var(--card)}
+.client-t{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.client-t strong{font-size:15px}
+.client-t span{color:var(--muted-foreground);font-size:13px}
+.parts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.parts span{font-size:12.5px;padding:2px 9px;border-radius:999px;border:1px solid var(--border)}
+.cols{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));column-gap:10px}
+.cols > div{display:flex;flex-direction:column}
+.wire{height:52px;position:relative;display:flex;justify-content:center;align-items:center;flex:none}
+.wire::before{content:"";position:absolute;top:0;bottom:0;left:50%;border-left:1.5px solid var(--c)}
+.wire span{position:relative;background:var(--background);font:11.5px var(--font-mono);padding:2px 4px;color:var(--muted-foreground);white-space:nowrap}
+.svc{border:1px solid var(--border);border-radius:var(--radius);padding:11px 12px 12px;background:var(--card);flex:1}
+.svc-n{display:flex;align-items:center;gap:7px;font-weight:620;font-size:13.5px}
+.svc-n::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--c);flex:none}
+.svc p{margin:5px 0 6px;font-size:12.5px;line-height:1.45}
+.svc .where{font:11.5px var(--font-mono);color:var(--muted-foreground)}
+.server{margin-left:calc((100% + 10px) / 5)}
+.server .wire{width:calc((100% - 30px) / 4)}
+.srv{border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;background:var(--card)}
+.srv strong{display:block;font-size:13.5px;margin-bottom:6px}
+.srv dl{display:grid;grid-template-columns:max-content 1fr;gap:5px 14px;margin:0;font-size:12.5px}
+.srv dt{display:flex;align-items:center;gap:7px;font-weight:560}
+.srv dt::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
+.srv dd{margin:0;color:var(--muted-foreground)}
+.lat{font-size:13px;color:var(--muted-foreground);margin:16px 0 0;max-width:68ch}
+
+h3{font-size:15px;margin:26px 0 6px;font-weight:620}
+.frow{display:grid;grid-template-columns:190px minmax(0,1fr) 128px;gap:4px 18px;padding:10px 0;border-top:1px solid var(--border);margin:0}
+.frow dt{font-weight:600}
+.frow dd{margin:0}
+.frow .desc{color:var(--muted-foreground)}
+.on-svc{display:flex;flex-direction:column;gap:2px;font-size:12.5px}
+.on-svc span{display:flex;align-items:center;gap:7px}
+.on-svc span::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-weight:560;color:var(--muted-foreground);font-size:12.5px;padding:0 12px 8px 0;border-bottom:1px solid var(--border)}
+td{padding:9px 12px 9px 0;border-bottom:1px solid var(--border);vertical-align:top}
+td:first-child{font-weight:560;white-space:nowrap}
+.n{text-align:right;white-space:nowrap;padding-right:0}
+tfoot td{border-bottom:0;font-weight:650;font-size:14.5px;padding-top:12px}
+.plan{color:var(--muted-foreground)}
+.after{font-size:13px;color:var(--muted-foreground);margin:12px 0 0}
+
+.steps{list-style:none;counter-reset:s;margin:0;padding:0}
+.steps li{counter-increment:s;display:grid;grid-template-columns:28px minmax(0,1fr);gap:2px 10px;padding:10px 0;border-top:1px solid var(--border)}
+.steps li::before{content:counter(s);font:600 13px/1.55 var(--font-mono);color:var(--muted-foreground);grid-row:span 2}
+.steps b{font-weight:620}
+.steps span{color:var(--muted-foreground)}
+
+@media (max-width:620px){
+  h1{font-size:29px}
+  .panes{grid-template-columns:1fr}
+  .side{order:2;border-right:0;border-top:1px solid var(--border)}
+  .msgs{padding:12px 12px 4px}
+  .comp{margin:10px 12px 12px}
+  .comp .k{display:none}
+  .key{grid-template-columns:1fr}
+  .cols{grid-template-columns:1fr}
+  .wire{height:34px;justify-content:flex-start}
+  .wire::before{left:20px}
+  .wire span{margin-left:30px;background:none;padding:0}
+  .server{margin-left:0}
+  .server .wire{width:auto}
+  .srv dl{grid-template-columns:1fr;gap:1px}
+  .srv dd{margin-bottom:6px}
+  .frow{grid-template-columns:1fr}
+  .on-svc{flex-direction:row;flex-wrap:wrap;gap:4px 14px;margin-top:2px}
+  td.plan{font-size:12.5px}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-spk" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M19 11a7 7 0 0 1-14 0"/><path d="M12 18v3"/></symbol>
+  <symbol id="i-hp" viewBox="0 0 24 24"><path d="M4 16v-4a8 8 0 0 1 16 0v4"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/></symbol>
+  <symbol id="i-cam" viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3"/></symbol>
+  <symbol id="i-scr" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol>
+  <symbol id="i-cur" viewBox="0 0 24 24"><path d="M4 3l7 17 2.4-7.4L21 10.2z"/></symbol>
+</svg>
+
+<header>
+  <h1>Malecón</h1>
+  <p class="lede">An internal chat app for the team in Miami and Guayaquil. Channels, voice, and screen share like Discord, plus HTML apps inside messages, shared browsers, and AI agents that sit in channels as team members.</p>
+  <p class="name-note">Named after Guayaquil's riverfront promenade. A working name.</p>
+  <dl class="facts">
+    <div><dt>Desktop app</dt><dd>Electron, macOS and Windows</dd></div>
+    <div><dt>Backend</dt><dd>Hosted services, no servers to run</dd></div>
+    <div><dt>Region</dt><dd>US East</dd></div>
+    <div><dt>Cost to start</dt><dd>$0–75 a month</dd></div>
+  </dl>
+</header>
+
+<section>
+  <h2>The desktop app</h2>
+  <p class="sub">The #dev channel during a standup. Numbered markers show which service powers each part.</p>
+
+  <div class="win" role="img" aria-label="Mockup of the Malecón desktop app showing the dev channel">
+    <div class="tb"><span class="lights"><i></i><i></i><i></i></span><span class="tb-title">Malecón</span></div>
+    <div class="panes">
+      <aside class="side">
+        <div class="team">Your team</div>
+        <div class="grp">
+          <div class="grp-h">Text channels <span class="mk" style="--c:var(--svc-convex)">1</span></div>
+          <div class="ch"><span class="h">#</span>general</div>
+          <div class="ch on"><span class="h">#</span>dev</div>
+          <div class="ch"><span class="h">#</span>design</div>
+          <div class="ch unread"><span class="h">#</span>deploys</div>
+        </div>
+        <div class="grp">
+          <div class="grp-h">Voice <span class="mk" style="--c:var(--svc-livekit)">2</span></div>
+          <div class="ch"><svg class="i"><use href="#i-spk"/></svg>Standup</div>
+          <ul class="vppl">
+            <li><span class="av">J</span>Julio<span class="live">Live</span></li>
+            <li><span class="av talk">A</span>Ana</li>
+            <li><span class="av">D</span>Diego</li>
+          </ul>
+          <div class="ch"><svg class="i"><use href="#i-spk"/></svg>Pairing</div>
+        </div>
+        <div class="grp">
+          <div class="grp-h">Agents</div>
+          <div class="agent"><span class="av bot">db</span>deploy-bot</div>
+          <div class="agent"><span class="av bot">rs</span>researcher</div>
+        </div>
+        <div class="dock">
+          <div class="dock-t"><strong>Voice connected</strong><span>Standup, sharing your screen</span></div>
+          <div class="dock-b">
+            <button class="ib" aria-label="Mute"><svg class="i"><use href="#i-mic"/></svg></button>
+            <button class="ib" aria-label="Deafen"><svg class="i"><use href="#i-hp"/></svg></button>
+            <button class="ib" aria-label="Camera"><svg class="i"><use href="#i-cam"/></svg></button>
+            <button class="ib on" aria-label="Stop sharing screen"><svg class="i"><use href="#i-scr"/></svg></button>
+          </div>
+        </div>
+      </aside>
+
+      <main class="chan">
+        <div class="ch-h">
+          <span class="h">#</span><strong>dev</strong>
+          <nav class="tabs"><span class="tab on">Chat</span><span class="tab">Sprint board</span><span class="tab">+ App</span></nav>
+        </div>
+        <div class="msgs">
+          <div class="msg">
+            <span class="av lg">A</span>
+            <div><div class="meta"><b>Ana</b><time>10:02</time></div>
+            <p>Staging build for the checkout fix is up. Can someone check it before we ship?</p></div>
+          </div>
+
+          <div class="msg">
+            <span class="av lg bot">db</span>
+            <div>
+              <div class="meta"><b>deploy-bot</b><span class="badge">Agent</span><time>10:03</time><span class="mk" style="--c:var(--svc-agent)">5</span></div>
+              <p>Build 214 passed. Here's the preview.</p>
+              <div class="frame">
+                <div class="fr-h"><span class="mono">deploy-status</span><span>HTML app, sandboxed</span><span class="mk" style="--c:var(--svc-app)">3</span></div>
+                <div class="dep">
+                  <div class="dep-top"><strong>checkout-fix</strong><span class="ok">Ready</span></div>
+                  <dl>
+                    <dt>Tests</dt><dd>182 passed</dd>
+                    <dt>Preview</dt><dd class="mono">staging.yourapp.com</dd>
+                    <dt>Commit</dt><dd class="mono">a3f9c1e</dd>
+                  </dl>
+                  <div class="btns"><button class="btn">Open preview</button><button class="btn pri">Promote to production</button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="msg">
+            <span class="av lg">D</span>
+            <div>
+              <div class="meta"><b>Diego</b><time>10:05</time></div>
+              <p>Opened a shared browser on the preview so we can click through it together.</p>
+              <div class="browser">
+                <div class="br-h"><svg class="i"><use href="#i-globe"/></svg><span class="url">staging.yourapp.com/checkout</span><span class="mk" style="--c:var(--svc-hyper)">4</span></div>
+                <div class="page">
+                  <h4>Order summary</h4>
+                  <div class="li"><span>Pro plan, monthly</span><span>$49.00</span></div>
+                  <div class="li"><span>Tax</span><span>$3.43</span></div>
+                  <div class="li tot"><span>Total</span><span>$52.43</span></div>
+                  <button class="pay">Pay $52.43</button>
+                  <span class="cur" style="--c:var(--primary);left:58%;top:36px"><svg viewBox="0 0 24 24"><use href="#i-cur"/></svg><span>Ana</span></span>
+                  <span class="cur" style="--c:var(--muted-foreground);left:30%;top:112px"><svg viewBox="0 0 24 24"><use href="#i-cur"/></svg><span>Diego</span></span>
+                </div>
+                <div class="br-f">
+                  <span class="stack"><span class="av">A</span><span class="av">D</span><span class="av">J</span></span>
+                  <span>3 people in this browser</span>
+                  <button class="btn">Join</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="comp"><span>Message #dev</span><span class="k"><kbd>/</kbd>apps and commands</span></div>
+      </main>
+    </div>
+  </div>
+
+  <ol class="key">
+    <li><span class="mk" style="--c:var(--svc-convex)">1</span><span><b>Convex</b>: channels, messages, presence, files.</span></li>
+    <li><span class="mk" style="--c:var(--svc-livekit)">2</span><span><b>LiveKit</b>: voice channel, screen share, call controls.</span></li>
+    <li><span class="mk" style="--c:var(--svc-app)">3</span><span><b>HTML app</b> posted by an agent, running in a sandboxed frame.</span></li>
+    <li><span class="mk" style="--c:var(--svc-hyper)">4</span><span><b>Hyperbeam</b> shared browser. Anyone in it can take control.</span></li>
+    <li><span class="mk" style="--c:var(--svc-agent)">5</span><span><b>Agent</b> member, powered by Claude and run from Convex.</span></li>
+  </ol>
+  <p class="sample">Names, messages, and numbers are sample data.</p>
+</section>
+
+<section>
+  <h2>Architecture</h2>
+  <p class="sub">The desktop app connects straight to four hosted services and one static page. There's nothing for you to run or patch.</p>
+
+  <div class="arch">
+    <div class="client">
+      <div class="client-t"><strong>Malecón desktop app</strong><span>Electron, on everyone's Mac or Windows PC in Miami and Guayaquil</span></div>
+      <div class="parts"><span>Chat</span><span>Calls and screen share</span><span>HTML app frames</span><span>Shared browser view</span></div>
+    </div>
+    <div class="cols">
+      <div style="--c:var(--svc-clerk)"><div class="wire"><span>OAuth</span></div>
+        <div class="svc"><div class="svc-n">Clerk</div><p>Sign-in with Google accounts.</p><div class="where">Hosted, free tier</div></div></div>
+      <div style="--c:var(--svc-convex)"><div class="wire"><span>WebSocket</span></div>
+        <div class="svc"><div class="svc-n">Convex Cloud</div><p>Channels, messages, files, presence, permissions, agent runs.</p><div class="where">N. Virginia</div></div></div>
+      <div style="--c:var(--svc-livekit)"><div class="wire"><span>WebRTC</span></div>
+        <div class="svc"><div class="svc-n">LiveKit Cloud</div><p>Voice, video, screen share, noise cancellation.</p><div class="where">Nearest edge, US East</div></div></div>
+      <div style="--c:var(--svc-hyper)"><div class="wire"><span>Embed SDK</span></div>
+        <div class="svc"><div class="svc-n">Hyperbeam</div><p>Shared browsers, started on demand.</p><div class="where">North America</div></div></div>
+      <div style="--c:var(--svc-app)"><div class="wire"><span>iframe</span></div>
+        <div class="svc"><div class="svc-n">App sandbox</div><p>Static page that renders HTML apps and channel tabs.</p><div class="where">Its own domain</div></div></div>
+    </div>
+    <div class="server" style="--c:var(--svc-convex)">
+      <div class="wire"><span>server side</span></div>
+      <div class="srv">
+        <strong>Convex functions also handle</strong>
+        <dl>
+          <dt style="--c:var(--svc-agent)">Claude API</dt><dd>Agents read the channel, use tools, and post text or HTML apps.</dd>
+          <dt style="--c:var(--svc-livekit)">LiveKit tokens</dt><dd>Issued when someone joins a voice channel.</dd>
+          <dt style="--c:var(--svc-hyper)">Hyperbeam sessions</dt><dd>Started from a channel, ended when idle.</dd>
+          <dt style="--c:var(--svc-convex)">MCP endpoint</dt><dd>Claude Code and other agents can read and post in channels.</dd>
+          <dt style="--c:var(--svc-clerk)">Clerk tokens</dt><dd>Checked on every request.</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+  <p class="lat">Why US East: ping measured today from Quito is 49 ms to Miami, 77 ms to New York, and 127 ms to São Paulo. Miami to New York is 35 ms.</p>
+</section>
+
+<section>
+  <h2>Features</h2>
+  <p class="sub">What the first full version does, and which service each feature runs on.</p>
+
+  <h3>Talk</h3>
+  <dl>
+    <div class="frow"><dt>Text channels</dt><dd class="desc">Channels, threads, DMs, reactions, mentions, file uploads, and search.</dd><dd class="on-svc"><span style="--c:var(--svc-convex)">Convex</span></dd></div>
+    <div class="frow"><dt>Voice channels</dt><dd class="desc">Drop in and out like Discord, with Krisp noise cancellation.</dd><dd class="on-svc"><span style="--c:var(--svc-livekit)">LiveKit</span></dd></div>
+    <div class="frow"><dt>Video and screen share</dt><dd class="desc">Pick a screen or window from thumbnails and share its sound. On a Mac this needs macOS 13 or later and a one-time permission.</dd><dd class="on-svc"><span style="--c:var(--svc-livekit)">LiveKit</span></dd></div>
+  </dl>
+
+  <h3>Work inside channels</h3>
+  <dl>
+    <div class="frow"><dt>HTML in messages</dt><dd class="desc">Agents and integrations post interactive HTML in the MCP Apps format. It runs in a sandboxed frame, so it can't touch the rest of the app.</dd><dd class="on-svc"><span style="--c:var(--svc-app)">App sandbox</span></dd></div>
+    <div class="frow"><dt>Apps as channel tabs</dt><dd class="desc">Pin a web app, such as a sprint board or a dashboard, to a channel.</dd><dd class="on-svc"><span style="--c:var(--svc-app)">App sandbox</span></dd></div>
+    <div class="frow"><dt>Shared browsers</dt><dd class="desc">Open a browser in a channel. Everyone sees the same page and can take control. It closes when nobody is using it.</dd><dd class="on-svc"><span style="--c:var(--svc-hyper)">Hyperbeam</span></dd></div>
+  </dl>
+
+  <h3>Agents</h3>
+  <dl>
+    <div class="frow"><dt>Agents as members</dt><dd class="desc">Each agent has a name, avatar, and permissions. @mention it in any channel it belongs to.</dd><dd class="on-svc"><span style="--c:var(--svc-convex)">Convex</span><span style="--c:var(--svc-agent)">Claude API</span></dd></div>
+    <div class="frow"><dt>Agents that do work</dt><dd class="desc">Agents run tools, post HTML apps, and open shared browsers for the team.</dd><dd class="on-svc"><span style="--c:var(--svc-agent)">Claude API</span></dd></div>
+    <div class="frow"><dt>MCP endpoint</dt><dd class="desc">Claude Code and other MCP clients can read and post in channels.</dd><dd class="on-svc"><span style="--c:var(--svc-convex)">Convex</span></dd></div>
+  </dl>
+</section>
+
+<section>
+  <h2>Monthly cost</h2>
+  <p class="sub">Free tiers cover a small team at the start. The upper end assumes daily calls and backups.</p>
+  <table>
+    <thead><tr><th>Service</th><th>Plan</th><th class="n">Per month</th></tr></thead>
+    <tbody>
+      <tr><td>Convex Cloud</td><td class="plan">Free, or Professional at $25 per developer for daily backups</td><td class="n">$0–25</td></tr>
+      <tr><td>LiveKit Cloud</td><td class="plan">Build with 5,000 participant-minutes, or Ship with 150,000 for $50</td><td class="n">$0–50</td></tr>
+      <tr><td>Hyperbeam</td><td class="plan">10,000 participant-minutes free, then $0.007 a minute</td><td class="n">$0</td></tr>
+      <tr><td>Clerk</td><td class="plan">Hobby</td><td class="n">$0</td></tr>
+      <tr><td>App sandbox</td><td class="plan">Free static hosting</td><td class="n">$0</td></tr>
+    </tbody>
+    <tfoot><tr><td>Total</td><td></td><td class="n">$0–75</td></tr></tfoot>
+  </table>
+  <p class="after">Plus $99 a year for Apple code signing, and Claude API usage for agents.</p>
+</section>
+
+<section>
+  <h2>Build order</h2>
+  <p class="sub">Each step is usable on its own before the next one starts.</p>
+  <ol class="steps">
+    <li><b>Chat</b><span>Electron app, Clerk sign-in, channels, threads, DMs, and file uploads on Convex.</span></li>
+    <li><b>Calls</b><span>Voice channels, video, and screen share with sound on LiveKit.</span></li>
+    <li><b>HTML apps and agents</b><span>Sandboxed app frames, channel tabs, agents as members, and the MCP endpoint.</span></li>
+    <li><b>Shared browsers</b><span>Hyperbeam sessions started from a channel and closed when idle.</span></li>
+  </ol>
+</section>
+</body>
+</html>

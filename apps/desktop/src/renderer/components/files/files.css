@@ -1,0 +1,301 @@
+.file-item[aria-current="page"]:hover {
+  background: var(--hover);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--faint);
+}
+:root .file-count > svg {
+  margin-top: var(--space-1);
+  width: var(--icon-14);
+  height: var(--icon-14);
+}
+.doc-source {
+  font-family: var(--ui);
+}
+.doc-viewer .viewer-tools,
+.doc-viewer .viewer-note {
+  flex-wrap: wrap;
+}
+.canvas-viewer {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+.canvas-viewer .excalidraw {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+}
+
+/* Excalidraw's mobile island uses -1rem relative to an already inset bar.
+   Keep it within that bar so both rounded sides have the same safe inset. */
+:root .canvas-viewer .excalidraw .mobile-misc-tools-container {
+  right: 0;
+  border-right: var(--border-hairline) solid var(--sidebar-border-color);
+  border-radius: var(--radius-card);
+}
+
+@media (min-resolution: 1.5dppx) {
+  :root .viewer-head > b,
+  :root .viewer-head > .tag,
+  :root .viewer-head > .muted {
+    position: relative;
+    top: var(--space-1);
+  }
+}
+
+/* Keep the same row measure with or without overflow. The permanent 8 px
+   scrollbar track is included in the trailing inset and only paints on hover. */
+.file-list,
+.rail-list,
+.doc-scroll,
+.image-scroll {
+  scrollbar-gutter: stable;
+  scrollbar-width: auto;
+  scrollbar-color: auto;
+}
+.file-list::-webkit-scrollbar,
+.rail-list::-webkit-scrollbar,
+.doc-scroll::-webkit-scrollbar,
+.image-scroll::-webkit-scrollbar {
+  width: var(--space-8);
+  height: var(--space-8);
+}
+.file-list::-webkit-scrollbar-thumb,
+.rail-list::-webkit-scrollbar-thumb,
+.doc-scroll::-webkit-scrollbar-thumb,
+.image-scroll::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: var(--radius-pill);
+}
+.file-list:hover::-webkit-scrollbar-thumb,
+.rail-list:hover::-webkit-scrollbar-thumb,
+.doc-scroll:hover::-webkit-scrollbar-thumb,
+.image-scroll:hover::-webkit-scrollbar-thumb {
+  background: var(--faint);
+}
+.file-list::-webkit-scrollbar-button,
+.rail-list::-webkit-scrollbar-button,
+.doc-scroll::-webkit-scrollbar-button,
+.image-scroll::-webkit-scrollbar-button {
+  display: none;
+}
+.file-list {
+  padding: 0 0 var(--space-10) var(--space-8);
+}
+.file-list-actions {
+  height: var(--head-h);
+  flex: none;
+  gap: var(--space-8);
+  padding: 0 var(--space-4);
+}
+.rail-list {
+  padding-right: var(--space-2);
+}
+.files-empty p {
+  margin-bottom: var(--space-12);
+}
+:root .viewer-head {
+  align-items: center;
+  padding: 0 var(--edge) 0 var(--gutter);
+}
+:root .viewer-head > b,
+:root .viewer-head > .tag,
+:root .viewer-head > .muted {
+  align-self: auto;
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .viewer-head > .tag {
+  padding-block: 0;
+}
+:root .viewer-head > svg {
+  margin-top: 0;
+  width: var(--icon-14);
+  height: var(--icon-14);
+}
+.viewer-head > .btn {
+  flex: none;
+}
+.viewer-head .file-size {
+  white-space: nowrap;
+}
+.file-count,
+.quote-badge,
+.pin,
+.file-empty,
+.save-state,
+.viewer-note,
+.rail-note,
+.rail-empty,
+.rail-hint,
+.comment-anchor,
+.comment-detached,
+.comment-resolved,
+.hint-keys,
+.comment-who .tag,
+.file-kind .label,
+.file-kind .hint,
+.file-name-field,
+.file-name-field input,
+.dialog:has(.file-kind) .label {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+.comment-card,
+.comment-card > *,
+.comment-reply,
+.comment-who,
+.comment-who > * {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.comment-who {
+  align-items: flex-start;
+}
+.comment-who > b {
+  flex: 1;
+}
+.comment-body .md pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.comment-body .md img {
+  max-width: 100%;
+}
+:root .comment-anchor {
+  align-items: baseline;
+}
+.pin-n {
+  height: auto;
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+.viewer-note.conflict {
+  border-color: var(--line);
+}
+.doc-prose .selectedCell,
+.quote-mark {
+  background: color-mix(in srgb, var(--text) 14%, transparent);
+}
+.quote-mark {
+  border-bottom-color: var(--muted);
+}
+.quote-mark.active {
+  background: color-mix(in srgb, var(--text) 24%, transparent);
+  border-bottom-color: var(--text);
+}
+.image-scroll {
+  padding-right: var(--space-8);
+}
+.image-scroll:has(.fit) {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.image-stage.fit {
+  min-width: 0;
+  max-width: 100%;
+}
+.file-name-field {
+  align-items: baseline;
+}
+.file-extension {
+  flex: none;
+  font-family: var(--ui);
+}
+.dialog:has(.file-delete-copy),
+.dialog:has(.file-kind) {
+  height: auto;
+}
+.dialog:has(.file-delete-copy) .dialog-foot,
+.dialog:has(.file-kind) .dialog-foot {
+  border-top: 0;
+  box-shadow: inset 0 var(--border-hairline) 0 var(--line);
+  padding-block: var(--space-12);
+}
+
+.viewer-col {
+  container: file-viewer / inline-size;
+}
+@container file-viewer (max-width: 30em) {
+  .viewer-head > .muted {
+    display: none;
+  }
+  .viewer-note > .grow {
+    flex-basis: 100%;
+  }
+}
+@container file-viewer (max-width: 20em) {
+  .viewer-head > .tag {
+    display: none;
+  }
+}
+
+.rail-title {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Mode selection and save status wrap as complete items in a narrow viewer. */
+.doc-viewer .viewer-tools {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: start;
+  gap: var(--space-8);
+}
+.doc-viewer .viewer-tools > .grow {
+  display: none;
+}
+.doc-viewer .viewer-tools .seg {
+  max-width: 100%;
+  width: 100%;
+  grid-auto-flow: row;
+  grid-template-columns: minmax(0, 1fr);
+}
+.doc-viewer .viewer-tools .seg > button {
+  min-width: 0;
+  max-width: 100%;
+}
+@container file-viewer (min-width: 24em) {
+  .doc-viewer .viewer-tools {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+  }
+  .doc-viewer .viewer-tools .seg {
+    width: auto;
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    grid-auto-columns: 1fr;
+  }
+  .doc-viewer .viewer-tools .save-state {
+    justify-self: end;
+  }
+}
+
+/* Keep mode labels complete when the comment rail narrows the editor. */
+:root .doc-viewer .viewer-tools .seg {
+  grid-auto-flow: row;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+}
+:root .doc-viewer .viewer-tools .seg button {
+  white-space: nowrap;
+  width: 100%;
+}
+:root .viewer-head > .tag {
+  flex: none;
+  white-space: nowrap;
+}
+@container file-viewer (min-width: 24em) {
+  :root .doc-viewer .viewer-tools .seg {
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    width: calc-size(max-content, round(up, size, var(--space-4)));
+  }
+}
+:root .doc-viewer .doc-prose:focus-visible {
+  outline: var(--space-2) solid var(--text);
+  outline-offset: var(--space-2);
+}

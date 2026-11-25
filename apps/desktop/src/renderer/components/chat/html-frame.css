@@ -1,0 +1,32 @@
+/* Host defaults for authored HTML; explicit page styles can still choose their own surface. */
+:root {
+  --frame-scrollbar-width: 6px;
+  --frame-scrollbar-radius: 999px;
+}
+html,
+body {
+  background: var(--frame-ground);
+  color: var(--frame-text);
+}
+html {
+  scrollbar-width: auto;
+  scrollbar-color: auto;
+}
+html:hover {
+  scrollbar-width: auto;
+  scrollbar-color: auto;
+}
+::-webkit-scrollbar {
+  width: var(--frame-scrollbar-width);
+  height: var(--frame-scrollbar-width);
+}
+::-webkit-scrollbar-thumb {
+  border-radius: var(--frame-scrollbar-radius);
+  background: transparent;
+}
+html:hover::-webkit-scrollbar-thumb {
+  background: var(--frame-line);
+}
+::-webkit-scrollbar-button {
+  display: none;
+}

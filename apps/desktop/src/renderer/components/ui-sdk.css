@@ -1,0 +1,202 @@
+/*
+ * UI SDK parts, in the app's own look (the app doesn't load @ui-sdk/core/web.css). Parts are found
+ * by their data-slot and state attributes. Popup content (menus, selects, popovers, tooltips) sits
+ * in the browser's top layer and UI SDK positions it with inline styles; a part that also carries
+ * an app class (.pop for a menu or a select's list) keeps that class's look.
+ */
+
+/* ---------- Tooltip (Tip.tsx) ---------- */
+.tip[data-slot="tooltip-content"] {
+  max-width: calc(var(--space-40) * 7);
+  padding: var(--space-4) var(--space-8);
+  border: var(--border-hairline) solid var(--line);
+  border-radius: var(--radius-small);
+  background: var(--raised);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  font-size: var(--font-12);
+  line-height: var(--line-12);
+  pointer-events: none;
+}
+
+/* ---------- Menus and select lists on .pop ---------- */
+.pop:is(
+    [data-slot="menu-content"],
+    [data-slot="select-content"],
+    [data-slot="combobox-content"],
+    [data-slot="popover-content"]
+  ) {
+  margin: 0;
+  color: var(--text);
+  overflow: auto;
+}
+:where(.pop)
+  :is(
+    [data-slot="menu-item"],
+    [data-slot="menu-checkbox-item"],
+    [data-slot="menu-radio-item"],
+    [data-slot="menu-sub-trigger"],
+    [data-slot="select-item"],
+    [data-slot="combobox-item"]
+  ) {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: var(--space-8);
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: left;
+  padding: var(--space-6) var(--space-8);
+  border-radius: var(--radius-small);
+  cursor: default;
+}
+:where(.pop)
+  :is(
+    [data-slot="menu-item"],
+    [data-slot="menu-checkbox-item"],
+    [data-slot="menu-radio-item"],
+    [data-slot="menu-sub-trigger"],
+    [data-slot="select-item"],
+    [data-slot="combobox-item"]
+  ):is([data-highlighted], :hover):not([data-disabled]) {
+  background: var(--hover);
+}
+:where(.pop) [data-disabled]:is([data-slot$="-item"], [data-slot="menu-sub-trigger"]) {
+  opacity: 0.45;
+}
+:where(.pop) [data-slot="menu-separator"],
+:where(.pop) [data-slot="select-separator"] {
+  height: var(--border-hairline);
+  background: var(--line);
+  margin: var(--space-4) var(--space-2);
+}
+:where(.pop) :is([data-slot="menu-group-label"], [data-slot="select-group-label"]) {
+  padding: var(--space-5) var(--space-8) var(--space-3);
+  font-size: var(--font-12);
+  color: var(--muted);
+  line-height: var(--line-12);
+}
+:where(.pop) [data-slot="menu-item-indicator"],
+:where(.pop) [data-slot="select-item-indicator"] {
+  display: inline-flex;
+  margin-left: auto;
+}
+
+/* ---------- Select triggers on .select ---------- */
+/* A Select's trigger is a button with the app's .select class. styles.css and look.css give it the
+   native select.select's look, the soft pill and its CSS chevron; here, its value and its list. */
+:root .select[data-slot="select-trigger"] {
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+  cursor: default;
+}
+:root .select[data-slot="select-trigger"] > [data-slot="select-value"] {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+:root .select[data-slot="select-trigger"][data-placeholder] > [data-slot="select-value"] {
+  color: var(--muted);
+}
+/* A select's list is at least as wide as its trigger. */
+.pop[data-slot="select-content"] {
+  min-width: var(--anchor-width);
+}
+:where(.pop) [data-slot="select-item"][data-selected] {
+  color: var(--accent-text);
+}
+
+/* ---------- Buttons ---------- */
+/* A Button whose action runs is aria-disabled, not natively disabled: it dims as a disabled one did. */
+:root .btn[data-slot="button"][data-pending] {
+  opacity: var(--disabled-opacity);
+  cursor: default;
+}
+
+/* ---------- Toggles, switches and checkboxes ---------- */
+[data-slot="switch"],
+[data-slot="checkbox"],
+[data-slot="radio"],
+[data-slot="tabs-tab"],
+[data-slot="segmented-control-item"] {
+  font: inherit;
+}
+
+/* A Checkbox is a button: a small box, filled with a check while checked. */
+:where([data-slot="checkbox"]) {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--ctl-small);
+  height: var(--ctl-small);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+}
+:where([data-slot="checkbox"])::before {
+  content: "";
+  width: var(--space-14);
+  height: var(--space-14);
+  background: var(--raised);
+  border: var(--border-hairline) solid var(--faint);
+  border-radius: var(--radius-inline);
+}
+:where([data-slot="checkbox"])[data-checked]::before {
+  background: var(--text);
+  border-color: var(--text);
+}
+:where([data-slot="checkbox"])[data-checked]::after {
+  content: "";
+  position: absolute;
+  width: var(--space-4);
+  height: var(--space-7);
+  border: solid var(--ground);
+  border-width: 0 var(--space-2) var(--space-2) 0;
+  transform: translateY(calc(-1 * var(--space-1))) rotate(45deg);
+}
+:where([data-slot="checkbox"])[data-disabled] {
+  opacity: 0.45;
+}
+/* Its box answers the pointer, as the native check rows' did; a checked box keeps its checkmark. */
+:where([data-slot="checkbox"]):hover:not([data-disabled])::before {
+  background: var(--hover);
+  border-color: var(--text);
+}
+:where([data-slot="checkbox"]):active:not([data-disabled])::before {
+  background: color-mix(in srgb, var(--text) 20%, var(--hover));
+  border-color: var(--text);
+}
+:where([data-slot="checkbox"])[data-checked]:hover:not([data-disabled])::before {
+  background: color-mix(in srgb, var(--text) 88%, var(--raised));
+}
+:where([data-slot="checkbox"])[data-checked]:active:not([data-disabled])::before {
+  background: var(--muted);
+}
+
+/* A Button with focusableWhenDisabled stays focusable (so its Tip can say why it's unavailable)
+   and marks itself with data-disabled instead of :disabled; it looks like a disabled .btn. */
+:root .btn[data-slot="button"][data-disabled] {
+  opacity: var(--disabled-opacity);
+  color: var(--muted);
+  background-color: var(--ground);
+  border-color: var(--line);
+  border-style: dashed;
+  cursor: default;
+}
+
+/* Select, Listbox, Combobox and Token Input keep a hidden form field beside their trigger: absolute,
+   with no offsets, so it sits where the trigger is. When that field's positioned ancestor is outside
+   a scrolling pane (the Settings box around its pane), a Select low in the pane stretched the box's
+   scroll area, and focus moving down scrolled the whole box, its title out of sight. Pinned to the
+   ancestor's top corner, the field never reaches past it. */
+[data-slot$="form-input"],
+[data-slot="value-input"] {
+  inset-block-start: 0;
+  inset-inline-start: 0;
+}

@@ -1,0 +1,21 @@
+/* The search adornment follows the field's center, without a guessed top inset. */
+.repo-picker .repo-search > svg {
+  top: calc((var(--ctl-h) - var(--icon-14)) / 2);
+}
+
+/* The results are a UI SDK combobox list in the top layer, as wide as the search above them. The
+   query returns eight rows: show complete rows, including the last icon, before introducing a
+   scroll boundary. */
+.repo-results[data-slot="combobox-content"] {
+  width: var(--anchor-width);
+  max-height: min(
+    calc((var(--ctl-h) + var(--space-2)) * 8 + var(--space-10)),
+    var(--available-height)
+  );
+  color: var(--text);
+}
+
+/* The empty note is always in the list, for screen readers; it shows only while nothing matches. */
+.repo-empty[data-slot="combobox-empty"]:not([data-empty]) {
+  display: none;
+}

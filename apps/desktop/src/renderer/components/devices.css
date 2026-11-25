@@ -1,0 +1,37 @@
+/* Follow live microphone input without adding lag; reduced motion stays immediate. */
+:root .mic-level > span {
+  transition: transform var(--motion-meter) var(--ease-linear);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root .mic-level > span {
+    transition: none;
+  }
+}
+
+/* Preserve the field geometry while making pointer feedback as clear as a button's. */
+:root .device-select:hover:not(:disabled) {
+  background: var(--hover);
+}
+:root .device-select:active:not(:disabled),
+:root .device-select[aria-expanded="true"] {
+  background: var(--hover);
+  border-color: var(--faint);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--faint);
+}
+.device-option-label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+.device-list [data-slot="select-item-indicator"] {
+  flex: none;
+}
+
+/* Muted ink signals the unavailable action without fading its text below contrast. */
+:root .speaker-test:disabled {
+  opacity: 1;
+  color: var(--muted);
+  background: var(--raised);
+  border-color: var(--line);
+}

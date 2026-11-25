@@ -1,0 +1,47 @@
+/* Settings' On/Off switches (OnOff.tsx): one UI SDK Switch, drawn as the two segments of `.seg`. */
+:root .seg.on-off {
+  align-self: flex-start;
+  color: inherit;
+  cursor: pointer;
+}
+:root .seg.on-off:disabled {
+  cursor: default;
+}
+:root .seg.on-off > [data-side] {
+  display: inline-flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: var(--ctl-h);
+  min-height: var(--ctl-h);
+  padding: var(--space-4) var(--space-10);
+  border: var(--border-hairline) solid transparent;
+  border-radius: var(--radius-control);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--muted);
+}
+:root .seg.on-off:not(:disabled) > [data-side]:hover {
+  background: var(--raised);
+  color: var(--text);
+}
+:root .seg.on-off[data-checked] > [data-side="on"],
+:root .seg.on-off[data-unchecked] > [data-side="off"] {
+  background: var(--raised);
+  color: var(--text);
+  box-shadow: var(--seg-lift);
+}
+:root .seg.on-off:disabled > [data-side] {
+  opacity: var(--disabled-opacity);
+  color: var(--muted);
+  background-color: var(--ground);
+  border-color: var(--line);
+  border-style: dashed;
+}
+/* A locked switch still shows which half is on. */
+:root .seg.on-off:disabled[data-checked] > [data-side="on"],
+:root .seg.on-off:disabled[data-unchecked] > [data-side="off"] {
+  background-color: var(--raised);
+  border-color: var(--muted);
+}

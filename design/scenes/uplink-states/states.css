@@ -1,0 +1,297 @@
+/* Uplink Room placeholder palette on the kit's dark theme. One color per
+   state, used the same way everywhere. */
+.us .ss-stage {
+  overflow: hidden;
+  background: transparent;
+  --ss-surface: #16181b;
+  --ss-chrome: #16181b;
+  --ss-canvas: #121417;
+  --ss-raised: #1e2125;
+  --ss-line: #2a2e33;
+  --ss-line-faint: #23262b;
+  --ss-text: #989ca4;
+  --ss-text-strong: #e7e8ea;
+  --ss-text-faint: #6d727a;
+  --ss-icon: #989ca4;
+  --ss-accent: #7aa2f7;
+  --ss-accent-text: #7aa2f7;
+  --ss-accent-soft: rgb(122 162 247 / 0.14);
+  --ss-warning-text: #f2a93b;
+  --ss-warning-soft: rgb(242 169 59 / 0.16);
+  --ss-success-text: #45c08a;
+  --ss-success-soft: rgb(69 192 138 / 0.13);
+  --ss-danger-text: #ef6b6b;
+  --ss-danger-soft: rgb(239 107 107 / 0.14);
+}
+
+/* Inset top and left by the gutter, off the bottom; off the right only by
+   its empty margin, so the pills end a gutter inside the stage */
+.us-win {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  width: 712px;
+  height: 460px;
+  box-shadow: var(--ss-shadow-hero);
+}
+
+.us .ss-stage[data-layout='compact'] .us-win {
+  top: 24px;
+  left: 16px;
+  width: 358px;
+}
+
+.us .ss-window__side {
+  background: #121417;
+}
+
+.us-side {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  padding: 6px 10px;
+}
+
+.us-nav {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: var(--ss-radius-sm);
+  color: var(--ss-text);
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+
+.us-nav[data-strong] {
+  color: var(--ss-text-strong);
+  font-weight: 500;
+}
+
+.us-nav svg {
+  flex: none;
+  color: var(--ss-icon);
+}
+
+.us-nav[data-active] {
+  background: var(--ss-ink-2);
+  color: var(--ss-text-strong);
+  font-weight: 500;
+}
+
+.us-group {
+  display: flex;
+  align-items: center;
+  height: 26px;
+  padding: 8px 8px 0;
+}
+
+.us-dot {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  margin: 0 2px;
+  border-radius: 2px;
+  background: var(--ss-accent);
+}
+
+.us-dot[data-faint] {
+  background: var(--ss-ink-4);
+}
+
+/* The Inbox count: Waiting's color, because that is what it counts */
+.us-count {
+  margin-left: auto;
+  min-width: 20px;
+  padding: 0 6px;
+  border-radius: var(--ss-radius-pill);
+  background: var(--ss-warning-soft);
+  color: var(--ss-warning-text);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 18px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.us-inbox-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 22px;
+  padding: 0 9px 0 8px;
+  border-radius: var(--ss-radius-pill);
+  background: var(--ss-warning-soft);
+  color: var(--ss-warning-text);
+  font-size: 11.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.us-body {
+  min-height: 440px;
+  padding: 2px 72px 0 16px;
+  background: var(--ss-surface);
+}
+
+.us .ss-stage[data-layout='compact'] .us-body {
+  padding: 4px 16px 0;
+}
+
+.us-list {
+  border-top: 0;
+}
+
+.us-task {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  height: 46px;
+  border-bottom: 1px solid var(--ss-line-faint);
+  white-space: nowrap;
+}
+
+.us-open {
+  border-bottom: 1px solid var(--ss-line-faint);
+}
+
+.us-open > .us-task {
+  border-bottom: 0;
+}
+
+.us-title {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  overflow: hidden;
+  color: var(--ss-text-strong);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.us-meta {
+  color: var(--ss-text-faint);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+/* The runs sit under the title's reading edge, on a hairline that ties them
+   to their task */
+.us-runs {
+  margin: -4px 0 8px 32px;
+  padding-left: 12px;
+  border-left: 1px solid var(--ss-line);
+}
+
+.us-run {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr) 56px auto;
+  align-items: center;
+  gap: 12px;
+  height: 32px;
+  white-space: nowrap;
+}
+
+.us .ss-stage[data-layout='compact'] .us-run {
+  grid-template-columns: minmax(0, 1fr) 56px auto;
+}
+
+.us-harness {
+  color: var(--ss-text-strong);
+  font-size: 12.5px;
+}
+
+.us-machine {
+  color: var(--ss-text);
+  font-family: var(--ss-font-mono, ui-monospace, 'SF Mono', Menlo, monospace);
+  font-size: 11.5px;
+}
+
+.us-slot {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Allow arrives in a reserved slot with Waiting and leaves with it */
+.us-allow {
+  height: 22px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--ss-radius-sm);
+  background: var(--ss-raised);
+  box-shadow: inset 0 0 0 1px var(--ss-line);
+  color: var(--ss-text-strong);
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateY(2px);
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.12s ease;
+  will-change: transform;
+}
+
+.us-allow[data-on] {
+  opacity: 1;
+  transform: none;
+}
+
+.us-allow[data-hover] {
+  background: #272b31;
+}
+
+.us-allow[data-pressed] {
+  background: #2e3239;
+  transform: scale(0.97);
+}
+
+/* Pills: one per run or task, tone eased by the Badge */
+.us-pill {
+  justify-self: end;
+  gap: 6px;
+}
+
+.us-pill[data-state='stopped'] {
+  color: #8a8f98;
+}
+
+.us-mark {
+  display: grid;
+  place-items: center;
+  width: 12px;
+  height: 12px;
+}
+
+.us-mark__g {
+  display: grid;
+  grid-area: 1 / 1;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.us-mark__g[data-on] {
+  opacity: 1;
+}
+
+.us-label {
+  display: grid;
+  justify-items: start;
+  transition: width 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.us-word {
+  grid-area: 1 / 1;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.14s ease;
+}
+
+.us-word[data-on] {
+  opacity: 1;
+  transition: opacity 0.2s ease 0.12s;
+}
+
+.us-task--filler {
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+}

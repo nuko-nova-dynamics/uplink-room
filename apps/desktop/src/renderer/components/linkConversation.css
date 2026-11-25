@@ -1,0 +1,202 @@
+/* Your conversation with your Link (ADR 0049), at the top of the Inbox: one timeline, as Grok Bot. */
+:root {
+  --link-run-width: 440px;
+  --send-chip-height: 30px;
+  --send-menu-width: 290px;
+  --inbox-ask-max: 160px;
+  --send-menu-max: min(480px, calc(100vh - 120px));
+}
+
+.link-conversation {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  margin: 0 0 var(--space-24);
+  padding: 0;
+  list-style: none;
+}
+
+.link-msg {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.link-msg.mine {
+  align-items: flex-end;
+}
+
+.link-msg-line {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-8);
+  max-width: 85%;
+}
+
+.link-msg-bubble {
+  padding: var(--space-8) var(--space-12);
+  border-radius: var(--radius-bubble);
+  font-size: var(--font-15);
+  line-height: var(--line-15);
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+}
+
+.link-msg.mine .link-msg-bubble {
+  background: var(--bubble-own);
+  color: var(--on-bubble-own);
+}
+
+/* Under your latest message while the Link hasn't answered: where it stands, one quiet line in
+   muted, as a delivery line in a channel. A failed send isn't amber: nothing waits on you. */
+.link-status {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-6);
+  max-width: 85%;
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--font-12);
+  line-height: var(--line-12);
+}
+
+.link-status > svg {
+  flex: none;
+  margin-top: var(--space-1);
+}
+
+/* Under the agent's reply: a quiet text action, in line with the bubble after the face. */
+.link-make-task {
+  align-self: flex-start;
+  margin-left: var(--space-32);
+  padding: var(--space-2) var(--space-6);
+  border: 0;
+  border-radius: var(--radius-inline);
+  background: transparent;
+  color: var(--muted);
+  font-size: var(--font-13);
+  cursor: pointer;
+}
+
+.link-make-task:hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+}
+
+.link-run {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  align-self: stretch;
+}
+
+.link-event {
+  margin: var(--space-4) 0 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+
+.link-event b {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.link-run-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: var(--link-run-width);
+  margin-left: var(--space-32);
+  padding: var(--space-12) var(--space-14);
+  border: var(--border-hairline) solid var(--line);
+  border-radius: var(--radius-group);
+  background: var(--raised);
+}
+
+.link-run-who {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  min-width: 0;
+  color: var(--muted);
+  font-size: var(--font-12);
+  line-height: var(--line-12);
+}
+
+.link-run-title {
+  font-size: var(--font-15);
+  line-height: var(--line-15);
+  font-weight: 600;
+}
+
+.link-run-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+}
+
+.link-run-state {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  color: var(--muted);
+  font-size: var(--font-13);
+}
+
+/* The composer's "Send to" chip, left of the send button, as T3 Code's model picker. */
+.send-target {
+  position: relative;
+  flex: none;
+}
+
+.send-target-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  height: var(--send-chip-height);
+  padding: 0 var(--space-10);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--chip);
+  color: var(--text);
+  font-size: var(--font-13);
+  cursor: pointer;
+}
+
+/* A UI SDK menu in the top layer, placed above the chip by MenuContent (side="top"). */
+.send-target-menu {
+  width: var(--send-menu-width);
+  max-height: var(--send-menu-max);
+  overflow-y: auto;
+}
+
+.link-msg-files {
+  max-width: 85%;
+}
+
+.link-msg.theirs .link-msg-files {
+  margin-left: var(--space-32);
+}
+
+.link-earlier {
+  align-self: center;
+}
+
+.send-target-menu .pick-line {
+  display: block;
+  color: var(--muted);
+  font-size: var(--font-12);
+  line-height: var(--line-12);
+}
+
+.send-target-menu .pick-text {
+  flex: 1;
+  min-width: 0;
+}
+
+/* A line the room wrote for the Link's run: centered, as Grok Bot's event lines. */
+.link-msg.room {
+  align-items: center;
+}

@@ -1,0 +1,61 @@
+name: Bridge release
+
+# Publishes the bridge that cloud machines install (#52, ADR 0013): on a
+# version tag (v0.1.0), or from the Actions tab on main, it builds and packs the
+# bridge, uploads it to the public Vercel Blob store `uplink-bridge-releases` at
+# bridge/uplink-room-bridge-<version>-<sha>.tgz, checks the downloaded file's
+# sha256, and sets UPLINK_BRIDGE_TARBALL_URL on Convex prod. Cloud machines
+# install the new bridge on their next boot. See packages/bridge/README.md.
+#
+# Repository secrets:
+#   BLOB_READ_WRITE_TOKEN the store's read-write token (Vercel project uplink-room, team Miami Web AI)
+#   CONVEX_DEPLOY_KEY     a deploy key for Convex prod (fleet-jaguar-632)
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+concurrency:
+  group: bridge-release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    # A manual run publishes only from main, since it changes prod.
+    if: github.ref_type == 'tag' || github.ref == 'refs/heads/main'
+    runs-on: ${{ fromJSON(vars.CI_RUNS_ON || '"ubuntu-latest"') }}
+    container: ${{ contains(fromJSON(vars.CI_RUNS_ON || '"ubuntu-latest"'), 'fleet') && 'node:24-bookworm@sha256:9d266751ca3d7fdbe651c878ffd5ad0a42fed49a18c283509267c97f025b7496' || '' }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/concept/
+            !/design/
+            !/research/
+      - uses: pnpm/action-setup@v6.1.0
+        with:
+          dest: ${{ runner.temp }}/setup-pnpm
+          cache: ${{ !job.container.id }}
+      - name: Reuse the fleet's Linux pnpm store
+        if: job.container.id
+        shell: bash
+        run: echo "pnpm_config_store_dir=$(dirname "$(dirname "$GITHUB_WORKSPACE")")/.pnpm-store" >> "$GITHUB_ENV"
+      - uses: actions/setup-node@v7.1.0
+        if: ${{ !job.container.id }}
+        with:
+          node-version: 24
+      # On Linux this compiles node-pty, which has no Linux prebuild.
+      - run: pnpm install --frozen-lockfile
+        env:
+          ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
+      - name: Build, upload, check and point prod at the bridge
+        run: node packages/bridge/scripts/release.ts
+        env:
+          BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}

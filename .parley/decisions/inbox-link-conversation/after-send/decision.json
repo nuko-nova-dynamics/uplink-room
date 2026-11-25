@@ -1,0 +1,19 @@
+{
+  "ask": "inbox-link-conversation",
+  "question": "after-send",
+  "prompt": "You send “the checkout page crashes on Safari, can someone look”. What does Link show once it starts the work?",
+  "level": 3,
+  "revision": 2,
+  "choice": [
+    "event-and-card"
+  ],
+  "values": {},
+  "notes": "",
+  "options": {
+    "event-and-card": {
+      "label": "Event line and run card",
+      "detail": "A gray line says a thread started; a run card below it shows the step it's on and turns into Finished with the diff and the PR.",
+      "folder": "event-and-card/"
+    }
+  }
+}

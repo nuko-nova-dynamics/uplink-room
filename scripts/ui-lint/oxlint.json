@@ -1,0 +1,17 @@
+{
+  "plugins": ["react", "jsx-a11y"],
+  "jsPlugins": ["./oxlint-plugin.mjs"],
+  "categories": { "correctness": "off" },
+  "rules": {
+    "react/button-has-type": "error",
+    "jsx-a11y/click-events-have-key-events": "error",
+    "jsx-a11y/no-static-element-interactions": "error",
+    "jsx-a11y/control-has-associated-label": "error",
+    "ui/no-inline-svg": "error",
+    "ui/no-inline-px": "error",
+    "ui/no-emoji-icon": "error",
+    "ui/icon-scale": "error",
+    "ui/icon-geometry": "error"
+  },
+  "ignorePatterns": ["**/*.test.*", "**/gym/**"]
+}

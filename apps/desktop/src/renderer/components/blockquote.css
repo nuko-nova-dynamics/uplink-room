@@ -1,0 +1,10 @@
+/*
+ * A quotation in rendered Markdown (messages and docs): the usual quote rule down its left side.
+ * It lives apart from styles.css so the detector's one exception for it (.impeccable/config.json,
+ * side-tab) covers this rule alone. It is a quote convention, not an accent stripe on a card.
+ */
+.md blockquote {
+  border-left: 3px solid var(--line);
+  padding-left: 10px;
+  color: var(--muted);
+}

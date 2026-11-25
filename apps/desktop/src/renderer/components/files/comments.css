@@ -1,0 +1,10 @@
+.comment-body .md p {
+  text-wrap: balance;
+}
+.comment-card .pin-n {
+  width: calc-size(fit-content, round(up, size, var(--pixel-pair)));
+}
+
+.comment-body .breakable-word {
+  word-break: break-all;
+}

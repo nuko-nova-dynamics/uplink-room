@@ -1,0 +1,55 @@
+{
+  "id": "03-bug-triage",
+  "kind": "Bug triage: four bugs, one fixed by its author, a duplicate, a deferral, and an unreproducible report",
+  "channel": "reef-runner-bugs",
+  "language": "en",
+  "people": [
+    { "id": "priya", "name": "Priya Raman", "voice": "Tara" },
+    { "id": "ben", "name": "Ben Okafor", "voice": "Daniel" },
+    { "id": "sam", "name": "Sam Rivera", "voice": "Rocko (English (US))", "gain": 0.8 }
+  ],
+  "turns": [
+    { "speaker": "priya", "text": "Thanks for joining, both of you. Sam, I hear some echo. Are you on speaker?" },
+    { "speaker": "sam", "text": "Sorry, switching to headphones. Is that better?" },
+    { "speaker": "priya", "text": "Much better, thanks." },
+    { "speaker": "priya", "text": "Let's go through the new bugs. There are four. First one, bug 212: the game crashes on launch on iPads running iOS 17." },
+    { "speaker": "sam", "text": "I saw that one. It's every iPad on 17, not just some of them." },
+    { "speaker": "priya", "text": "I can reproduce it. It's the new audio session code I wrote last week. It asks for a mode that iOS 17 doesn't support on iPad. It's my code, so I'll fix it." },
+    { "speaker": "ben", "text": "That's a launch crash, so it shouldn't wait for 1.5. Can we do a hotfix?" },
+    { "speaker": "priya", "text": "Yes. Let's ship a 1.4.1 hotfix on Friday with just that fix." },
+    { "speaker": "sam", "text": "Agreed, Friday." },
+    { "speaker": "priya", "text": "Next, bug 215: the leaderboard shows the wrong names for players with emoji in their names." },
+    { "speaker": "ben", "text": "That's a duplicate of 198. Sam already fixed it on the main branch, and it goes out with 1.5." },
+    { "speaker": "sam", "text": "Right, that one's fixed." },
+    { "speaker": "priya", "text": "Then I'm closing 215 as a duplicate. Done. Bug 219: the music keeps playing after you quit to the menu on Android." },
+    { "speaker": "sam", "text": "It's annoying, but harmless. I don't think it's worth fixing before 1.5." },
+    { "speaker": "ben", "text": "Agreed, let's leave it for 1.5." },
+    { "speaker": "priya", "text": "OK, 219 waits for 1.5. Last one, bug 220, and this one worries me. Three players say they lost coins right after a purchase." },
+    { "speaker": "ben", "text": "We can't reproduce it. I tried on four devices yesterday, and the coins were always there." },
+    { "speaker": "sam", "text": "I'm on call this week, so I'll pull the purchase logs for those three players and see what the store says." },
+    { "speaker": "priya", "text": "Thanks, Sam. Ben, could you reply to the three players and tell them we're looking into it? They've been waiting for two days." },
+    { "speaker": "ben", "text": "Sure, I'll write to them today." },
+    { "speaker": "priya", "text": "And we should have a test that restores purchases after a reinstall. We never test that path. I don't want to give it to anyone yet, let's just add it to the backlog." },
+    { "speaker": "sam", "text": "Makes sense." },
+    { "speaker": "priya", "text": "OK, that's all four. Thanks, both of you." }
+  ],
+  "truth": {
+    "decisions": [
+      { "text": "Ship a 1.4.1 hotfix on Friday with only the iPad launch crash fix.", "match": [["1.4.1", "hotfix"], ["friday"]] },
+      { "text": "Bug 215 is closed as a duplicate of 198, already fixed on main for 1.5.", "match": [["duplicate"]] },
+      { "text": "Bug 219 (music keeps playing on Android) waits for 1.5.", "match": [["219", "music"]] }
+    ],
+    "tasks": [
+      { "title": "Fix the iOS 17 launch crash on iPad (bug 212)", "owner": "priya", "match": [["ipad", "ios 17", "212", "audio session", "launch crash", "crash on launch", "crashes on launch"]], "exclude": [["ship", "release"]] },
+      { "title": "Pull the purchase logs for the three players who lost coins (bug 220)", "owner": "sam", "match": [["log"]] },
+      { "title": "Reply to the three players who lost coins", "owner": "ben", "match": [["repl", "write to", "contact", "email", "message", "reach out", "respond", "let", "tell", "update"], ["player"]], "exclude": [["log"]] },
+      { "title": "Add a test that restores purchases after a reinstall (backlog)", "owner": null, "match": [["restore", "reinstall"]] },
+      { "title": "Ship the 1.4.1 hotfix on Friday", "owner": ["priya", null], "optional": true, "match": [["ship", "release"], ["hotfix", "1.4.1"]] }
+    ],
+    "notTasks": [
+      { "text": "Bug 215, emoji names (duplicate, already fixed)", "match": [["emoji", "215"]] },
+      { "text": "Bug 219, music on Android (deferred to 1.5)", "match": [["music", "219"]] }
+    ],
+    "notes": "The restore test was explicitly left without an owner. Priya closed 215 during the call, so there is nothing left to do on it."
+  }
+}

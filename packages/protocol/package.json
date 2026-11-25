@@ -1,0 +1,11 @@
+{
+  "name": "@uplink-room/protocol",
+  "license": "MIT",
+  "version": "0.2.27",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.ts", "./terminalText": "./src/terminalText.ts", "./terminalReplies": "./src/terminalReplies.ts", "./mcp": "./src/mcp.ts", "./runMessages": "./src/runMessages.ts", "./codexAppServer": "./src/codexAppServer.ts", "./drain": "./src/drain.ts", "./refusals": "./src/refusals.ts",
+    "./closedOutput": "./src/closedOutput.ts" },
+  "scripts": { "typecheck": "tsc-rs -p tsconfig.json" },
+  "dependencies": { "convex": "1.49.0" }
+}

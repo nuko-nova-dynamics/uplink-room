@@ -1,0 +1,4 @@
+{
+  "note": "The team's people who are in none of the calls. With everyone who is in one, they are what teams.members returns.",
+  "people": [{ "id": "marta", "name": "Marta Vidal" }]
+}

@@ -1,0 +1,565 @@
+/* Shell-owned layout and typography. Shared controls and tokens stay in styles.css. */
+:root .inbox-scroll {
+  scrollbar-gutter: stable both-edges;
+  scrollbar-width: auto;
+  scrollbar-color: auto;
+}
+:root .inbox-scroll::-webkit-scrollbar {
+  width: var(--space-8);
+  height: var(--space-8);
+}
+:root .inbox-scroll::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: var(--radius-pill);
+}
+:root .inbox-scroll:hover::-webkit-scrollbar-thumb {
+  background: var(--line);
+}
+:root .inbox-scroll::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+}
+:root .inbox .section-head,
+:root .inbox .section-head .badge,
+:root .inbox-row .reason,
+:root .inbox-row .row-keys,
+:root .inbox-row .row-keys .kbd {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .inbox .section-head {
+  align-items: baseline;
+}
+:root .inbox .section-head .badge {
+  padding-block: 0;
+}
+:root .inbox-row.focus:hover {
+  background: var(--hover);
+}
+:root .inbox-row .actions {
+  gap: var(--space-8);
+}
+:root .inbox-row .reason {
+  overflow-wrap: anywhere;
+}
+:root .inbox .state-working,
+:root .inbox .state-done,
+:root .inbox .state-failed {
+  color: var(--muted);
+}
+:root .zero {
+  gap: var(--space-8);
+}
+/* Link's canvas has four pixels more empty space at its left than its right. */
+:root .zero > .char-host {
+  margin-left: calc(-1 * var(--space-8));
+}
+:root .get-started {
+  gap: var(--space-8);
+}
+:root .get-started .section-head {
+  padding-inline: 0;
+}
+:root .get-started-bar {
+  margin: 0;
+}
+:root .get-started-bar > span {
+  min-width: 0;
+  background: var(--muted);
+}
+:root .get-started-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+:root .get-started-row {
+  width: 100%;
+  grid-template-columns: var(--icon-14) minmax(0, 1fr);
+  gap: var(--space-8);
+  padding: var(--space-8) 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+:root .get-started-row:hover {
+  background: var(--hover);
+}
+:root .get-started-row .get-started-icon {
+  width: var(--icon-14);
+  height: var(--icon-14);
+  background: transparent;
+  color: var(--muted);
+}
+:root .get-started-row.next .get-started-icon {
+  color: var(--text);
+}
+:root .get-started-text b {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-8);
+}
+:root .get-started-next {
+  font-weight: 400;
+  color: var(--muted);
+}
+:root .get-started-text {
+  overflow-wrap: anywhere;
+}
+:root .no-team-app .label,
+:root .no-team-app .hint,
+:root .no-team-app .nav-heading {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .no-team-app .face {
+  font-size: var(--font-13);
+}
+:root .no-team-app .pair-item .badge,
+:root .no-team-app .pairs-row .badge {
+  background: var(--raised);
+  border: var(--border-hairline) solid var(--faint);
+  height: var(--space-20);
+  width: calc-size(fit-content, round(up, size, var(--pixel-pair)));
+  color: var(--muted);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root #invite-token::placeholder {
+  font-family: var(--ui);
+  font-size: var(--font-13);
+}
+:root .settings-pane > .pane-title {
+  margin-right: calc(-1 * var(--space-2));
+  gap: var(--space-8);
+}
+:root .settings-pane .label,
+:root .settings-pane .hint,
+:root .settings-pane .table,
+:root .settings-pane .table th,
+:root .settings-pane .table td,
+:root .settings-pane .tag,
+:root .settings-pane .invite-meta {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .settings-pane {
+  overflow-wrap: anywhere;
+}
+:root .settings-pane .profiles-table {
+  width: 100%;
+  table-layout: fixed;
+}
+:root .profiles-table th:first-child {
+  width: 26%;
+}
+:root .profiles-table th:nth-child(2) {
+  width: 23%;
+}
+:root .profiles-table th:last-child {
+  width: 20%;
+}
+:root .settings-pane .profiles-table td {
+  overflow-wrap: anywhere;
+}
+:root .settings-pane .device-select,
+:root .members-table .select {
+  height: var(--ctl-h);
+}
+:root .settings-pane .state-working,
+:root .settings-pane .state-done,
+:root .settings-pane .state-failed {
+  color: var(--muted);
+}
+:root .notification-blocked {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  flex-wrap: wrap;
+}
+:root .notification-blocked > svg {
+  flex: none;
+}
+:root .notification-blocked > span {
+  flex: 1;
+}
+:root .invite-error {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-8);
+  color: var(--amber-text);
+}
+:root .invite-error > svg {
+  flex: none;
+  align-self: center;
+}
+
+:root .drawer .state-done,
+:root .drawer .state-failed,
+:root .drawer .run-fail,
+:root .drawer .btn.stop-run:hover,
+:root .drawer .run-output-fail {
+  color: var(--muted);
+}
+:root .drawer .run-card-meta,
+:root .drawer .task-fact > span:first-child,
+:root .drawer .section-label,
+:root .drawer .run-card-state {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .drawer .run-card-name {
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+:root .drawer .kept-chip {
+  color: var(--muted);
+  border-color: var(--line);
+}
+:root .settings-pane .test-sound,
+:root .settings-pane .row-flex > .select {
+  height: var(--ctl-h);
+}
+
+:root .call-dock .btn.is-off,
+:root .call-dock .btn.is-on,
+:root .call-dock .btn.leave {
+  color: var(--text);
+  border-color: var(--line);
+  background: var(--ground);
+}
+:root .call-dock .btn:hover {
+  background: var(--hover);
+}
+:root .sidebar .state-done,
+:root .sidebar .state-failed {
+  color: var(--muted);
+}
+:root .sidebar .ring-failed {
+  --ring: var(--muted);
+}
+:root .sidebar .presence-dot.active {
+  background: var(--muted);
+}
+:root .settings-pane .mic-level > span {
+  background: var(--muted);
+}
+:root .saved-login-controls .input {
+  height: var(--ctl-h);
+}
+:root .invite-meta > span > span,
+:root .invite-error > span,
+:root .notification-blocked > span {
+  padding-top: var(--space-2);
+}
+:root .banner-stack .banner {
+  width: 100%;
+  min-width: 0;
+}
+/* Two previews per row keep the sample text readable and the tracks on whole pixels. */
+:root .banner-section {
+  container-type: inline-size;
+}
+:root .banner-stack {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@container (max-width: 44em) {
+  :root .banner-stack {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+:root .settings-pane .copy-failed:not(.primary) {
+  color: var(--muted);
+}
+
+/* Text owned by the shell uses the interface ramp even outside a settings pane. */
+:root .saved-logins,
+:root .saved-logins h2,
+:root .saved-login-meta,
+:root .saved-login-controls,
+:root .saved-login-controls .select,
+:root .saved-login-controls .input,
+:root .saved-logins > .hint,
+:root .browser-logins,
+:root .logins-picker .label,
+:root .logins-picker .hint,
+:root .cloud-machine-section .label,
+:root .cloud-machine-section .hint,
+:root .cloud-machine-section .chip,
+:root .updates-panel .label,
+:root .updates-panel .hint,
+:root .setup .label,
+:root .setup .hint,
+:root .settings-nav-group,
+:root .machine-grid .sub,
+:root .sidebar .nav-heading,
+:root .sidebar .roster-item small,
+:root .inbox-menu .pop-title,
+:root .team-menu .pop-title,
+:root .run-again-note {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .saved-login-controls .select {
+  height: var(--ctl-h);
+}
+:root .drawer .run-card-meta .mono {
+  font-family: var(--mono);
+  font-size: var(--font-12);
+  line-height: var(--line-12);
+}
+:root .settings-pane .secret-box,
+:root .settings-pane[data-section="activity"] code {
+  font-family: var(--ui);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .saved-logins > .hint,
+:root .updates-panel .update-note {
+  max-width: var(--reading-measure);
+}
+/* Saved-login rows have a separate caption baseline from the live-login strip. */
+:root .saved-logins .btn > svg {
+  margin-top: var(--space-2);
+}
+@media (min-resolution: 1.5dppx) {
+  :root .browser-logins-line > svg {
+    margin-top: var(--space-1);
+  }
+}
+:root .settings-pane .chip,
+:root .label[for="file-task"],
+:root .label[for="file-title"],
+:root .label[for="file-project"] {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+
+:root .cloud-error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  color: var(--amber-text);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .cloud-error > span {
+  padding-top: var(--space-2);
+}
+
+/* Modal close actions are bare icon controls, not window-header controls. */
+:root .dialog .dialog-head > .icon-btn {
+  width: var(--ctl-small);
+  height: var(--ctl-small);
+  min-width: var(--ctl-small);
+  min-height: var(--ctl-small);
+  border-radius: var(--radius-small);
+}
+
+:root .inbox-open {
+  min-width: 0;
+  min-height: var(--ctl-small);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-inline);
+  background: transparent;
+  text-align: left;
+}
+:root .inbox-open .reason {
+  display: block;
+}
+:root .inbox .inbox-row.focus:has(.inbox-open:focus-visible) {
+  outline-color: transparent;
+}
+
+/* Keep document-level focus scrolling from moving the window chrome. */
+:root .app {
+  min-height: 0;
+  overflow: clip;
+}
+:root .drawer-scrim {
+  position: fixed;
+}
+/* Intrinsic media may be fractional; the panel's painted edge stays on the pixel grid. */
+:root .panel {
+  height: calc-size(auto, round(up, size, var(--border-hairline)));
+}
+:root .settings {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+:root .settings-nav,
+:root .settings-pane {
+  min-height: 0;
+  overflow-y: auto;
+}
+:root .settings-pane:has(> .machines-view) {
+  padding-bottom: 0;
+}
+/* Settings scrolls as one pane (look.css), so the machine grid grows with its panel instead of
+   clipping it: a clipped grid left the panel's lower sections out of reach of the wheel. */
+:root .settings-pane .machine-grid {
+  flex: none;
+  overflow: visible;
+  align-items: start;
+  padding-bottom: var(--space-16);
+}
+:root .machine-grid > .machine-list,
+:root .machine-grid > .panel {
+  min-height: 0;
+}
+
+/* Error messages center the glyph on their content, without an inherited top margin. */
+:root .invite-error > svg {
+  margin-top: 0;
+}
+:root .invite-error > span {
+  padding-top: 0;
+}
+:root .notification-blocked > span,
+:root .invite-meta > .invite-failed > span {
+  padding-top: 0;
+}
+/* Cap trimming belongs to labels, not the height of a stacked banner text row. */
+:root .banner-app > span {
+  text-box: normal;
+}
+
+:root .banner-section > .settings-copy {
+  max-width: round(down, 62ch, var(--border-hairline));
+}
+
+/* These compound labels have a different cap band from a plain button label. */
+:root .task-panel .drawer-head > .btn:not(.icon) > svg,
+:root .drawer-body .run-card-actions > .btn:not(.icon) > svg {
+  margin-top: var(--space-3);
+}
+
+/* Inline baseline alignment follows the title's font metrics at both display scales. */
+:root .no-team-app .main-head h1 {
+  display: block;
+}
+:root .no-team-app .main-head h1 > .head-glyph {
+  margin-right: var(--space-8);
+  vertical-align: calc(-1 * var(--space-2));
+}
+
+:root .main-body:has(> .settings) {
+  overflow: hidden;
+  scrollbar-gutter: auto;
+}
+:root :is(.settings-nav, .settings-pane, .machine-grid > .machine-list, .machine-grid > .panel) {
+  scrollbar-gutter: stable;
+}
+:root
+  :is(
+    .settings-nav,
+    .settings-pane,
+    .machine-grid > .machine-list,
+    .machine-grid > .panel
+  )::-webkit-scrollbar {
+  width: var(--space-8);
+  height: var(--space-8);
+}
+:root
+  :is(
+    .settings-nav,
+    .settings-pane,
+    .machine-grid > .machine-list,
+    .machine-grid > .panel
+  )::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: var(--radius-pill);
+}
+:root
+  :is(
+    .settings-nav,
+    .settings-pane,
+    .machine-grid > .machine-list,
+    .machine-grid > .panel
+  ):hover::-webkit-scrollbar-thumb {
+  background: var(--line);
+}
+:root
+  :is(
+    .settings-nav,
+    .settings-pane,
+    .machine-grid > .machine-list,
+    .machine-grid > .panel
+  )::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+}
+
+/* Unavailable actions keep readable ink; surface and native disabled behavior carry the state. */
+:root .settings-pane .btn:disabled,
+:root .settings-pane .btn[data-slot="button"][data-disabled],
+:root .settings-pane .seg button:disabled,
+:root .settings-pane .seg button[data-disabled],
+:root .team-form .btn:disabled,
+:root .dialog .btn:is(:disabled, [data-pending]),
+:root .dialog .btn[data-slot="button"][data-disabled] {
+  opacity: 1;
+  color: var(--muted);
+  background: var(--sidebar);
+  border-color: var(--line);
+  box-shadow: none;
+}
+:root .settings-pane .seg button:disabled:is([aria-pressed="true"], [data-checked]) {
+  background: var(--raised);
+  border-color: var(--muted);
+}
+:root .settings-pane .secret-box {
+  border-color: var(--line);
+}
+
+/* The whole row responds to the pointer, independently of keyboard selection. */
+:root .inbox .inbox-row:hover {
+  background: var(--hover);
+}
+
+/* The window's primary action follows the header control contract. */
+:root .main-head .btn.primary {
+  color: var(--ground);
+  background: var(--text);
+  border-color: var(--text);
+}
+:root .main-head .btn.primary:hover,
+:root .main-head .btn.primary:active {
+  color: var(--ground);
+  background: color-mix(in srgb, var(--text) 88%, var(--ground));
+  border-color: var(--text);
+}
+
+/* The panel supplies the grouping edge; its choices need only their selected state. */
+:root .panel-section > .seg {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+/* Dates remain whole; longer activity descriptions take the available wrapping width. */
+:root .settings-pane[data-section="activity"] th:first-child,
+:root .settings-pane .activity-age {
+  white-space: nowrap;
+  width: var(--space-48);
+}
+:root .panel > .tile-tools {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+}
+:root .panel > .camera-picture {
+  border: 0;
+  border-radius: 0;
+}
+:root .panel > .tile-video {
+  border: 0;
+  border-radius: 0;
+}

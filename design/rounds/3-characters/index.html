@@ -1,0 +1,268 @@
+<title>Uplink Room Characters</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&family=Host+Grotesk:wght@400;500;600&family=Martian+Mono:wdth,wght@87.5,400;87.5,500&family=Familjen+Grotesk:wght@400;500;600&family=Fragment+Mono&family=Atkinson+Hyperlegible+Next:wght@400;500;700&family=Atkinson+Hyperlegible+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: one reading column of decisions. Each decision = context, a dark stage with the real UI (film or live HTML), then choices that save on click. Sticky bar: progress, save state, Send to Claude. */
+:root{
+  --bg:#f6f7f8;--surface:#ffffff;--fg:#15171a;--muted:#5a606a;--line:#e1e4e8;--accent:#2f62d6;--accent-fg:#ffffff;--pick:#e9effc;--ok:#1d7f4f;--warn:#a86200;
+  --stage:#0e1012;
+  --page:"Schibsted Grotesk",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111316;--surface:#181b1f;--fg:#e8e9eb;--muted:#9da2ab;--line:#2a2e34;--accent:#7aa2f7;--accent-fg:#0d1320;--pick:#1b2436;--ok:#4cc28d;--warn:#f2a93b;--stage:#0b0c0e;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111316;--surface:#181b1f;--fg:#e8e9eb;--muted:#9da2ab;--line:#2a2e34;--accent:#7aa2f7;--accent-fg:#0d1320;--pick:#1b2436;--ok:#4cc28d;--warn:#f2a93b;--stage:#0b0c0e;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.55 var(--page);-webkit-font-smoothing:antialiased}
+::selection{background:color-mix(in srgb,var(--accent) 30%,transparent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 96px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid var(--line)}
+.bar-in{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.bar b{font-weight:600}
+.prog{flex:1 1 140px;min-width:100px;height:6px;border-radius:99px;background:var(--line);overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .4s cubic-bezier(.22,1,.36,1)}
+.count,.save{font-size:13px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.save[data-s="ok"]{color:var(--ok)}.save[data-s="err"]{color:var(--warn)}
+.send{font:inherit;font-size:13px;font-weight:600;padding:6px 12px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-fg);cursor:pointer;white-space:nowrap}
+.send:disabled{background:none;color:var(--muted);border-color:var(--line);cursor:default}
+header.top{padding-block:40px 8px}
+h1{font:700 32px/1.12 var(--page);letter-spacing:-.015em;margin:0 0 10px;text-wrap:balance}
+.intro{max-width:64ch;color:var(--muted);margin:0}
+.intro b{color:var(--fg);font-weight:600}
+.q{margin-top:22px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px clamp(16px,3vw,26px) 20px;scroll-margin-top:70px}
+.q[data-answered] .qn{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.qh{display:flex;gap:12px;align-items:flex-start}
+.qn{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:600;font-size:12.5px;border:1.5px solid var(--line);color:var(--muted);margin-top:1px;transition:background .25s,color .25s,border-color .25s}
+.qh h3{font:600 19px/1.3 var(--page);margin:2px 0 4px;text-wrap:balance}
+.ctx{margin:0;color:var(--muted);max-width:66ch}
+.ctx b{color:var(--fg);font-weight:600}
+.stage{margin:16px 0 0;background:var(--stage);border-radius:var(--r);padding:16px;color:#e7e8ea;overflow:hidden}
+.stage img{display:block;width:100%;height:auto;border-radius:6px}
+.stage+.stage{margin-top:10px}
+.slab{color:#e7e8ea;font-size:13px;font-weight:600;margin:0 0 10px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.slab span{color:#989ca4;font:600 12px var(--mono)}
+.slab em{font-style:normal;color:#989ca4;font-weight:400}
+.pending{border:1px dashed #2a2e33;border-radius:8px;padding:28px 16px;text-align:center;color:#989ca4;font-size:13px}
+.opts{display:grid;gap:8px;margin-top:16px}
+.opt{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:start;padding:11px 14px;border:1px solid var(--line);border-radius:var(--r);cursor:pointer;background:var(--surface);transition:background .15s,border-color .15s}
+.opt:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.opt input{margin:4px 0 0;accent-color:var(--accent);width:16px;height:16px}
+.opt .ot{font-weight:600;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline}
+.opt .ok{font:600 12px var(--mono);color:var(--muted)}
+.opt .rec{font-size:11.5px;font-weight:600;color:var(--ok)}
+.opt .od{grid-column:2;color:var(--muted);font-size:14px}
+.opt:has(input:checked){background:var(--pick);border-color:var(--accent)}
+textarea{width:100%;font:14px/1.5 var(--page);color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;resize:vertical;min-height:42px}
+.note{margin-top:12px}
+.note label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+.foot{margin-top:40px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;color:var(--muted);font-size:14px}
+/* --- live inbox rows --- */
+.lv{--bg:#121315;--raised:#18191c;--line2:#26282c;--fg2:#ebecee;--mu:#8f939b;--faint:#5d6168;--wait:#F0A73A;--work:#9DB0D8;--done:#5FC38F;--ui:"Host Grotesk";--mn:"Martian Mono";--rowpad:9px;--fs:13px;--av:20px;
+  background:var(--bg);border:1px solid var(--line2);border-radius:8px;color:var(--fg2);font:400 var(--fs)/1.4 var(--ui),ui-sans-serif,system-ui,sans-serif;overflow:hidden}
+.lv.f-b{--ui:"Familjen Grotesk";--mn:"Fragment Mono"}
+.lv.f-c{--ui:"Atkinson Hyperlegible Next";--mn:"Atkinson Hyperlegible Mono"}
+.lv.d-compact{--rowpad:7px;--fs:12.5px;--av:18px}
+.lv.d-default{--rowpad:11px;--fs:13.5px;--av:22px}
+.lv.d-spacious{--rowpad:15px;--fs:14px;--av:26px}
+.lv .lh{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line2);font-weight:600}
+.lv .lh small{font-weight:400;color:var(--mu)}
+.lv .sec{font-size:11.5px;font-weight:500;color:var(--mu);padding:10px 12px 4px;display:flex;gap:6px;align-items:center}
+.lv .row{display:grid;grid-template-columns:var(--av) minmax(0,1fr) auto;gap:2px 10px;align-items:center;padding:var(--rowpad) 12px;border-top:1px solid color-mix(in srgb,var(--line2) 55%,transparent)}
+.lv .row.focus{background:var(--raised)}
+.lv .av{width:var(--av);height:var(--av);border-radius:50%;display:grid;place-items:center;font-size:9.5px;font-weight:600;background:#2a2c31;color:var(--fg2)}
+.lv .av.sq{border-radius:5px;background:#23262c}
+.lv .t{min-width:0;overflow:hidden}
+.lv .t b{font-weight:500;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lv .t>span{color:var(--mu);font-size:.93em;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lv code,.lv .mn{font:400 .86em var(--mn),ui-monospace,monospace;font-stretch:87.5%}
+.lv .r{display:flex;align-items:center;gap:8px;color:var(--mu);font-size:.9em;white-space:nowrap;font-variant-numeric:tabular-nums}
+.lv .dot{width:8px;height:8px;border-radius:50%;flex:none}
+.lv .kbd{font:500 10.5px var(--ui),ui-sans-serif,sans-serif;color:var(--mu);border:1px solid var(--line2);border-bottom-width:2px;border-radius:4px;padding:0 5px;line-height:15px;min-width:18px;text-align:center;display:inline-block}
+.lv .keys{display:none;gap:14px;padding:8px 12px;border-top:1px solid var(--line2);font-size:11.5px;color:var(--mu);flex-wrap:wrap}
+.lv .keys span{display:inline-flex;gap:6px;align-items:center}
+.lv.k-footer .keys{display:flex}
+.lv .rowkeys{display:none;gap:6px}
+.lv.k-row .row.focus .rowkeys{display:inline-flex}
+.lv .menu{display:none}
+.lv.k-menu .menu{display:block;position:absolute;right:16px;top:58px;background:#1c1e22;border:1px solid var(--line2);border-radius:8px;padding:4px;min-width:170px;box-shadow:0 12px 28px -12px #000}
+.lv .menu div{display:flex;justify-content:space-between;gap:16px;padding:5px 8px;border-radius:5px;font-size:12px}
+.lv .menu div:first-child{background:#26292e}
+.lvwrap{position:relative}
+.steps{color:var(--faint);font-size:.88em;margin-top:2px}
+.bar2{height:3px;border-radius:2px;background:var(--line2);overflow:hidden;margin-top:5px;width:120px}
+.bar2 i{display:block;height:100%;width:40%;background:var(--work);border-radius:2px;animation:prog 9s linear infinite}
+@keyframes prog{from{width:5%}to{width:95%}}
+.arc{width:12px;height:12px;border-radius:50%;border:1.8px solid color-mix(in srgb,var(--work) 30%,transparent);border-top-color:var(--work);animation:spin 1s linear infinite;flex:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.zero{padding:36px 16px;text-align:center;color:var(--mu)}
+.zero b{display:block;color:var(--fg2);font-weight:500;margin-bottom:4px}
+.zero.reward{background:#1b1e24;padding:56px 16px}
+.zero.reward b{font-size:17px}
+.zero .sum{display:flex;justify-content:center;gap:18px;margin-top:10px;font-size:12px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.sw{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.sw i{width:40px;height:28px;border-radius:6px;border:1px solid #ffffff14}
+.cap{color:#989ca4;font-size:12.5px;margin:8px 0 0}
+
+/* --- agents as teammates --- */
+.refrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;align-items:start}
+.refrow figure{margin:0}
+.refrow figcaption{color:#989ca4;font-size:12px;margin-top:6px}
+.refrow img{border-radius:6px;background:#000}
+.gh-sec{font:600 13px var(--page);color:var(--muted);margin:52px 0 0;letter-spacing:.02em}
+.gh-sec+.ctx{margin-top:6px}
+.avs{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px}
+.avc{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 8px;border:1px solid #23262b;border-radius:8px;background:#121315}
+.avc span{font-size:12px;color:#989ca4}
+.ag{position:relative;width:44px;height:44px;border-radius:12px;background:#262a31;display:grid;place-items:center;font:600 13px "Host Grotesk",ui-sans-serif,sans-serif;color:#ebecee}
+.ag::after{content:"";position:absolute;inset:-4px;border-radius:15px;border:2px solid transparent}
+.ag.working::after{border-color:#9DB0D8 transparent transparent transparent;animation:spin 1.6s linear infinite}
+.ag.thinking{animation:breathe 2.4s ease-in-out infinite}
+.ag.waiting::after{border-color:#F0A73A}
+.ag.waiting{animation:nudge 3s cubic-bezier(.22,1,.36,1) infinite}
+.ag.blocked::after{border-color:#EF6F6C;border-style:dashed}
+.ag.done::after{border-color:#5FC38F}
+.ag.done .ck{position:absolute;right:-6px;bottom:-6px;width:16px;height:16px;border-radius:50%;background:#5FC38F;color:#0e1012;font-size:10px;display:grid;place-items:center}
+@keyframes breathe{50%{transform:scale(.94);opacity:.8}}
+@keyframes nudge{0%,70%,100%{transform:none}75%{transform:translateY(-3px)}80%{transform:none}85%{transform:translateY(-2px)}}
+.hov{font-size:11.5px;color:#989ca4;text-align:center;min-height:2.6em}
+.chat{display:flex;flex-direction:column;gap:6px;padding:12px;background:#121315;border:1px solid #23262b;border-radius:8px;font:13px/1.4 "Host Grotesk",ui-sans-serif,sans-serif;color:#ebecee;min-height:250px}
+.chat .meta{align-self:center;color:#6b7078;font-size:11px;margin:4px 0}
+.chat .ev{align-self:center;color:#8f939b;font-size:11.5px;border:1px solid #26282c;border-radius:99px;padding:2px 10px}
+.bub{max-width:82%;padding:7px 11px;border-radius:16px;background:#22252a}
+.bub.me{align-self:flex-end;background:#2f4f8f}
+.bub+.bub.me,.bub.me+.bub.me{margin-top:-2px}
+.rowsx .m{display:grid;grid-template-columns:22px 1fr;gap:8px}
+.rowsx .m b{font-weight:600}.rowsx .m small{color:#6b7078;font-weight:400;margin-left:6px}
+.rowsx .m i{width:22px;height:22px;border-radius:6px;background:#262a31;font:600 9.5px/22px "Host Grotesk",sans-serif;text-align:center;font-style:normal}
+.rowsx .m i.p{border-radius:50%}
+.card{align-self:stretch;border:1px solid #2c3036;border-radius:10px;padding:10px 12px;background:#17191c}
+.card .ch{display:flex;justify-content:space-between;color:#8f939b;font-size:11.5px;margin-bottom:6px}
+.card code{font:11.5px "Martian Mono",ui-monospace,monospace;font-stretch:87.5%;color:#ebecee}
+.card .cb{display:flex;gap:6px;margin-top:9px}
+.card .cb span{font-size:12px;padding:4px 10px;border-radius:6px;border:1px solid #2c3036}
+.card .cb span:first-child{background:#ebecee;color:#121315;border-color:#ebecee;font-weight:600}
+.lvls{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.lvl{border:1px solid #23262b;border-radius:8px;background:#121315;padding:10px;font-size:12px;color:#989ca4}
+.lvl b{display:block;color:#ebecee;font-weight:600;margin-bottom:6px}
+.win{height:84px;border:1px solid #2c3036;border-radius:6px;background:#16181b;position:relative;overflow:hidden}
+.win .tb{height:14px;border-bottom:1px solid #2c3036;display:flex;align-items:center;gap:3px;padding:0 5px}
+.win .tb i{width:5px;height:5px;border-radius:50%;background:#3a3e45}
+.win .tb .ic{margin-left:auto;width:16px;height:8px;border-radius:2px;background:#9DB0D8}
+.win .side{position:absolute;right:0;top:14px;bottom:0;width:42%;background:#23262b;border-left:1px solid #2c3036}
+.win .side::after,.win.full::after{content:"build-linux";position:absolute;left:6px;top:5px;font:9px "Martian Mono",monospace;color:#8f939b}
+.win.full{background:#23262b}
+.win.full .pill{position:absolute;left:6px;bottom:6px;font-size:9.5px;color:#fff;background:#2f62d6;border-radius:99px;padding:1px 7px}
+@media (max-width:620px){.lvls{grid-template-columns:1fr}}
+
+body.hide-done .q[data-answered]{display:none}
+@media (prefers-reduced-motion:reduce){.arc,.bar2 i{animation:none}.prog i{transition:none}}
+@media (max-width:620px){.bar b{display:none}}
+</style>
+
+<div class="bar"><div class="bar-in">
+  <b>Characters</b>
+  <div class="prog" aria-hidden="true"><i id="progbar"></i></div>
+  <span class="count" id="count">0 of 0 answered</span>
+  <span class="save" id="save" data-s="idle">Connecting</span>
+  <button class="send" type="button" id="sendTop" disabled>Send answers to Claude</button>
+</div></div>
+
+<div class="wrap">
+<header class="top">
+  <h1>Characters, mascot and the brand around them</h1>
+  <p class="intro">Your note on round 2: the brand should feel like Grok Bot and Muse, with real icons, animation and mascots. These are three character systems, each with a <b>house mascot</b> (the larger one, with an antenna ending in Uplink Room's amber dot) and six <b>agent characters</b> told apart by body shape, color and one accessory: headphones for a notetaker, a wrench for a deploy bot, and so on. They are generated explorations, not final art; the chosen style gets redrawn as clean vectors with state animations next. Press <b>Send answers to Claude</b> when you're done.</p>
+</header>
+
+<article class="q" id="c01"><div class="qh"><span class="qn">1</span><div><h3>Character style</h3>
+<p class="ctx">The same cast in three styles. Grok Bot tested many styles and kept simple shapes with expressive eyes because detailed styles (watercolor, clay) lost their character at sidebar size.</p></div></div>
+<div class="stage"><p class="slab"><span>a</span>Soft flat</p><img src="media/r3-a-flat.jpg" alt="Soft flat character set" loading="lazy"></div>
+<div class="stage"><p class="slab"><span>b</span>Vinyl toys</p><img src="media/r3-b-vinyl.jpg" alt="Vinyl toy character set" loading="lazy"></div>
+<div class="stage"><p class="slab"><span>c</span>Ink line art</p><img src="media/r3-c-line.jpg" alt="Ink line art character set" loading="lazy"></div>
+<div class="opts" data-q="c01"></div></article>
+
+<article class="q" id="c02"><div class="qh"><span class="qn">2</span><div><h3>A house mascot</h3>
+<p class="ctx">Muse made the agent itself the face of the product. Here the larger character would be Uplink Room's own: the app icon, the Inbox zero line, onboarding, and the sound cues.</p></div></div>
+<div class="opts" data-q="c02"></div></article>
+
+<article class="q" id="c03"><div class="qh"><span class="qn">3</span><div><h3>Agents and harnesses</h3>
+<p class="ctx">The glossary separates them: an agent is a team member a person added (Hermes, a notetaker); a harness is the tool running a thread (Claude Code, Codex).</p></div></div>
+<div class="opts" data-q="c03"></div></article>
+
+<article class="q" id="c04"><div class="qh"><span class="qn">4</span><div><h3>Who picks an agent's character</h3>
+<p class="ctx">Grok Bot keeps one construction and varies accessories so every Bot looks like it came from the same world. Muse lets you make your own.</p></div></div>
+<div class="opts" data-q="c04"></div></article>
+
+<article class="q" id="c05"><div class="qh"><span class="qn">5</span><div><h3>The interface palette around the characters</h3>
+<p class="ctx">Round 2 had no brand pick, but you chose Atkinson Hyperlegible. These are the three palettes from those directions.</p></div></div>
+<div class="stage"><img src="media/r2-a-board.png" alt="Direction A board" loading="lazy"></div>
+<div class="stage"><img src="media/r2-b-board.png" alt="Direction B board" loading="lazy"></div>
+<div class="stage"><img src="media/r2-c-board.png" alt="Direction C board" loading="lazy"></div>
+<div class="opts" data-q="c05"></div></article>
+
+<div class="foot"><button class="send" type="button" id="sendBottom" disabled>Send answers to Claude</button><span id="sendNote">Checking whether Claude can be reached from here.</span></div>
+</div>
+<script>
+const Q={
+ c01:[["a","Soft flat","Geometric bodies, big eyes, flat color with soft shading. Closest to Grok Bot; reads well at 20 px."],["b","Vinyl toys","Matte 3D figures with studio light. Closest to Muse's Veda; richest, but heavy at sidebar size."],["c","Ink line art","Thin lines and one spot color. Calm and distinctive; the most work to animate convincingly."],["d","None of these","Say what's missing in the note."]],
+ c02:[["a","Yes, a house mascot","Uplink Room's own character, the one with the amber-dot antenna, on the app icon, empty states and onboarding.",1],["b","No, only the agents have characters","The app itself stays a wordmark and icon."]],
+ c03:[["a","Agents get characters; harnesses keep their real marks","Hermes or the Notetaker is a character. A Claude Code or Codex run shows that product's own logo, because it isn't a team member.",1],["b","Everything gets a character","Harness runs get characters too."]],
+ c04:[["a","Built from the system, owner picks","Whoever adds an agent picks its body, color and accessory from the set, like Grok Bot's controlled variations.",1],["b","Owner uploads anything","Muse-style: any picture and name."],["c","Assigned automatically","Each new agent gets the next variation."]],
+ c05:[["a","Graphite with amber","From direction A. Amber stays the only loud color, which matches the mascot's antenna."],["b","Warm dark with presence green","From direction B."],["c","Blue-black with cobalt","From direction C, which already uses your typeface choice."],["d","Let the character style decide","Pick the palette that best fits the chosen characters in the next round.",1]]
+};
+const IDS=Object.keys(Q),state={};
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+for(const id of IDS){
+ const box=document.querySelector(`.opts[data-q="${id}"]`);box.setAttribute('role','radiogroup');
+ box.innerHTML=Q[id].map(([k,t,d,rec])=>`<label class="opt"><input type="radio" name="${id}" value="${k}" id="${id}-${k}"><span class="ot"><span class="ok">${k}</span>${esc(t)}${rec?'<span class="rec">Recommended</span>':''}</span><span class="od">${esc(d)}</span></label>`).join('');
+ box.insertAdjacentHTML('afterend',`<div class="note"><label for="${id}-note">Note for Claude (optional)</label><textarea id="${id}-note" rows="1" placeholder="Anything to add, change or ask"></textarea></div>`);
+}
+/* save */
+const saveEl=document.getElementById('save');
+function setSave(s,t){saveEl.dataset.s=s;saveEl.textContent=t}
+function refresh(){let n=0;for(const id of IDS){const a=state[id],art=document.getElementById(id);if(a&&a.choice){n++;art.setAttribute('data-answered','')}else art.removeAttribute('data-answered')}
+ document.getElementById('count').textContent=`${n} of ${IDS.length} answered`;document.getElementById('progbar').style.width=(n/IDS.length*100)+'%'}
+function applyToForm(id){const a=state[id]||{};const r=a.choice?document.getElementById(`${id}-${a.choice}`):null;if(r)r.checked=true;const nt=document.getElementById(`${id}-note`);if(nt&&document.activeElement!==nt&&a.note!=null)nt.value=a.note}
+let db=null;const timers={};
+function local(){try{return JSON.parse(localStorage.getItem('urc-answers')||'{}')}catch{return{}}}
+function saveLocal(){try{localStorage.setItem('urc-answers',JSON.stringify(state))}catch{}}
+function queue(id,delay){clearTimeout(timers[id]);timers[id]=setTimeout(async()=>{saveLocal();if(!db){setSave('err','Saved in this browser only');return}
+ setSave('busy','Saving');try{const a=state[id]||{};await db.doc('answers/'+id).set({choice:a.choice||null,note:a.note||'',question:document.querySelector(`#${id} h3`).textContent,label:a.choice?(Q[id].find(o=>o[0]===a.choice)||[])[1]||'':'',at:new Date().toISOString()});setSave('ok','Saved')}catch(e){setSave('err',"Couldn't save: "+(e&&e.code||'error'))}},delay)}
+document.addEventListener('change',e=>{const t=e.target;if(t.type!=='radio')return;state[t.name]={...(state[t.name]||{}),choice:t.value};refresh();queue(t.name,0)});
+document.addEventListener('input',e=>{const m=e.target.id&&e.target.id.match(/^([a-z]\d\d)-note$/);if(!m)return;state[m[1]]={...(state[m[1]]||{}),note:e.target.value};queue(m[1],700)});
+Object.assign(state,local());IDS.forEach(applyToForm);refresh();
+(async()=>{
+ try{db=await window.claude.use('db')}catch{db=null}
+ if(!db){setSave('err','Saved in this browser only')}else{
+  setSave('ok','Connected');let first=true;
+  db.collection('answers').onSnapshot(snap=>{
+   if(first){first=false;const have=new Set(snap.docs.map(d=>d.id));for(const id of IDS){if(state[id]&&state[id].choice&&!have.has(id))queue(id,0)}}
+   const focus=(document.activeElement&&document.activeElement.id)||'';
+   for(const d of snap.docs){if(focus.startsWith(d.id+'-'))continue;const v=d.data()||{};state[d.id]={choice:v.choice||null,note:v.note||''};applyToForm(d.id)}
+   saveLocal();refresh();
+  },err=>setSave('err',"Couldn't load answers: "+(err&&err.code||'error')));
+ }
+ /* send to Claude */
+ const note=document.getElementById('sendNote'),btns=[document.getElementById('sendTop'),document.getElementById('sendBottom')];
+ let cm=null;try{cm=await window.claude.use('comments')}catch{cm=null}
+ async function check(){
+  if(!cm){note.textContent='Sending from the page is not available here. Tell Claude in the chat instead.';return}
+  let s='off';try{s=await cm.canSendToClaude()}catch{s='off'}
+  const ok=s==='available';btns.forEach(b=>b.disabled=!ok);
+  note.textContent=ok?'Posts a short comment that brings Claude in to read your answers.':s==='no_session'?'No Claude session is listening right now. Tell Claude in the chat instead.':s==='writers_only'?'Only editors can send to Claude. Tell Claude in the chat instead.':'Sending from the page is not available here. Tell Claude in the chat instead.';
+ }
+ await check();setInterval(check,20000);
+ for(const b of btns)b.addEventListener('click',async()=>{
+  const n=IDS.filter(id=>state[id]&&state[id].choice).length;
+  b.disabled=true;note.textContent='Sending';
+  try{const anchor=await cm.anchorFor(document.querySelector('.foot'));
+   await cm.sendToClaude({anchor,text:`Character round answers are in (${n} of ${IDS.length} answered). Read them from the answers collection.`});
+   note.textContent='Sent. Claude will reply in the comment thread and in the chat.';}
+  catch(e){note.textContent="Couldn't send: "+(e&&e.code||'error')+'. Tell Claude in the chat instead.';b.disabled=false}
+ });
+})();
+</script>

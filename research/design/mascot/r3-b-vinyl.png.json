@@ -1,0 +1,16 @@
+{
+  "image_path": "research/design/mascot/r3-b-vinyl.png",
+  "prompt": "Character design sheet of collectible designer-toy style AI agent characters for a team collaboration app, rendered as soft matte 3D vinyl figures with gentle studio lighting. Front and center, larger: the house mascot, a rounded cube character with big glossy expressive eyes, a calm curious expression, and a short antenna topped by a small glowing amber bead. Behind it, a neat row of six smaller companion agents in the same family, each a rounded cube or rounded capsule body in a different muted color (sage, cobalt, coral, lilac, sand, slate) with the same eye style and one small accessory hinting at its job: headphones, a tiny wrench, round glasses, a pencil, a clipboard, a little lantern. Deep warm charcoal background, soft contact shadows. No text, no letters, no logos.",
+  "revised_prompt": "Character design sheet of collectible designer-toy style AI agent characters for a team collaboration app, rendered as soft matte 3D vinyl figures with gentle studio lighting. Front and center, larger: the house mascot, a rounded cube character with big glossy expressive eyes, a calm curious expression, and a short antenna topped by a small glowing amber bead. Behind it, a neat row of six smaller companion agents in the same family, each a rounded cube or rounded capsule body in a different muted color (sage, cobalt, coral, lilac, sand, slate) with the same eye style and one small accessory hinting at its job: headphones, a tiny wrench, round glasses, a pencil, a clipboard, a little lantern. Deep warm charcoal background, soft contact shadows. No text, no letters, no logos.",
+  "size": "1536x1024",
+  "quality": "medium",
+  "format": "png",
+  "is_transparent": false,
+  "input_image": null,
+  "requested_image_model": null,
+  "ts": "2026-11-02T02:49:52Z",
+  "resolved_quality": "medium",
+  "image_model": "gpt-image-2-codex",
+  "resolved_background": "opaque",
+  "transparency_mode": null
+}

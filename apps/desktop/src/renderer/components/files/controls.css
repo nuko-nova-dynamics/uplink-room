@@ -1,0 +1,62 @@
+/* File, browser and project controls inherit the shared control geometry and states. */
+:root .seg.surface-seg {
+  max-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.surface-label {
+  position: relative;
+  top: var(--space-1);
+}
+
+:root .seg.surface-seg > button {
+  flex: 1 0 auto;
+  width: auto;
+}
+:root .seg.surface-seg > button > .surface-label {
+  top: auto;
+}
+/* A UI SDK toggle in a segment group stays focusable while disabled (aria-disabled, data-disabled),
+   so its hint can say why. It takes the shared :disabled segment look, and hover and press leave it
+   as it is. */
+:root .seg.surface-seg > [data-slot="toggle"][data-disabled]:is(*, :hover, :active) {
+  opacity: var(--disabled-opacity);
+  color: var(--muted);
+  background-color: var(--ground);
+  border-color: var(--line);
+  border-style: dashed;
+  box-shadow: none;
+  cursor: default;
+}
+/* A locked segment still shows which choice was selected. */
+:root .seg.surface-seg > [data-slot="toggle"][data-disabled][aria-pressed="true"] {
+  background-color: var(--raised);
+  border-color: var(--muted);
+}
+
+/* Keep the focused cell's outline above the borders of its neighboring cells. */
+:root
+  :is(
+    .browser-panel,
+    .browser-settings,
+    .doc-viewer,
+    .dialog:has(.file-run-note),
+    .dialog:has(.file-kind)
+  )
+  .seg.surface-seg {
+  isolation: isolate;
+}
+:root
+  :is(
+    .browser-panel,
+    .browser-settings,
+    .doc-viewer,
+    .dialog:has(.file-run-note),
+    .dialog:has(.file-kind)
+  )
+  .seg.surface-seg
+  button:focus-visible {
+  position: relative;
+  z-index: var(--layer-conversation-focus);
+}

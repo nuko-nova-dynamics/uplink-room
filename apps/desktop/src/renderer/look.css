@@ -1,0 +1,1435 @@
+/* The app's look, built toward Grok Bot's (2026-11): neutral surfaces, soft fills instead of edges,
+   pill buttons, round icon buttons, title rows with no hairline, and conversations in one centered
+   reading column. Loaded after every other stylesheet (main.tsx, gym.tsx), so these rules win over
+   the older ones at the same specificity. Colors come from the tokens in styles.css. */
+
+:root {
+  --column: 720px;
+  --roster-tile: 64px;
+  --radius-row: 10px;
+  --radius-group: 14px;
+  --chip: #262626;
+  --chip-hover: #2e2e2e;
+  --scroll-fade: 12px;
+}
+:root[data-theme="light"] {
+  --chip: #f0f0f0;
+  --chip-hover: #e8e8e8;
+}
+
+/* ---------- buttons ---------- */
+
+/* A secondary button is a soft gray pill with no edge; the primary one is the text-colored pill. */
+:root .btn {
+  border-radius: var(--radius-pill);
+  border-color: transparent;
+  background: var(--chip);
+  padding-inline: var(--space-12);
+  font-weight: 500;
+}
+:root .btn:hover:not(:disabled),
+:root .btn[aria-pressed="true"]:not(.primary, .amber, .solid),
+:root .btn[aria-expanded="true"]:not(.primary, .amber, .solid) {
+  background: var(--chip-hover);
+  border-color: transparent;
+}
+:root .btn.primary,
+:root .main-head .btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+  font-weight: 500;
+}
+:root .btn.primary:hover:not(:disabled),
+:root .main-head .btn.primary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 86%, var(--ground));
+  border-color: transparent;
+}
+:root .btn.small {
+  border-radius: var(--radius-pill);
+  padding-inline: var(--space-10);
+}
+/* Icon-only buttons are round and bare until pointed at, as Grok Bot's header and composer icons. */
+:root .btn.icon {
+  border-radius: var(--radius-pill);
+  background: transparent;
+  padding: 0;
+}
+:root .btn.icon:hover:not(:disabled),
+:root .btn.icon[aria-pressed="true"],
+:root .btn.icon[aria-expanded="true"] {
+  background: var(--chip);
+}
+:root .icon-btn {
+  border-radius: var(--radius-pill);
+}
+:root .icon-btn:hover:not(:disabled) {
+  background: var(--chip);
+}
+:root .btn.ghost {
+  background: transparent;
+}
+:root .btn.ghost:hover:not(:disabled) {
+  background: var(--chip);
+}
+
+/* ---------- title rows ---------- */
+
+/* No hairline under a title row: it shares the ground with what's under it, as Grok Bot's header. */
+:root .main-head,
+:root .drawer-head,
+:root .viewer-head,
+:root .rail-head {
+  box-shadow: none;
+  border-bottom: 0;
+}
+
+/* ---------- sidebar ---------- */
+
+:root .sidebar {
+  border-right: 0;
+  box-shadow: inset calc(-1 * var(--border-hairline)) 0 0 var(--line);
+}
+:root .sidebar-bottom {
+  box-shadow: none;
+  border-top: 0;
+}
+:root .sidebar .nav-heading {
+  color: var(--muted);
+  font-weight: 500;
+}
+:root .sidebar-search {
+  border-color: transparent;
+  border-radius: var(--radius-pill);
+  background: var(--chip);
+}
+:root .sidebar-search:focus-within {
+  border-color: transparent;
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--faint);
+}
+:root .nav-item,
+:root .sidebar .pair-item {
+  border-radius: var(--radius-row);
+}
+:root .nav-item.unread .label-text {
+  font-weight: 500;
+}
+/* An agent shows its state on its own face (DESIGN.md, "ask less"); the ring stays only for the states
+   that need someone. */
+:root .roster-item .state-ring.ring-working,
+:root .roster-item .state-ring.ring-done,
+:root .roster-item .state-ring.ring-idle,
+:root .roster-item .state-ring.ring-unknown,
+:root .roster-item .state-ring.ring-stopped {
+  box-shadow: none;
+}
+:root .roster-item {
+  border-radius: var(--radius-row);
+}
+
+/* ---------- conversations ---------- */
+
+/* One centered reading column for the messages and the box under them. */
+:root .messages-inner {
+  width: 100%;
+  max-width: var(--column);
+  margin-inline: auto;
+}
+:root .composer > * {
+  width: 100%;
+  max-width: var(--column);
+  margin-inline: auto;
+}
+/* A day is a quiet centered label, with no rule across the column. */
+:root .day-sep::before,
+:root .day-sep::after {
+  background: transparent;
+}
+:root .day-sep {
+  justify-content: center;
+}
+
+/* ---------- cards and rows ---------- */
+
+/* The Inbox's rows: a soft fill, no edge, as Grok Bot's lists. */
+:root .inbox-row,
+:root .task-card {
+  border-color: transparent;
+  border-radius: var(--radius-group);
+}
+/* Keyboard hints are soft chips, not outlined keycaps. */
+:root kbd,
+:root .kbd {
+  border-color: transparent;
+  background: var(--chip);
+  box-shadow: none;
+}
+/* The row the keyboard is on: a soft fill, no edge. */
+:root .inbox-row.focus {
+  background: var(--current);
+  border-color: transparent;
+}
+
+/* A list of choices is one grouped card with hairline rows, as Grok Bot's settings groups; the chosen
+   row takes a soft fill. */
+:root .option-list {
+  gap: 0;
+  border: var(--border-hairline) solid var(--line);
+  border-radius: var(--radius-group);
+  background: var(--raised);
+  overflow: hidden;
+}
+:root .option-list .option {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: var(--space-10) var(--space-14);
+}
+:root .option-list :is(.option + .option, .option + [data-slot="radio-input"] + .option) {
+  box-shadow: inset 0 var(--border-hairline) 0 var(--line);
+}
+:root .option-list .option:hover:not(:disabled) {
+  background: var(--hover);
+}
+:root .option-list .option:is([aria-pressed="true"], [data-checked]),
+:root .option-list .option.selected {
+  background: var(--current);
+}
+
+/* A channel's start and its older-messages line sit in the reading column too. */
+:root .messages > :is(.channel-start, .load-older, .older-btn) {
+  width: 100%;
+  max-width: var(--column);
+  margin-inline: auto;
+}
+
+/* The Roster: tiles in a grid, as Grok Bot's Bots, each character with its name under it. Its state
+   is on the character (and its ring when it needs someone); what it's on is in the tooltip. */
+.roster-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  padding: 0 var(--space-8) var(--space-6);
+}
+:root .roster-grid .roster-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  min-height: 0;
+  padding: var(--space-8) 0 var(--space-6);
+  text-align: center;
+}
+:root .roster-grid .roster-item > div {
+  width: 100%;
+}
+:root .roster-grid .roster-item b {
+  font-size: var(--font-12);
+  line-height: var(--line-12);
+  font-weight: 400;
+  color: var(--text);
+}
+:root .roster-grid .roster-line {
+  display: none;
+}
+:root .roster-grid .roster-item .state-ring {
+  width: var(--space-40);
+  height: var(--space-40);
+}
+
+/* Type: the system's own face, as Grok Bot uses (SF Pro on a Mac, Segoe UI on Windows). Linux has no
+   such face, so it gets Inter, the open face closest to SF Pro. */
+:root {
+  --ui:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Atkinson Hyperlegible Next",
+    sans-serif;
+}
+
+/* Title-row buttons are pills too: the secondary ones white with a hairline edge, as Grok Bot's Share. */
+:root :is(.main-head, .drawer-head, .a2a-chat-head, .pane-title) :is(.btn, .link-btn) {
+  border-radius: var(--radius-pill);
+}
+:root :is(.main-head, .drawer-head) .btn:not(.primary, .amber, .icon, .solid) {
+  background: var(--raised);
+  border-color: var(--line);
+}
+:root :is(.main-head, .drawer-head) .btn:not(.primary, .amber, .icon, .solid):hover:not(:disabled),
+:root
+  :is(.main-head, .drawer-head)
+  .btn[aria-expanded="true"]:not(.primary, .amber, .icon, .solid) {
+  background: var(--hover);
+}
+:root :is(.main-head, .drawer-head) .btn.icon {
+  border-color: transparent;
+}
+/* Titles are calm: a medium weight, not a heavy display one. */
+:root :is(.main-head, .drawer-head) h1 {
+  font-weight: 600;
+}
+
+/* A character in the Roster stands on the sidebar with no tile behind it, as Grok Bot's Bots. */
+:root .roster-grid .harness-face {
+  background: none;
+}
+
+/* Initials faces are soft, not dark discs. */
+:root {
+  --face-fill: #2e2e2e;
+  --face-ink: #cfcfcf;
+}
+:root[data-theme="light"] {
+  --face-fill: #e6e6e6;
+  --face-ink: #4d4d4d;
+}
+
+/* Send is a filled round button, as Grok Bot's, once there's something to send. */
+:root .composer-send {
+  border-radius: var(--radius-pill);
+}
+:root .composer-send:not(:disabled) {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+:root .composer-send:not(:disabled):hover {
+  background: color-mix(in srgb, var(--accent) 86%, var(--ground));
+  color: var(--on-accent);
+}
+
+/* A coding thread reads as a direct conversation: the agent in the soft gray bubble, you in the solid
+   one on the right. */
+:root .thread-msg .thread-bubble {
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+  border-radius: var(--radius-bubble);
+}
+:root .thread-msg.to-agent .thread-bubble {
+  background: var(--bubble-own);
+  color: var(--on-bubble-own);
+}
+:root .thread-msg.to-agent .thread-bubble :is(a, code) {
+  color: inherit;
+}
+
+/* A turn's work: quiet lines that open in place, with no outline when open. */
+:root .thread-fold {
+  border-radius: var(--radius-row);
+}
+:root .thread-fold[aria-expanded="true"] {
+  background: transparent;
+  box-shadow: none;
+}
+:root .thread-fold:hover:not(:disabled),
+:root .thread-fold[aria-expanded="true"]:hover:not(:disabled) {
+  background: var(--hover);
+}
+/* No rule above a thread's message box; its box is the composer's rounded card. */
+:root .thread-foot {
+  border-top: 0;
+}
+:root body .thread-composer {
+  border-radius: var(--radius-composer);
+  box-shadow: var(--composer-lift);
+}
+/* A thread's working state: one small centered line over the composer, with Stop beside it. */
+:root body .thread-foot {
+  display: flex;
+  flex-direction: column;
+}
+:root body .thread-foot .thread-state {
+  order: -1;
+  align-self: center;
+  gap: var(--space-8);
+  font-size: var(--font-12);
+  color: var(--muted);
+}
+:root body .thread-foot .thread-state .btn {
+  height: var(--ctl-small);
+  padding-inline: var(--space-10);
+  font-size: var(--font-12);
+}
+
+/* Selects and filters are soft pills, as Grok Bot's "Follow System" and its category chips. */
+:root select.select,
+:root .select[data-slot="select-trigger"],
+:root .select-wrap :is(select, [data-slot="select-trigger"]) {
+  border-radius: var(--radius-pill);
+  border-color: transparent;
+  background-color: var(--chip);
+}
+:root select.select:hover:not(:disabled),
+:root .select[data-slot="select-trigger"]:hover:not(:disabled),
+:root .select-wrap :is(select, [data-slot="select-trigger"]):hover:not(:disabled) {
+  border-color: transparent;
+  background-color: var(--chip-hover);
+}
+
+/* Wider letters need a little more sidebar, so names in the Roster and Pairs keep their ends. */
+:root .app {
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+}
+:root {
+  --sidebar-width: 264px;
+}
+/* Machine names on a board card stay whole. */
+:root .task-card .mono {
+  white-space: nowrap;
+}
+/* A thread's lazily loaded stylesheet comes after this one: these need one more class to hold. */
+:root .thread-msg.from-agent .thread-bubble {
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+}
+
+/* ---------- calls ---------- */
+
+:root {
+  --hang-up: #e5484d;
+  --on-hang-up: #ffffff;
+  --speaking: #3ecf8e;
+  --float-shadow: 0 4px 16px rgb(0 0 0 / 0.35);
+}
+:root[data-theme="light"] {
+  --speaking: #1f9d63;
+  --float-shadow: 0 4px 16px rgb(0 0 0 / 0.08), 0 0 0 1px rgb(0 0 0 / 0.04);
+}
+/* The stage sits on the ground with the conversation, not in a band of its own. */
+:root .channel-col .call-stage,
+:root .channel-col .stage-bar {
+  background: transparent;
+  border-bottom: 0;
+}
+/* Tiles: soft gray, no edge. The one speaking gets a green ring inside its edge. */
+:root .call-stage .tile {
+  border-color: transparent;
+  background: color-mix(in srgb, var(--text) 6%, var(--ground));
+  border-radius: var(--radius-group);
+}
+:root .call-stage .tile.speaking {
+  border-color: transparent;
+  box-shadow: none;
+}
+/* The speaking edge is drawn over the tile (calls.css), so it shows over video; it's green, not text. */
+:root .call-stage .tile.speaking::after,
+:root .call-faces .call-face.speaking::after,
+:root .call-face.speaking::after {
+  border-color: var(--speaking);
+}
+/* The controls float in one pill, as Grok Bot's Watching and Take control. */
+:root .stage-bar .stage-controls {
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--raised);
+  box-shadow: var(--float-shadow);
+  padding: var(--space-6);
+}
+:root .stage-bar .stage-controls .btn {
+  border-radius: var(--radius-pill);
+  border-color: transparent;
+  background: transparent;
+}
+:root .stage-bar .stage-controls .btn:hover:not(:disabled) {
+  background: var(--chip);
+}
+:root .stage-bar .stage-controls .btn.leave,
+:root .call-dock .call-dock-controls .btn.leave {
+  background: var(--hang-up);
+  border-color: var(--hang-up);
+  color: var(--on-hang-up);
+}
+:root .stage-bar .stage-controls .btn.leave:hover:not(:disabled),
+:root .call-dock .call-dock-controls .btn.leave:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--hang-up) 88%, var(--text));
+}
+
+/* ---------- round 4 ---------- */
+
+/* Filter selects in light: a soft pill like the rest (the light .input rule is one step stronger). */
+:root[data-theme="light"] select.select,
+:root[data-theme="light"] .select[data-slot="select-trigger"],
+:root[data-theme="light"] .select-wrap :is(select, [data-slot="select-trigger"]) {
+  background-color: var(--chip);
+  border-color: transparent;
+}
+
+/* Who's in control is status, not a focus ring: a hairline pill like its neighbors. */
+:root body :is(.main-head, .drawer-head) .driver-pill,
+:root body .thread-main .driver-pill {
+  border-color: var(--line);
+}
+
+/* Choices standing alone (the machine list, an agent to pick): no edge; the chosen one a soft fill. */
+:root body .option {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  border-radius: var(--radius-row);
+}
+:root body .option:hover:not(:disabled) {
+  background: var(--hover);
+  border-color: transparent;
+}
+:root body .option:is([aria-pressed="true"], [data-checked]),
+:root body .option.selected {
+  background: var(--current);
+  border-color: transparent;
+  box-shadow: none;
+}
+:root body .option-list .option {
+  border-radius: 0;
+}
+
+/* Calm type: titles and labels at a medium weight; section labels gray. */
+:root body :is(.main-head, .drawer-head) h1 {
+  font-weight: 500;
+}
+:root body :is(.section-head, .column-head) {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* Dark segmented controls: a visible track and a lighter chosen segment. */
+:root:not([data-theme="light"]) {
+  --seg-chosen: #333333;
+}
+:root[data-theme="light"] {
+  --seg-chosen: var(--raised);
+}
+:root body .seg button[aria-pressed="true"],
+:root body .seg button[aria-selected="true"],
+:root body .seg button[data-checked],
+:root body .seg [data-slot="segmented-control-item"][data-checked],
+:root body .tabs button[aria-pressed="true"],
+:root body .tabs button[aria-selected="true"] {
+  background: var(--seg-chosen);
+}
+
+/* A section's + and its other controls show while you point at the section, as Grok Bot keeps its
+   labels bare. Keyboard focus shows them too. */
+:root .sidebar .nav-heading .icon-btn {
+  opacity: 0;
+  transition: opacity var(--motion-fast) var(--ease-out);
+}
+:root .sidebar .nav-heading:hover .icon-btn,
+:root .sidebar .nav-heading:focus-within .icon-btn,
+:root .sidebar .nav-heading .icon-btn[aria-expanded="true"] {
+  opacity: 1;
+}
+
+/* Settings scrolls as one pane, as Grok Bot's does, instead of a box scrolling inside it. */
+:root body :is(.agents-view, .machines-view) .machine-grid > :is(.machine-list, .panel),
+:root body .machine-grid > :is(.machine-list, .panel) {
+  max-height: none;
+  overflow-y: visible;
+}
+:root .settings-nav {
+  border-right: 0;
+}
+
+/* Channel messages sit in the same soft bubble as a direct conversation's. */
+:root body .messages .msg.rows .bubble:not(.has-frame, .jumbo) {
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+  padding: var(--space-8) var(--space-12);
+  border-radius: var(--radius-bubble);
+}
+
+/* A terminal is the machine's own dark screen, inset with rounded corners as Grok Bot frames its
+   computer, rather than a slab to the window's edges. */
+:root body .xterm-host {
+  background: var(--ground);
+}
+:root body .xterm-frame {
+  margin: 0 var(--space-12) var(--space-12);
+  border-radius: var(--radius-group);
+  overflow: hidden;
+  background: var(--term-bg);
+}
+/* Side panels share the ground, apart by a hairline only, as Grok Bot's Bot panel. */
+:root body .terminal-side {
+  background: var(--ground);
+}
+
+/* A conversation's header: who or what it is as one pill between even spaces, as Grok Bot's
+   "Morgan Hale · Chief of Staff". The spaces give way first, so it never runs under the buttons. */
+.head-id {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  min-width: 0;
+}
+:root body .channel-col .main-head:not(:has(.call-face))::before {
+  content: "";
+  flex: 1 1 0;
+  min-width: 0;
+}
+:root body .channel-col .main-head:not(:has(.call-face)) > .grow {
+  flex: 1 1 0;
+}
+:root body .channel-col .main-head:not(:has(.call-face)) .head-id {
+  flex: 0 1 auto;
+  height: var(--ctl-stage);
+  padding: 0 var(--space-14) 0 var(--space-6);
+  border: var(--border-hairline) solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--raised);
+  box-shadow: var(--composer-lift);
+}
+:root body .channel-col .main-head:not(:has(.call-face)) .head-id:not(:has(.dm-faces)) {
+  padding-left: var(--space-14);
+}
+:root body .channel-col .main-head:not(:has(.call-face)) .head-id h1 {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+
+/* ---------- the Inbox as a manager's desk ---------- */
+
+/* The first line: what needs you, in one sentence. */
+:root body .inbox .brief {
+  margin-bottom: var(--space-8);
+}
+/* Working, folded: one quiet line with the faces of what's working. */
+.working-fold {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  width: 100%;
+  margin-block: var(--space-12);
+  padding: var(--space-10) var(--space-14);
+  border: 0;
+  border-radius: var(--radius-group);
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+}
+.working-fold:hover {
+  background: var(--hover);
+}
+.working-fold b {
+  font-weight: 500;
+}
+.working-faces {
+  display: inline-flex;
+}
+.working-faces > * + * {
+  margin-left: calc(-1 * var(--space-6));
+}
+/* A question's answer, typed on its card. */
+:root body .inbox-row > .right {
+  grid-row: 1;
+  grid-column: 3;
+}
+.quick-reply {
+  grid-row: 2;
+  grid-column: 2 / -1;
+  display: flex;
+  gap: var(--space-8);
+  margin-top: var(--space-8);
+}
+.quick-reply .input {
+  flex: 1;
+  border-radius: var(--radius-pill);
+}
+/* What needs you is a card; nothing else is. */
+:root body .inbox-row.needs {
+  background: var(--raised);
+  border: var(--border-hairline) solid var(--line);
+  border-radius: var(--radius-group);
+  padding: var(--space-12) var(--space-14);
+  margin-bottom: var(--space-8);
+}
+:root body .inbox-row.needs .reason {
+  font-size: var(--font-15);
+  line-height: var(--line-15);
+  color: var(--text);
+  white-space: normal;
+}
+/* One signal for "needs you": the cards and the sidebar count. The section's own count and the
+   warning glyph by each wait stay quiet. */
+:root body .section-head.needs .badge.amber {
+  background: transparent;
+  color: var(--muted);
+}
+:root body .inbox-row.needs .row-state .state-icon {
+  display: none;
+}
+/* Keys are in the buttons' tooltips; the strip under a focused row stays out. */
+:root body .inbox .row-keys {
+  display: none;
+}
+
+/* ---------- the sidebar as agents and what's live ---------- */
+
+:root body .sidebar .nav-item.unread .label-text {
+  font-weight: 400;
+  color: var(--text);
+}
+/* A folded section's heading opens it. */
+.fold-heading {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  border: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+:root body .sidebar .fold-toggle {
+  color: var(--muted);
+}
+
+/* A project's tasks: one list in the reading column, sections stacked, most urgent first. */
+:root body .board.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+  width: 100%;
+  max-width: var(--column);
+  margin-inline: auto;
+  overflow: visible;
+}
+:root body .board.task-list .column {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+:root body .board.task-list .task-card {
+  border: var(--border-hairline) solid var(--line);
+  background: var(--raised);
+  box-shadow: none;
+}
+:root body .board-wrap {
+  overflow-x: hidden;
+}
+
+/* Read conversations are gray; unread ones are in the text color. Nothing else marks them. */
+:root body .sidebar :is(.nav-item, .pair-item) .label-text {
+  color: var(--muted);
+}
+:root body .sidebar :is(.nav-item, .pair-item):is(.unread, [aria-current="page"]) .label-text,
+:root body .sidebar .nav-item:hover .label-text {
+  color: var(--text);
+}
+/* An agent waiting on someone wears one small amber dot, not a ring. */
+:root body .roster-item .state-ring.ring-waiting {
+  box-shadow: none;
+  position: relative;
+}
+:root body .roster-item .state-ring.ring-waiting::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--space-8);
+  height: var(--space-8);
+  border-radius: var(--radius-pill);
+  background: var(--amber);
+  box-shadow: 0 0 0 var(--focus-gap) var(--sidebar);
+}
+/* One count for "needs you" (the sidebar's), and one sentence (the brief): sections don't recount. */
+:root body .inbox .section-head .badge {
+  display: none;
+}
+/* A direct conversation reads as Grok Bot's: bubbles, no name line over each one. */
+:root body .channel-col:has(.head-id .dm-faces) .msg:not(.right) .msg-head > b {
+  display: none;
+}
+
+/* A question's choices, as Grok Bot's card: lettered rows, one tap to answer. */
+.inbox-question {
+  grid-row: 2;
+  grid-column: 2 / -1;
+  margin-top: var(--space-8);
+}
+:root body :is(.inbox-question, .thread-main) .thread-question {
+  counter-reset: choice;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+/* One question's text is already the card's title, so its legend is for screen readers only;
+   with several questions each keeps its own. */
+:root body .inbox-question .thread-question:only-of-type legend {
+  position: absolute;
+  width: var(--border-hairline);
+  height: var(--border-hairline);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+:root body :is(.inbox-question, .thread-main) :is(.thread-option-send, .thread-option) {
+  counter-increment: choice;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: var(--space-10);
+  align-items: baseline;
+  gap: var(--space-10);
+  width: 100%;
+  padding: var(--space-8) var(--space-10);
+  border: 0;
+  border-radius: var(--radius-row);
+  background: transparent;
+  text-align: left;
+}
+:root body :is(.inbox-question, .thread-main) :is(.thread-option-send, .thread-option)::before {
+  content: counter(choice, upper-alpha);
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: var(--space-20);
+  height: var(--space-20);
+  border-radius: var(--radius-small);
+  background: var(--chip);
+  color: var(--muted);
+  font-size: var(--font-11);
+  font-weight: 500;
+}
+:root body :is(.inbox-question, .thread-main) :is(.thread-option-send, .thread-option):hover {
+  background: var(--hover);
+}
+:root body :is(.inbox-question, .thread-main) .thread-option-send b {
+  font-weight: 500;
+}
+
+:root body :is(.inbox-question, .thread-main) .thread-option-send > .muted {
+  flex-basis: 100%;
+  padding-left: var(--space-32);
+  margin-top: calc(-1 * var(--space-6));
+  font-size: var(--font-12);
+}
+
+/* ---------- round L3 ---------- */
+
+/* A drawer holds focus while it opens; its controls ring themselves (scripts/ui-lint/exceptions.json). */
+:root body .drawer:focus-visible {
+  outline: none;
+}
+/* Folded lines (working, done) with their one action beside them. */
+.working-fold-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+.working-fold-row .working-fold {
+  flex: 1;
+  min-width: 0;
+}
+.working-fold-row .working-fold .grow {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* A decision card leads with the question; the task above it is a quiet line. */
+:root body .inbox-row.needs .inbox-open .title {
+  font-size: var(--font-12);
+  line-height: var(--line-12);
+  color: var(--muted);
+}
+:root body .inbox-row.needs .inbox-open .title .t {
+  font-weight: 400;
+}
+:root body .inbox-row.needs .row-state {
+  display: none;
+}
+:root body .inbox-row.needs > :is(.face, .harness-face, .mark) {
+  width: var(--icon-24);
+  height: var(--icon-24);
+}
+/* A choice is one row: its name, and what it means beside it, quieter. */
+:root body .inbox-question .thread-option-send > .muted {
+  flex-basis: auto;
+  padding-left: 0;
+  margin-top: 0;
+  font-size: var(--font-13);
+}
+:root body .inbox-question .thread-option-send {
+  padding-block: var(--space-6);
+}
+/* The Inbox count says something waits; agents don't repeat it. */
+:root body .roster-item .state-ring.ring-waiting::after {
+  display: none;
+}
+/* A channel opens on its messages, not an intro; a direct conversation keeps who it's with. */
+:root body .messages > .channel-start:not(.direct) {
+  display: none;
+}
+/* A project's task is one line, as a thread in T3 Code. */
+:root body .board.task-list .task-card {
+  padding: var(--space-10) var(--space-14);
+}
+/* The Inbox's title is what needs you, as a pill between even spaces (as a conversation's name). */
+:root body .inbox-head > .grow {
+  flex: 1 1 0;
+}
+:root body .inbox-head .inbox-summary {
+  flex: 0 1 auto;
+  height: var(--ctl-stage);
+  padding: 0 var(--space-14) 0 var(--space-8);
+  border: var(--border-hairline) solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--raised);
+  box-shadow: var(--composer-lift);
+  font-size: var(--font-13);
+}
+:root body .inbox-head .inbox-summary b {
+  font-weight: 500;
+}
+:root body .inbox-head .tabs {
+  flex: none;
+}
+/* Whose work and which project: one quiet pill at the right, its menu under it. It stands apart
+   from the row, so the Inbox pill centers over the column below it. */
+:root body .inbox-head {
+  position: relative;
+}
+.inbox-filter {
+  position: absolute;
+  right: var(--space-16);
+  min-width: 0;
+}
+:root body .inbox-filter > .btn {
+  max-width: var(--sidebar-width);
+  background: transparent;
+  border-color: transparent;
+  color: var(--muted);
+}
+:root body .inbox-filter > .btn:hover:not(:disabled),
+:root body .inbox-filter > .btn[aria-expanded="true"] {
+  background: var(--hover);
+  color: var(--text);
+}
+:root body .inbox-filter-pop {
+  top: calc(100% + var(--space-4));
+  right: 0;
+}
+
+/* The shared browser is an icon by the pin and the bell, as the narrow column draws it, so a
+   conversation's header keeps one labeled action (Join call). Its name is in the tooltip. */
+:root body .channel-col .main-head .browser-btn {
+  display: inline-grid;
+  place-items: center;
+  width: var(--ctl-h);
+  height: var(--ctl-h);
+  padding: 0;
+  flex: none;
+  background: transparent;
+  border-color: transparent;
+}
+:root body .channel-col .main-head .browser-btn:hover:not(:disabled) {
+  background: var(--chip);
+}
+:root body .channel-col .main-head .browser-btn .btn-label {
+  display: none;
+}
+
+/* ---------- round L4 ---------- */
+
+/* The question leads a card; who asks is a quiet line over it. */
+:root body .inbox-row.needs .title .who {
+  color: var(--muted);
+  font-weight: 400;
+}
+/* Room for a harness's whole name under its character. */
+:root {
+  --roster-tile: 70px;
+}
+/* A conversation sits at the bottom, just above the composer, however short: with no intro above it,
+   the messages themselves take the space. */
+:root body .messages > .messages-inner {
+  margin-top: auto;
+}
+
+/* ---------- Settings as a dialog over the view you were on ---------- */
+
+:root body .settings-overlay {
+  position: absolute;
+  padding: var(--space-32);
+}
+.settings-dialog {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--settings-width);
+  height: 100%;
+  max-height: var(--settings-height);
+  border: var(--border-hairline) solid var(--line);
+  border-radius: var(--radius-group);
+  background: var(--ground);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+:root body .settings-dialog:focus-visible {
+  outline: none;
+}
+:root {
+  --settings-width: 1040px;
+  --settings-height: 760px;
+}
+.settings-dialog > .settings-close {
+  position: absolute;
+  top: var(--space-12);
+  right: var(--space-12);
+  z-index: var(--layer-conversation-controls);
+  -webkit-app-region: no-drag;
+}
+/* The dialog's own title row leaves room for its close button. It reuses .main-head, which is a
+   window drag region, and on macOS a drag region takes every mouse click over it: the close button
+   sits on the row without being inside it, so it never got its clicks. A dialog's title row
+   doesn't move the window. */
+:root body .settings-dialog .main-head {
+  -webkit-app-region: no-drag;
+  padding-right: var(--space-48);
+}
+
+/* A direct conversation's intro sits with its messages at the bottom, with no gap between them. */
+:root body .messages > .channel-start.direct {
+  margin-top: auto;
+}
+:root body .messages > .channel-start.direct ~ .messages-inner {
+  margin-top: 0;
+}
+
+/* A task's facts are one quiet line (its state, then its owner and project as small pills), so the
+   drawer opens on what's happening, not on a form. The field names stay for screen readers. */
+:root body .task-facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8);
+}
+:root body .task-facts .task-state {
+  margin-right: var(--space-4);
+}
+:root body .task-facts .task-fact {
+  display: inline-flex;
+  margin: 0;
+}
+:root body .task-facts .task-fact > span:first-child {
+  position: absolute;
+  width: var(--border-hairline);
+  height: var(--border-hairline);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+:root body .task-facts .task-fact .select {
+  height: var(--ctl-small);
+  font-size: var(--font-12);
+}
+:root body .task-facts .task-fact .select {
+  width: auto;
+  min-width: 0;
+}
+/* Buttons in the work views (drawers, run cards, threads) are pills like everywhere else. */
+:root body .work-ui .btn {
+  border-radius: var(--radius-pill);
+}
+
+/* ---------- the Inbox as Link's conversation ---------- */
+
+/* It reads as a chat with a Bot in Grok Bot: it sits at the bottom, above its message box. */
+:root body .inbox-scroll {
+  display: flex;
+  flex-direction: column;
+}
+:root body .inbox-scroll > .inbox {
+  margin-top: auto;
+  width: 100%;
+  /* The same reading column as the box under it, so cards and composer share their edges. */
+  max-width: var(--column);
+  margin-inline: auto;
+  padding-inline: 0;
+}
+/* Link speaks first, in a gray bubble with its face. */
+.link-says {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-10);
+  margin-bottom: var(--space-12);
+}
+.link-says .link-bubble {
+  padding: var(--space-8) var(--space-12);
+  font-size: var(--font-15);
+  line-height: var(--line-15);
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+  border-radius: var(--radius-bubble);
+}
+/* What Link brings up hangs under its bubble, as Grok Bot's cards hang under a Bot's message. */
+:root body .inbox > :is(section, .working-fold-row, .get-started) {
+  margin-left: calc(var(--space-28) + var(--space-10));
+}
+:root body .inbox-row.needs {
+  border-radius: var(--radius-bubble);
+}
+/* Working and done are quiet centered lines, as Grok Bot's "Messaged …" events. */
+:root body .inbox > .working-fold-row {
+  justify-content: center;
+  margin-left: 0;
+  margin-block: var(--space-4);
+}
+:root body .inbox .working-fold-row .working-fold {
+  flex: 0 1 auto;
+  width: auto;
+  margin-block: 0;
+  padding: var(--space-4) var(--space-10);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-13);
+  color: var(--muted);
+}
+:root body .inbox .working-fold-row .working-fold b {
+  color: var(--text);
+}
+/* The message box under it all: what you type becomes a task. */
+:root body .inbox-composer {
+  flex: none;
+}
+.inbox-ask {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  padding: var(--space-6);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: var(--font-15);
+  line-height: var(--line-15);
+}
+.inbox-ask::placeholder {
+  color: var(--faint);
+}
+/* "Needs you" is said by Link's line in Mine; the hidden heading stays hidden. */
+:root body .inbox .section-head[hidden] {
+  display: none;
+}
+/* The sidebar's top row: the team, then search and a new task at its right, as Grok Bot's. */
+:root body .sidebar-top {
+  gap: var(--space-2);
+  padding-right: var(--space-8);
+}
+/* Search's own box, centered in its title row. */
+:root body .search-head > .grow {
+  flex: 1 1 0;
+}
+:root body .search-head .search-box {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  flex: 0 1 var(--column);
+  height: var(--ctl-stage);
+  padding: 0 var(--space-14);
+  border: var(--border-hairline) solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--raised);
+  box-shadow: var(--composer-lift);
+  color: var(--muted);
+}
+:root body .search-head .search-box input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+}
+/* Typing in these boxes shows on the pill around them. */
+:root body .inbox-composer .composer-box:focus-within,
+:root body .search-head .search-box:focus-within {
+  border-color: var(--faint);
+}
+/* At zero, Link's line stands in the middle of the view, a step larger: the calm state is the news. */
+:root body .inbox-scroll > .inbox.is-zero {
+  margin-block: auto;
+}
+:root body .inbox.is-zero .link-says {
+  justify-content: center;
+}
+:root body .inbox.is-zero .link-bubble {
+  font-size: var(--font-20);
+  line-height: var(--line-20);
+  padding: var(--space-10) var(--space-16);
+}
+:root body .inbox.is-zero > :is(.working-fold-row, .get-started) {
+  margin-left: 0;
+}
+/* A new team's first steps stand centered under Link's line. */
+:root body .inbox.is-zero > .get-started {
+  width: 100%;
+  max-width: var(--column);
+  margin-inline: auto;
+}
+
+/* ---------- less to read, roomier rows ---------- */
+
+:root {
+  --sidebar-width: 288px;
+  --roster-face: 36px;
+}
+/* Agents as roomy rows, as Grok Bot lists its Bots: a face, the name, and one gray line of what it's
+   on. */
+:root body .roster-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: 0 var(--space-8) var(--space-8);
+}
+:root body .roster-grid .roster-item {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--space-8) var(--space-10);
+  text-align: left;
+}
+:root body .roster-grid .roster-item b {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+  font-weight: 500;
+}
+:root body .roster-grid .roster-line {
+  display: flex;
+  margin-top: var(--space-2);
+  font-size: var(--font-12);
+  line-height: var(--line-12);
+  color: var(--muted);
+}
+:root body .roster-grid .roster-line > span:first-child {
+  display: none;
+}
+:root body .roster-grid .roster-item .state-ring {
+  width: var(--roster-face);
+  height: var(--roster-face);
+}
+/* Conversations: bigger faces and a little more room per row. */
+:root body .sidebar :is(.nav-item, .pair-item) {
+  min-height: var(--space-40);
+  gap: var(--space-10);
+  padding-inline: var(--space-10);
+}
+:root body .sidebar .nav-item:not(.fold-toggle) > svg:first-child {
+  box-sizing: border-box;
+  width: var(--space-32);
+  height: var(--space-32);
+  padding: var(--space-8);
+  border-radius: var(--radius-pill);
+  background: var(--chip);
+}
+:root body .sidebar :is(.nav-item, .pair-item) .label-text {
+  font-size: var(--font-13);
+}
+/* Decision cards: who's asking, then the question; the task is the card's tooltip. */
+:root body .inbox-row.needs .title .t[hidden] {
+  display: none;
+}
+/* First steps are their names; what each does is in its own screen. */
+:root body .get-started-text > .muted {
+  display: none;
+}
+/* Settings choices explain only the one chosen; the long notes under them go. */
+:root body .settings-dialog .option:not([aria-pressed="true"], [data-checked], .selected) .sub {
+  display: none;
+}
+:root body .settings-dialog .option-list + .hint {
+  display: none;
+}
+
+:root body .sidebar :is(.nav-item, .pair-item) {
+  align-items: center;
+}
+:root body .sidebar :is(.nav-item, .pair-item) .label-text {
+  line-height: var(--line-13);
+}
+
+/* What needs you is a small amber dot at a row's end: the Inbox's, and a waiting agent's. */
+.attention-dot {
+  flex: none;
+  width: var(--space-8);
+  height: var(--space-8);
+  margin-left: auto;
+  border-radius: var(--radius-pill);
+  background: var(--amber);
+}
+:root body .roster-grid .roster-item > div {
+  flex: 1;
+  min-width: 0;
+}
+/* With a face or tile beside it, a row's name centers on it rather than sitting on a baseline. */
+:root body .sidebar :is(.nav-item, .pair-item) > .label-text {
+  align-self: center;
+}
+/* Deny, then the black Allow at the end of the row, as Grok Bot's approval card orders them. */
+:root body .inbox-row .actions .btn.primary {
+  order: 2;
+}
+/* An agent waiting on you says so first in its line, as Grok Bot's "Approval required: …". */
+:root body .roster-grid .roster-line > .state-waiting:first-child {
+  display: inline;
+  color: var(--amber-text);
+  font-weight: 500;
+}
+/* A running agent wears a small green dot on its face's corner; an idle one shows nothing. */
+:root body .roster-grid .roster-item .state-ring.ring-working {
+  position: relative;
+}
+:root body .roster-grid .roster-item .state-ring.ring-working::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: var(--space-8);
+  height: var(--space-8);
+  border-radius: var(--radius-pill);
+  background: var(--speaking);
+  box-shadow: 0 0 0 var(--focus-gap) var(--sidebar);
+}
+
+/* An agent's second line only when it's waiting on you: the reason, as Grok Bot's "Waiting for
+   you: …". Otherwise its name and face say enough, and what it's on is in its tooltip. */
+:root body .roster-grid .roster-item:not(:has(.ring-waiting)) .roster-line {
+  display: none;
+}
+/* Settings' long notes under a group go. */
+:root body .settings-dialog .option-list ~ .hint {
+  display: none;
+}
+
+/* A run card's facts are one quiet line, machine then repository, as Grok Bot's run card has one
+   line of scope; the field names stay for screen readers. */
+:root body .run-card-meta {
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: var(--space-12);
+}
+:root body .run-location > span:first-child {
+  position: absolute;
+  width: var(--border-hairline);
+  height: var(--border-hairline);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Link's line is the news at any count, so it keeps one size: "3 things need you." as large as
+   "You're all caught up." */
+:root body .inbox .link-says .link-bubble {
+  font-size: var(--font-20);
+  line-height: var(--line-20);
+  padding: var(--space-10) var(--space-16);
+}
+/* A person's face in the title pill already carries their presence dot; the word is extra. */
+:root body .head-id .head-presence:not(.roster-line) {
+  display: none;
+}
+
+/* A thread's header: the agent and its task as one centered pill, as a conversation's. */
+:root body .thread-main .work-head::before {
+  content: "";
+  flex: 1 1 0;
+  min-width: 0;
+}
+:root body .thread-main .work-head > .grow {
+  flex: 1 1 0;
+}
+:root body .thread-main .work-head .head-id {
+  flex: 0 1 auto;
+  height: var(--ctl-stage);
+  padding: 0 var(--space-14) 0 var(--space-6);
+  border: var(--border-hairline) solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--raised);
+  box-shadow: var(--composer-lift);
+}
+:root body .thread-main .work-head .head-id h1 {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+  font-weight: 600;
+}
+/* On the Inbox its cards already say what each agent waits on, so the sidebar keeps only the
+   agent's amber dot and says nothing twice. */
+:root body .app.on-inbox .roster-grid .roster-line {
+  display: none;
+}
+/* A choice list's long note under it goes too: the chosen option already says what it does. */
+:root body .settings-dialog .panel-section:has(.option-list) > .hint {
+  display: none;
+}
+
+
+/* People and groups in the sidebar sit in rows as roomy as the agents', faces the same size, so
+   the list reads as one list of who you work with. */
+:root body .sidebar .conversation-face {
+  --face: var(--roster-face);
+}
+:root body .sidebar .conversation-face .face {
+  font-size: var(--font-13);
+}
+:root body .sidebar :is(.dm-item, .pair-item) {
+  min-height: calc(var(--roster-face) + var(--space-16));
+}
+/* A face on the open row keeps its circle against the row's fill, which in light is the face's own gray. */
+:root[data-theme="light"] body .sidebar [aria-current="page"] .face:not(.agent) {
+  background: var(--raised);
+}
+:root body .sidebar .dm-item > .face {
+  width: var(--roster-face);
+  height: var(--roster-face);
+}
+/* A card's choices line up under its question, letters on the question's left edge. */
+:root body .inbox-question .thread-option-send {
+  margin-left: calc(-1 * var(--space-10));
+  width: calc(100% + var(--space-10));
+}
+/* A project's group heads are small gray labels with their count beside them, as Grok Bot's
+   "Engineering 3": no badge, no rule. */
+:root body .board.task-list .project-column-head {
+  gap: var(--space-6);
+  border-bottom: 0;
+}
+:root body .board.task-list .project-column-head .badge {
+  padding: 0;
+  background: transparent;
+  color: var(--faint);
+  font-weight: 400;
+}
+/* Your own message's time takes no line of its own: it shows beside the bubble on hover, as a
+   chat's does. A pin or anything else in its head keeps the head. */
+:root body .msg.right .msg-body {
+  position: relative;
+}
+:root body .msg.right .msg-head:has(> time:only-child) {
+  position: absolute;
+  right: 100%;
+  bottom: var(--space-8);
+  margin: 0 var(--space-8) 0 0;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity var(--motion-fast) var(--ease-out);
+}
+:root body .msg.right:is(:hover, :focus-within) .msg-head:has(> time:only-child) {
+  opacity: 1;
+}
+
+/* The sidebar reads as quietly as Grok Bot's: gray section labels and names in regular weight, and
+   no dot on a working agent (the Inbox says what's working). The one mark left is what needs you. */
+:root body .sidebar .nav-heading {
+  font-weight: 400;
+}
+:root body .roster-grid .roster-item b,
+:root body .sidebar-bottom .me-name {
+  font-weight: 400;
+}
+:root body .roster-grid .roster-item .state-ring.ring-working::after {
+  content: none;
+}
+/* The Inbox's box grows with what's typed, up to a few lines, then scrolls (ADR 0049). */
+.inbox-ask {
+  resize: none;
+  field-sizing: content;
+  max-height: var(--inbox-ask-max);
+}

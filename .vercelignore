@@ -1,0 +1,14 @@
+# What `vercel deploy` from the repo root leaves out when it uploads the site (apps/site, the
+# project's root directory). The workspace manifests and the lockfile stay, so the install is the
+# repo's own frozen one; research, design films and screenshots aren't needed.
+node_modules
+**/node_modules
+**/.next
+**/dist
+**/out
+research
+design
+concept
+apps/desktop/screenshots
+apps/desktop/e2e
+.env.local

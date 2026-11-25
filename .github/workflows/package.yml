@@ -1,0 +1,197 @@
+name: Package
+
+# Builds the desktop app for macOS, Windows and Linux and uploads the
+# installers as workflow artifacts. Run it from the Actions tab, push a version
+# tag (v0.1.0), or open a pull request that changes the app, the bridge or this
+# workflow.
+#
+# macOS is signed and notarized only when these repository secrets exist;
+# without them it builds an unsigned app:
+#   MAC_CSC_LINK         Developer ID Application certificate and key, as a base64 .p12
+#   MAC_CSC_KEY_PASSWORD the .p12's password
+#   APPLE_API_KEY_P8     an App Store Connect API key's .p8 file contents
+#   APPLE_API_KEY_ID     that key's ID
+#   APPLE_API_ISSUER     the key's issuer ID
+# Windows and Linux builds are unsigned.
+#
+# Release builds report errors to Sentry. With this secret they also upload their
+# source maps, so stack traces are readable; without it they build the same and
+# upload nothing:
+#   SENTRY_AUTH_TOKEN    a Sentry organization token (org:ci) for nuko-nova-dynamics-llc
+#
+# On a version tag, the Windows and Linux builds are published to the update
+# channel the version names (v0.2.0 to latest, v0.2.1-test.1 to test) with
+# apps/desktop/scripts/release.ts; the tag must match apps/desktop/package.json.
+# Mac builds are signed, notarized and published from a Mac with
+# `pnpm release:mac` (docs/releases.md).
+#   UPDATES_BLOB_READ_WRITE_TOKEN  the read-write token of the Vercel Blob store
+#                                  uplink-room-updates (project uplink-room-website)
+#   UPDATES_SIGNING_KEY            the Ed25519 key that signs each installer; the app
+#                                  refuses an update without its signature
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+  pull_request:
+    paths:
+      - "apps/desktop/**"
+      - "packages/bridge/**"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/package.yml"
+
+concurrency:
+  group: package-${{ (github.event_name == 'pull_request' || github.ref_type == 'tag') && github.ref || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  package:
+    name: package (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      # A release's macOS build is signed, notarized and published from the release Mac
+      # (`pnpm release:mac`, docs/releases.md), so version tags package only Windows and Linux. A
+      # manual run (Actions tab) also builds macOS. Jobs run on GitHub-hosted runners; CI_RUNS_ON_LARGE
+      # (or CI_RUNS_ON) and CI_RUNS_ON_WINDOWS move tag and manual runs to other runners, and pull
+      # requests always stay on GitHub-hosted runners (AGENTS.md, "Checks").
+      matrix:
+        include: ${{ fromJSON(github.event_name == 'workflow_dispatch' && '[{"os":"macos-latest","target":"--mac"},{"os":"windows","target":"--win"},{"os":"linux","target":"--linux"}]' || '[{"os":"windows","target":"--win"},{"os":"linux","target":"--linux"}]') }}
+    runs-on: ${{ (matrix.os == 'linux' && fromJSON(github.event_name != 'pull_request' && (vars.CI_RUNS_ON_LARGE || vars.CI_RUNS_ON) || '"ubuntu-latest"')) || (matrix.os == 'windows' && fromJSON(github.event_name != 'pull_request' && vars.CI_RUNS_ON_WINDOWS || '"windows-latest"')) || matrix.os }}
+    container: ${{ matrix.os == 'linux' && contains(fromJSON(github.event_name != 'pull_request' && (vars.CI_RUNS_ON_LARGE || vars.CI_RUNS_ON) || '"ubuntu-latest"'), 'fleet') && 'node:24-bookworm@sha256:9d266751ca3d7fdbe651c878ffd5ad0a42fed49a18c283509267c97f025b7496' || '' }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/concept/
+            !/design/
+            !/research/
+      - uses: pnpm/action-setup@v6.1.0
+        with:
+          dest: ${{ runner.temp }}/setup-pnpm
+          cache: ${{ runner.environment == 'github-hosted' }}
+      - name: Reuse the fleet's Linux pnpm store
+        if: job.container.id
+        shell: bash
+        run: echo "pnpm_config_store_dir=$(dirname "$(dirname "$GITHUB_WORKSPACE")")/.pnpm-store" >> "$GITHUB_ENV"
+      - name: Reuse the Windows runner's pnpm store
+        if: runner.os == 'Windows' && runner.environment == 'self-hosted'
+        shell: bash
+        run: echo "pnpm_config_store_dir=$RUNNER_TOOL_CACHE/pnpm-store" >> "$GITHUB_ENV"
+      - uses: actions/setup-node@v7.1.0
+        if: ${{ !job.container.id }}
+        with:
+          node-version: 24
+      # Include the root postinstall and the desktop app's workspace dependencies.
+      - run: pnpm --filter uplink-room --filter "@uplink-room/desktop..." --fail-if-no-match install --frozen-lockfile
+      - name: Restore Electron and installer tools
+        if: runner.os == 'Linux' && github.event_name == 'pull_request'
+        uses: actions/cache@v6.1.0
+        with:
+          path: |
+            ~/.cache/electron
+            ~/.cache/electron-builder
+          key: electron-package-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('pnpm-lock.yaml') }}
+      - name: Build the app for release
+        run: pnpm --filter @uplink-room/desktop build:release
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
+      # The standalone bridge for headless machines (packages/bridge/README.md), built once, with
+      # its source map uploaded like the app's.
+      - name: Pack the standalone bridge
+        if: runner.os == 'Linux'
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        run: |
+          pnpm --filter @uplink-room/bridge build
+          cd packages/bridge && pnpm pack
+      # Kept only from version tags and manual runs, as the installers below are. A pull request
+      # still builds and packs the bridge, which is the check that matters there.
+      - uses: actions/upload-artifact@v7.0.2
+        if: runner.os == 'Linux' && github.event_name != 'pull_request'
+        continue-on-error: true
+        with:
+          name: uplink-room-bridge
+          if-no-files-found: error
+          path: packages/bridge/uplink-room-bridge-*.tgz
+
+      - name: Set up macOS signing
+        if: runner.os == 'macOS'
+        shell: bash
+        env:
+          MAC_CSC_LINK: ${{ secrets.MAC_CSC_LINK }}
+          MAC_CSC_KEY_PASSWORD: ${{ secrets.MAC_CSC_KEY_PASSWORD }}
+          APPLE_API_KEY_P8: ${{ secrets.APPLE_API_KEY_P8 }}
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+        run: |
+          if [ -n "$MAC_CSC_LINK" ]; then
+            {
+              echo "CSC_LINK=$MAC_CSC_LINK"
+              echo "CSC_KEY_PASSWORD=$MAC_CSC_KEY_PASSWORD"
+            } >> "$GITHUB_ENV"
+            echo "Signing with the Developer ID certificate."
+          else
+            # No certificate: build unsigned instead of signing ad hoc.
+            echo "CSC_IDENTITY_AUTO_DISCOVERY=false" >> "$GITHUB_ENV"
+            echo "SIGN_ARGS=-c.mac.identity=null" >> "$GITHUB_ENV"
+            echo "::warning::MAC_CSC_LINK is not set, so the macOS app is unsigned and not notarized."
+          fi
+          if [ -n "$MAC_CSC_LINK" ] && [ -n "$APPLE_API_KEY_P8" ]; then
+            key="$RUNNER_TEMP/AuthKey_$APPLE_API_KEY_ID.p8"
+            printf '%s' "$APPLE_API_KEY_P8" > "$key"
+            chmod 600 "$key"
+            {
+              echo "APPLE_API_KEY=$key"
+              echo "APPLE_API_KEY_ID=$APPLE_API_KEY_ID"
+              echo "APPLE_API_ISSUER=$APPLE_API_ISSUER"
+            } >> "$GITHUB_ENV"
+            echo "Notarizing with the App Store Connect API key."
+          fi
+
+      - name: Package
+        shell: bash
+        working-directory: apps/desktop
+        env:
+          TARGET: ${{ matrix.target }}
+        run: pnpm exec electron-builder "$TARGET" --publish never ${SIGN_ARGS:+"$SIGN_ARGS"}
+
+      - name: Publish to the update channel
+        if: github.ref_type == 'tag' && runner.os != 'macOS'
+        shell: bash
+        env:
+          UPDATES_BLOB_READ_WRITE_TOKEN: ${{ secrets.UPDATES_BLOB_READ_WRITE_TOKEN }}
+          UPDATES_SIGNING_KEY: ${{ secrets.UPDATES_SIGNING_KEY }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          version=$(node -p "require('./apps/desktop/package.json').version")
+          if [ "$TAG" != "v$version" ]; then
+            echo "::error::The tag $TAG doesn't match the app's version $version."
+            exit 1
+          fi
+          node apps/desktop/scripts/release.ts
+
+      # Installers are kept only from version tags and manual runs, as a convenience copy. A pull
+      # request's are about 0.5 GB per run and nobody downloads them; keeping them filled the repo's
+      # artifact storage quota (2026-11-04). Releases come from the update store (docs/releases.md),
+      # so this step runs after publishing and can't fail the job: with the quota full, v0.2.1's
+      # Windows and Linux jobs failed here, before they published.
+      - uses: actions/upload-artifact@v7.0.2
+        if: github.event_name != 'pull_request'
+        continue-on-error: true
+        with:
+          name: uplink-room-${{ runner.os }}
+          if-no-files-found: error
+          # The feed files and blockmaps too, so a build can be published by hand
+          # (`node apps/desktop/scripts/release.ts --dist <folder>`).
+          path: |
+            apps/desktop/dist/*.dmg
+            apps/desktop/dist/*.zip
+            apps/desktop/dist/*.exe
+            apps/desktop/dist/*.AppImage
+            apps/desktop/dist/*.deb
+            apps/desktop/dist/*.blockmap
+            apps/desktop/dist/latest*.yml
+            apps/desktop/dist/test*.yml

@@ -1,0 +1,55 @@
+[P] primary (opened), [S] secondary (snippet). Dates 2026.
+
+1. T3 Code
+- Made by T3 Tools Inc., MIT license, so open source. 32.6k stars, v0.1.5 on Oct 29. [P] https://raw.githubusercontent.com/pingdotgg/t3code/main/LICENSE and https://github.com/pingdotgg/t3code.
+- The server owns provider processes, PTYs and git; web, Electron and mobile clients use authenticated RPC. [P] https://github.com/pingdotgg/t3code/blob/main/docs/internals/overview.md
+- Claude via `@anthropic-ai/claude-agent-sdk`; OpenCode via `@opencode-ai/sdk`; Codex via its app-server JSON-RPC (`effect-codex-app-server`, CodexAdapterV2); others via ACP. [P] https://raw.githubusercontent.com/pingdotgg/t3code/main/apps/server/package.json, .../docs/internals/providers.md, .../docs/internals/adding-a-provider.md
+- Terminals: server-owned PTY (node-pty); clients attach and can "share a running session"; web renders with libghostty-vt WASM. [P] .../docs/internals/terminal-runtime.md
+- Guest links (beta): a browser follows one thread live; guest messages wait until the owner clicks Send or Dismiss; 24 h expiry; needs T3 Connect. [P] .../docs/user/guest-links.md
+- Reuse: the adapter, Codex and ACP packages are `private: true` workspace packages, so vendor or fork them. Device-pairing auth reads as single-owner (my inference).
+
+2. Claude Code
+- Agent SDK: TS `@anthropic-ai/claude-agent-sdk` 0.3.314, Python `claude-agent-sdk` 0.2.175, CLI 2.1.314 (Oct 30). It runs the Claude Code binary: tools, hooks, MCP, permissions, resume/fork. [P] npm/pip, https://code.claude.com/docs/en/agent-sdk/overview
+- Not open source (Commercial Terms). Third parties may not offer claude.ai login without approval, so a shared server needs API-key auth. [P] same page; https://github.com/anthropics/claude-agent-sdk-typescript
+- Streaming input mode: long-lived process, queued messages, interrupts, permission requests. [P] https://code.claude.com/docs/en/agent-sdk/streaming-vs-single-mode. CLI: `claude -p --output-format stream-json --verbose --include-partial-messages`. [P] https://code.claude.com/docs/en/headless
+- Hooks: PreToolUse, PostToolUse, SessionStart, Stop, SubagentStart/Stop. [P] https://code.claude.com/docs/en/agent-sdk/hooks
+- Anthropic's own sharing does not fit: cloud-session links "don't update in real time"; `--teleport` is one-way to a terminal; Remote Control needs a claude.ai login, rejects API keys, and the session appears only in your account. [P] https://code.claude.com/docs/en/claude-code-on-the-web, https://code.claude.com/docs/en/remote-control
+- Managed Agents (beta header `managed-agents-2026-04-01`): SSE event stream, persisted history, steer/interrupt by sending events, optional self-hosted sandbox. [P] https://platform.claude.com/docs/en/managed-agents/overview
+- Design (inference): one SDK process per thread in streaming mode; write each message to Convex as an ordered event; viewers subscribe to those rows; steering goes through one authorized input queue.
+
+3. Codex
+- CLI 0.166.0 (Oct 29), Apache-2.0. [P] npm, https://github.com/openai/codex
+- app-server: JSON-RPC 2.0 over stdio JSONL (default), WebSocket (labelled experimental, unsupported) or Unix socket; bearer-token auth; `generate-ts` emits types. `thread/start` auto-subscribes the connection, and `thread/unsubscribe` mentions the "last subscriber", which suggests several connections per thread (inference; test it). [P] https://learn.chatgpt.com/docs/app-server
+- TS `@openai/codex-sdk` 0.166.0 spawns the CLI over JSONL, `runStreamed()` yields events [P] https://github.com/openai/codex/tree/main/sdk/typescript. Python `openai-codex` 0.163.0 drives app-server; `codex mcp-server` was removed. [P] https://learn.chatgpt.com/docs/codex-sdk
+- Cloud tasks run in isolated VMs. Environments can be shared; tasks cannot ("another participant's request doesn't automatically continue your task"). No public task API found. [P] https://learn.chatgpt.com/docs/environments/cloud-environments
+- Hosting (inference): app-server on loopback or Unix socket, your backend as its only client, notifications mirrored to viewers.
+
+4. Other harnesses
+- Amp, closest match: Multiplayer lets workspace teammates prompt one thread and its orb or shared runner, including terminal and files; on per thread for 7 days; billed to the owner; "Space" adds voice, video, screen share. [P] https://ampcode.com/docs/collaborate/multiplayer
+- Cursor Cloud Agents: share URL is read-only; admin "Team follow-ups" (Disabled, Service accounts only, All) lets others send messages, with a docs warning that they run on the creator's secrets. [P] https://cursor.com/docs/cloud-agent, https://cursor.com/docs/cloud-agent/settings
+- OpenCode (MIT): `opencode serve` gives HTTP, OpenAPI 3.1, SSE, basic auth. [P] https://opencode.ai/docs/server/. v2.0.30 (Oct 15) removed session sharing and `/share`. [P] https://opencode.ai/changelog
+- ACP: JSON-RPC, only stdio defined; HTTP/WebSocket is an RFD. [P] https://agentclientprotocol.com/protocol/v1/transports.md. Agents include Claude and Codex (via adapters), Cursor, Factory Droid, Gemini CLI, Copilot CLI (preview), OpenCode, Goose, Cline. [P] https://agentclientprotocol.com/get-started/agents. npm: `@agentclientprotocol/sdk` 2.2.0, `claude-agent-acp` 0.99.1, `codex-acp` 2.5.0, Apache-2.0. No multi-viewer in the spec I read (inference).
+- Factory: `droid exec` offers `stream-jsonrpc` and `acp` output. [P] https://docs.factory.ai/cli/droid-exec/overview. Live session URLs let teammates "watch, leave comments, or take over". [S] https://factory.ai/product/web
+- Devin: Shell/IDE/Browser takeover [P] https://docs.devin.ai/work-with-devin/devin-session-tools; "multiplayer" sessions [S] https://devin.ai/blog/devin-in-pylon
+
+5. Shared terminals
+- xterm.js 6.0.0, MIT; attach (WebSocket) and serialize addons. [P] https://github.com/xtermjs/xterm.js
+- sshx: MIT, v0.4.1 (Feb 2025); Argon2 + AES end-to-end encryption, web viewer, live cursors; self-hosting "not supported". [P] https://github.com/ekzhang/sshx
+- tmate: BSD/ISC; public servers shut down July 2025; last release 2.4.0 (2019). [P] https://github.com/tmate-io/tmate
+- ttyd: MIT, 1.7.7 (Mar 2024); xterm.js over WebSocket; read-only unless `-W`. [P] https://github.com/tsl0922/ttyd
+- Warp: client AGPL-3.0 (UI crates MIT). Sharing goes through Warp servers, not P2P; web viewer; multi-viewer; owner approves edit access; links expire after about a week; viewers sign in; covers third-party agent sessions. [P] https://github.com/warpdotdev/warp, https://docs.warp.dev/agents/local-agents/session-sharing/. Not embeddable (inference).
+- Live Share: terminals read-only or read/write; P2P with relay fallback, SSH encryption over TLS WebSockets. [P] https://learn.microsoft.com/en-us/visualstudio/liveshare/reference/security. Proprietary extension.
+
+Top 5 building blocks
+1. Codex app-server: structured events, versioned schemas, Apache-2.0, a server transport.
+2. Claude Agent SDK streaming mode: the supported library for hosting Claude headless; plan for API-key billing.
+3. T3 Code (MIT) as vendored reference: adapter boundary, event-sourced orchestrator, guest-link approval flow.
+4. node-pty on the server plus xterm.js with scrollback replay (T3's model); sshx if you want E2E and cursors.
+5. ACP SDK and adapters for every other agent; Amp and Warp as permission-model templates (view, request edit, owner approves, time-boxed).
+
+Not verified
+- Live multi-human steering of one Claude Code or Codex session in the vendors' own products (none found).
+- Codex app-server multi-connection fan-out; Codex cloud-task API.
+- OpenCode 1.x `/share` behavior (npm 1.19.5); Factory and Devin concurrent-steering details.
+- Whether Anthropic's terms allow an internal multi-user server on subscriptions (docs say API key).
+- T3 Code per-package licenses beyond the root MIT file.

@@ -1,0 +1,702 @@
+/* Issue 173: the agents, runs, tasks, machines and command-line surfaces. */
+.agents-view,
+.machines-view,
+.command-line-view {
+  display: contents;
+}
+
+/* These views use the same content gutter as their title row. */
+.settings-pane:has(> :is(.agents-view, .machines-view, .command-line-view)) {
+  padding: 0 var(--gutter) var(--space-40);
+}
+:root :is(.agents-view, .machines-view, .command-line-view) > .pane-title {
+  height: var(--head-h);
+  flex: none;
+  gap: var(--space-8);
+}
+:root :is(.agents-view, .machines-view, .command-line-view) .pane-title h2 {
+  padding: 0;
+}
+
+/* Neutral state ink. The state icon and words carry the distinction; amber still needs you. */
+:root .work-ui .status-granted {
+  color: var(--text);
+}
+
+:root .work-ui :is(.label, .hint, .sub, .tag, .chip, .run-card-meta),
+:root .work-ui :is(dl, dd.mono),
+:root
+  .dialog:has(
+    :is(#agent-name, #key-name, #a2a-url, .credential-fields, #run-prompt, #task-title, .link-panel)
+  )
+  :is(.label, .hint, .btn.small) {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .work-ui .chip {
+  height: auto;
+  min-height: var(--ctl-small);
+  align-items: center;
+  padding-block: var(--space-2);
+}
+:root .work-ui .chip > svg {
+  margin-top: 0;
+}
+
+/* Drawer contents share one unshifted 52px title row. */
+:root .work-ui.drawer .drawer-head:has(.drawer-title) {
+  height: var(--head-h);
+  min-height: var(--head-h);
+  padding-block: 0;
+}
+:root .work-ui.drawer .drawer-title {
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+}
+:root .work-ui.drawer .task-fact-value:has(> .select) {
+  display: grid;
+  grid-template-columns: var(--space-20) minmax(0, 1fr);
+  justify-items: start;
+}
+:root .work-ui.drawer .task-fact-value:has(> .select) > svg {
+  margin-top: 0;
+  justify-self: center;
+}
+:root .run-panel .run-inbox-text {
+  font-size: var(--font-15);
+  line-height: var(--line-15);
+}
+
+/* The A2A header has equal breathing room and a single text baseline. */
+:root .a2a-chat {
+  margin-top: var(--space-8);
+  max-height: calc(100vh - var(--head-h) - var(--space-32));
+  min-height: 0;
+  overflow: visible;
+}
+:root .a2a-chat-head {
+  padding: var(--space-8) 0;
+  gap: var(--space-8);
+  border-block: var(--border-hairline) solid var(--line);
+  position: static;
+  background: var(--ground);
+  flex: none;
+}
+:root .a2a-chat-head .run-card-state {
+  margin: 0;
+  align-items: baseline;
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .a2a-chat-head .tag {
+  font-size: var(--font-13);
+  padding-block: 0;
+  line-height: var(--line-13);
+}
+:root .a2a-chat-head .state-icon {
+  align-items: baseline;
+}
+:root .a2a-chat-head .state-icon > svg {
+  align-self: center;
+  margin-top: 0;
+}
+:root .a2a-chat :is(.msg-head b.agent-name, .run-line.warn) {
+  color: var(--text);
+}
+:root .a2a-chat .messages .msg.agent-msg .bubble:not(.jumbo, .has-frame) {
+  background: var(--raised);
+  border-color: var(--line);
+}
+:root .a2a-chat-composer {
+  z-index: var(--layer-conversation-controls);
+  position: static;
+  flex: none;
+}
+:root .a2a-chat-composer .composer-line {
+  align-items: center;
+}
+:root .a2a-chat-composer .composer-send {
+  align-self: center;
+  margin-block: 0;
+}
+:root .a2a-facts,
+:root .a2a-actions,
+:root .key-confirm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  min-width: 0;
+}
+:root .a2a-endpoint > .row-flex:first-child .label {
+  color: var(--text);
+}
+:root .a2a-run-details {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+
+/* Long agent names cannot widen either grid track or escape the detail panel. */
+:root .agents-view .machine-list .option {
+  display: grid;
+  min-width: 0;
+  width: 100%;
+}
+:root .agents-view .machine-list .truncate {
+  min-width: 0;
+  max-width: 100%;
+}
+:root .agent-panel {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+:root .agent-identity {
+  flex-basis: 50%;
+}
+:root .agent-identity > b {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .work-ui .option.selected,
+:root .work-ui .option[aria-pressed="true"],
+:root .dialog:has(#run-prompt) .option.selected,
+:root .builder .pick[aria-pressed="true"] {
+  background: var(--current);
+  border-color: transparent;
+  box-shadow: none;
+}
+:root .builder-preview {
+  border-radius: 0;
+}
+:root .agent-templates {
+  gap: 0;
+}
+:root .agent-template {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  padding: var(--space-12) 0;
+}
+:root .agent-template + .agent-template {
+  border-top: var(--border-hairline) solid var(--line);
+}
+:root .work-ui :is(.running-tools h3, .connectors > .panel-section > .row-flex > .label) {
+  font-size: var(--font-13);
+  font-weight: 700;
+  color: var(--text);
+}
+:root .running-tool {
+  flex-wrap: wrap;
+}
+:root .running-tool .state-icon {
+  align-items: center;
+}
+:root .running-tool .state-icon > svg {
+  margin-top: 0;
+}
+:root :is(.connectors, .dialog:has(#key-name)) .scope-grid + .hint {
+  margin-top: var(--space-24);
+}
+:root .connector-origin,
+:root .connector-address,
+:root .connectors .cmd-box {
+  font-family: var(--ui);
+  font-size: var(--font-13);
+}
+
+/* Install rows retain the common icon/text/action anatomy. */
+:root .agent-setup-row .mono,
+:root .t3-pairing-note .mono,
+:root .link-panel .mono {
+  white-space: nowrap;
+}
+:root .cli-signin-head {
+  align-items: center;
+}
+:root .cli-signin .btn.danger {
+  color: var(--text);
+}
+
+/* Machine policy groups and their headings share an 8px gap. */
+:root .machine-panel .mode-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+:root .machine-panel :is(.sub, .hint, .note, .t3-pairing-line),
+:root .link-panel :is(.muted, .hint, .note),
+:root .t3-pairing-note {
+  max-width: 52ch;
+}
+:root .machine-panel .option > svg {
+  width: var(--icon-14);
+  height: var(--icon-14);
+  color: var(--muted);
+}
+:root .machine-owner {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  max-width: 24ch;
+  vertical-align: middle;
+}
+:root .machine-owner .truncate {
+  min-width: 0;
+}
+:root .machine-rex-tabs .select-wrap {
+  flex: none;
+}
+:root .machine-rex-tabs select {
+  width: max-content;
+  height: var(--ctl-h);
+  appearance: none;
+  padding-right: var(--space-28);
+  background-color: var(--raised);
+}
+:root .machine-command,
+:root .work-ui .cmd-row,
+:root .agent-setup-row .cli-manual {
+  align-items: center;
+}
+:root .machine-command .cmd-box {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+:root .dialog:has(.link-panel) .dialog-foot {
+  padding-block: var(--space-12);
+}
+
+/* The terminal badge has equal corner insets in both themes. */
+:root .xterm-host.work-ui .kb-badge {
+  bottom: var(--space-8);
+  right: var(--space-8);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+  align-items: center;
+}
+:root .xterm-host.work-ui .kb-badge > svg {
+  margin-top: 0;
+}
+:root .ask-for-wheel > svg {
+  margin-top: 0;
+}
+
+/* The light silhouette needs an edge against a white panel. */
+:root[data-theme="light"] .face.agent path[stroke-width="4.5"][stroke-linejoin="round"] {
+  stroke: var(--muted);
+}
+:root .dialog:has(#task-title) .dialog-head {
+  align-items: center;
+}
+
+:root .dialog:has(.link-panel) .cli-path {
+  white-space: nowrap;
+}
+:root .agents-view .machine-list .sub {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+:root .running-tool {
+  grid-template-columns: var(--space-28) minmax(0, 1fr) auto auto;
+}
+:root .running-tool > b {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+:root .running-tool > .truncate {
+  grid-column: 2 / -1;
+}
+:root .a2a-chat .run-line.warn > svg {
+  color: var(--muted);
+}
+:root .a2a-chat-identity {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  padding-top: var(--space-2);
+  min-width: 0;
+}
+:root .a2a-chat-identity .mono {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .a2a-chat-identity .state-icon {
+  align-self: center;
+}
+/* Optical text adjustment does not change the control's symmetric padding or hit box. */
+:root .work-ui .copy-labels {
+  position: relative;
+  top: var(--space-1);
+}
+/* Keep the conversation header below the drawer chrome when it is scrolled into view. */
+:root .a2a-chat {
+  scroll-margin-block-start: var(--space-16);
+}
+
+:root .work-ui .chip > .control-label,
+:root .xterm-host.work-ui .kb-badge > .control-label {
+  position: relative;
+  top: var(--space-1);
+}
+:root .machine-owner {
+  vertical-align: top;
+}
+:root .machine-panel h3,
+:root .running-tool > .state-icon,
+:root .running-tool > .mono,
+:root .a2a-chat-identity > b {
+  width: calc-size(fit-content, round(up, size, var(--border-hairline)));
+}
+
+/* The rounded dialog height gives its spare pixel to the body, not below the footer. */
+:root .dialog:has(.link-panel) .dialog-body {
+  flex: 1;
+}
+
+/* Reserve composer clearance for a message, not for the whole conversation header. */
+:root .drawer-body:has(.a2a-chat) {
+  scroll-padding: var(--space-16) 0 0;
+}
+:root .a2a-chat .messages-inner > :last-child {
+  scroll-margin-block-end: var(--space-12);
+}
+:root .a2a-chat .a2a-chat-messages {
+  flex: 1 1 auto;
+  min-height: var(--space-48);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-bottom: var(--space-12);
+}
+:root .a2a-chat .a2a-chat-run {
+  scroll-margin-block-end: var(--space-12);
+}
+:root .drawer-body:has(.a2a-chat) {
+  /* The composer supplies this inset; duplicate drawer padding would pull it over the last line. */
+  padding-bottom: 0;
+}
+
+/* Keep changes local to work views; shared controls and palette belong to their own sheet. */
+:root .work-ui {
+  overflow-wrap: anywhere;
+}
+:root
+  .work-ui
+  :is(.card, .card-note, .run-chip, .run-card-name, .panel, .term-row, .field, .task-fact-value) {
+  min-width: 0;
+  max-width: 100%;
+}
+:root .work-ui :is(.run-card-name, .card-note) {
+  white-space: normal;
+  flex-wrap: wrap;
+}
+:root .work-ui :is(.run-fail, .stop-run:hover, .copy-failed),
+:root .cli-signin .copy-failed {
+  color: var(--text);
+}
+:root .work-ui :is(.kept-chip, .run-chip.kept) {
+  color: var(--text);
+  border-color: var(--line);
+}
+:root .work-ui :is(.btn, .input, select.select, .select[data-slot="select-trigger"]) {
+  height: var(--ctl-h);
+  min-height: var(--ctl-h);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .work-ui .btn {
+  border-radius: var(--radius-control);
+}
+
+:root
+  .work-ui
+  :is(
+    .mono,
+    code,
+    .label,
+    .hint,
+    .note,
+    .sub,
+    .tag,
+    .chip,
+    .badge,
+    .card-note,
+    .meta,
+    .run-chip,
+    .section-label,
+    .task-fact > span,
+    .task-settled,
+    .a2a-chat-under,
+    .a2a-chat-sending,
+    .run-inbox-head .muted,
+    .run-hears-label,
+    .joined-note,
+    .log-time,
+    .cli-intro
+  ) {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root :is(.agents-view, .machines-view, .command-line-view) .pane-title {
+  margin-inline-end: calc(var(--edge) - var(--gutter) - var(--space-6));
+}
+:root :is(.agents-view, .machines-view, .command-line-view) .pane-title h2 {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .machine-name-error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  color: var(--text);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .machine-name-error > svg {
+  flex: none;
+}
+:root .link-panel .input[aria-invalid="true"] {
+  border-color: var(--text);
+}
+
+/* Reserve the same gutter before and after overflow. Native steppers are never needed. */
+:root .main-body:has(.work-ui),
+:root .work-ui :is(.drawer-body, .machine-list, .cmd-box, .log-scroll),
+:root .settings-pane:has(.work-ui) {
+  scrollbar-gutter: stable;
+  scrollbar-width: auto;
+}
+:root .main-body:has(.work-ui),
+:root .work-ui :is(.drawer-body, .machine-list, .cmd-box, .log-scroll),
+:root .settings-pane:has(.work-ui) {
+  scrollbar-color: auto;
+}
+:root .main-body:has(.work-ui)::-webkit-scrollbar,
+:root .work-ui ::-webkit-scrollbar,
+:root .settings-pane:has(.work-ui)::-webkit-scrollbar {
+  width: var(--space-6);
+  height: var(--space-6);
+}
+:root .main-body:has(.work-ui)::-webkit-scrollbar-thumb,
+:root .work-ui ::-webkit-scrollbar-thumb,
+:root .settings-pane:has(.work-ui)::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: var(--radius-pill);
+}
+:root .main-body:has(.work-ui):hover::-webkit-scrollbar-thumb,
+:root .work-ui :hover::-webkit-scrollbar-thumb,
+:root .settings-pane:has(.work-ui):hover::-webkit-scrollbar-thumb {
+  background: var(--line);
+}
+:root .main-body:has(.work-ui)::-webkit-scrollbar-button,
+:root .work-ui ::-webkit-scrollbar-button,
+:root .settings-pane:has(.work-ui)::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+:root .work-ui .column-head > .state-icon,
+:root .work-ui .card-note > .state-icon,
+:root .work-ui .unfiled-row .right > .state-icon {
+  transform: translateY(calc(-1 * var(--space-1)));
+}
+:root .work-ui .column-head {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+/* Round each lane to a whole pixel so its state icon stays on the pixel grid. */
+:root .work-ui .board {
+  grid-template-columns: repeat(
+    4,
+    round(down, calc((100% - 3 * var(--space-16)) / 4), var(--border-hairline))
+  );
+  gap: var(--space-16);
+}
+
+/* Keep the Rex heading and help visible while a long tab list scrolls. */
+:root .machine-rex-tabs .rex-tab-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  max-height: 50vh;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  scrollbar-width: auto;
+  scrollbar-color: auto;
+}
+:root .machine-rex-tabs .rex-tab-list .term-row {
+  flex: none;
+}
+
+:root .work-ui .unfiled-actions .btn {
+  min-width: 0;
+  max-width: 100%;
+}
+:root .work-ui .unfiled-actions .control-label {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+:root .agent-setup-row .select-wrap > svg {
+  margin-top: var(--space-7);
+}
+
+:root .work-ui :is(.column-rule, .reason, .run-card-state, .scope-grid small, .output-warn),
+:root .a2a-chat :is(.run-line, .a2a-chat-under, .attachments) .truncate,
+:root .dialog:has(#key-name) .scope-grid small,
+:root .dialog:has(#file-task, #file-title) :is(.label, .run-again-note, .mono) {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+@media (min-resolution: 1.5dppx) {
+  :root .agent-setup-row .select-wrap > svg {
+    margin-top: var(--space-6);
+  }
+}
+:root .a2a-chat .run-line > .truncate {
+  position: relative;
+  top: var(--space-1);
+}
+
+:root .t3-pairing-note,
+:root .a2a-chat a.truncate {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+
+/* Bare dialog dismiss controls keep the 24px target; view headers use .btn.icon. */
+:root
+  :is(.agents-view, .machines-view, .agent-panel, .a2a-endpoint, .task-panel, .cloud-machine)
+  .dialog-head
+  > .icon-btn,
+:root .dialog:has(#cloud-name) .dialog-head > .icon-btn {
+  width: var(--ctl-small);
+  height: var(--ctl-small);
+  border-radius: var(--radius-small);
+}
+
+/* Long lists and settings scroll beside their peer instead of stretching the opening row. */
+:root :is(.agents-view, .machines-view) .machine-grid > :is(.machine-list, .panel) {
+  max-height: round(down, 70vh, var(--pixel-pair));
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+:root :is(.agents-view, .machines-view) .machine-list > .option {
+  flex: none;
+}
+
+:root .a2a-endpoint .tag {
+  padding-block: var(--space-4);
+  padding-inline: var(--space-8);
+}
+
+/* Round the leading label so the access segments start on a whole pixel. */
+:root .terminal-bar > .label {
+  width: calc-size(fit-content, round(up, size, var(--border-hairline)));
+}
+
+:root .cloud-machine .cloud-error {
+  align-items: flex-start;
+}
+:root .cloud-machine .cloud-error > span {
+  padding-top: 0;
+}
+:root .cloud-machine .cloud-error > svg {
+  flex: none;
+  margin-top: var(--space-2);
+}
+
+/* Harness names keep one line and wrap as whole controls when the dialog narrows. */
+:root .task-panel .harness-options {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+:root .task-panel .harness-options > button {
+  white-space: nowrap;
+}
+
+/* The copy action in a command row is a small control, as its shared markup declares. */
+:root :is(.machine-command.work-ui, .agent-setup-row) .btn.small {
+  height: var(--ctl-small);
+  min-height: var(--ctl-small);
+  border-radius: var(--radius-small);
+  font-size: var(--font-12);
+  padding-block: var(--space-2);
+}
+:root :is(.machine-command, .agent-setup-row) .btn.small > svg {
+  width: var(--icon-12);
+  height: var(--icon-12);
+  margin-top: var(--space-3);
+}
+:root :is(.machine-command, .agent-setup-row) .copy-labels {
+  top: 0;
+}
+
+/* Unavailable actions stay readable instead of fading their text and fill together. */
+:root .work-ui .btn:disabled,
+:root .work-ui :is(.input, .textarea, .select):disabled,
+:root
+  .dialog:has(:is(#cloud-name, #key-name, #run-prompt, #task-title, .credential-fields))
+  .btn:disabled {
+  opacity: 1;
+  color: var(--muted);
+  background: var(--ground);
+  border-color: var(--line);
+}
+/* A UI SDK button that's busy, or focusable while disabled so its hint can say why, has data-pending
+   or data-disabled instead of :disabled. It looks disabled, and hover and press leave it as it is. */
+:root .work-ui .btn:is([data-disabled], [data-pending]):is(*, :hover, :active) {
+  opacity: 1;
+  color: var(--muted);
+  background: var(--ground);
+  border-color: var(--line);
+  border-style: dashed;
+  box-shadow: none;
+  cursor: default;
+}
+:root .task-panel .seg button:disabled {
+  opacity: 1;
+  color: var(--muted);
+}
+
+:root .a2a-chat .agent-result-links a {
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--ctl-small);
+}
+
+:root .agent-panel input[type="checkbox"] {
+  width: var(--ctl-small);
+  height: var(--ctl-small);
+  margin: 0;
+}
+
+:root .link-os {
+  display: flex;
+  width: fit-content;
+}
+:root .link-os > button {
+  flex: none;
+}
+
+:root .xterm-host:focus-within .xterm-frame {
+  outline: var(--focus-width) solid var(--focus-color-on-dark);
+  outline-offset: calc(-1 * var(--focus-width));
+}
+
+:root .pass-wheel-menu {
+  max-width: calc(100vw - var(--space-32));
+}
+:root .pass-wheel-menu [data-slot="menu-item"] {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}

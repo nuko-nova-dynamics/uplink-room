@@ -1,0 +1,48 @@
+{
+  "id": "05-no-action-items",
+  "kind": "A look back at a launch with no action items: finished work, numbers, a dream feature, one decision to keep doing something",
+  "channel": "general",
+  "language": "en",
+  "people": [
+    { "id": "julio", "name": "Julio Díaz", "voice": "Reed (English (US))" },
+    { "id": "nora", "name": "Nora Byrne", "voice": "Moira" },
+    { "id": "kenji", "name": "Kenji Sato", "voice": "Rishi", "gain": 0.75 }
+  ],
+  "turns": [
+    { "speaker": "julio", "text": "Hey, thanks for hopping on. There's no agenda today. I just wanted to look back at the 1.3 launch while it's still fresh." },
+    { "speaker": "nora", "text": "Honestly, it went well. The store page looked great, and the reviews keep mentioning the art, which makes me very happy." },
+    { "speaker": "kenji", "text": "On my side, the servers were boring, which is exactly what you want. The peak was about four thousand players at once, and we never went above forty percent CPU." },
+    { "speaker": "julio", "text": "That's great. Last launch we were scrambling all weekend." },
+    { "speaker": "nora", "text": "Remember the font bug, where the Japanese text was cut off? That's fixed, by the way. It went out in the last patch." },
+    { "speaker": "kenji", "text": "And I moved all the server docs into the wiki last week, so that's done too." },
+    { "speaker": "julio", "text": "Nice. I was going to ask about that." },
+    { "speaker": "kenji", "text": "Support tickets were down as well. About thirty a day, instead of a hundred after the last launch." },
+    { "speaker": "nora", "text": "The new help page probably did that." },
+    { "speaker": "julio", "text": "Probably. Marta said the same thing." },
+    { "speaker": "nora", "text": "Something I've been thinking about: some day it would be cool to have a level editor, so players could make their own levels. Not as a plan, just a dream." },
+    { "speaker": "kenji", "text": "It would be amazing, and also a year of work." },
+    { "speaker": "julio", "text": "Yes. Let's keep dreaming about it, but it's not on any roadmap." },
+    { "speaker": "kenji", "text": "One more thing I noticed. Our crash rate went down from two percent to half a percent after the engine upgrade. So the upgrade paid off." },
+    { "speaker": "nora", "text": "That's a big drop." },
+    { "speaker": "julio", "text": "It is. I think we should keep shipping every two weeks, the way we did this time. It worked." },
+    { "speaker": "kenji", "text": "Agreed, two weeks felt right." },
+    { "speaker": "nora", "text": "Yes, let's keep it." },
+    { "speaker": "kenji", "text": "Unrelated, but the new coffee machine in the office is great." },
+    { "speaker": "nora", "text": "Finally, yes." },
+    { "speaker": "julio", "text": "OK, that's all I had. No action items, I just wanted to say thanks. Good work, both of you." },
+    { "speaker": "nora", "text": "Thanks, Julio." },
+    { "speaker": "kenji", "text": "Thanks. See you tomorrow." }
+  ],
+  "truth": {
+    "decisions": [
+      { "text": "Keep shipping every two weeks.", "match": [["two weeks", "2 weeks", "two-week", "2-week", "biweekly", "fortnight"]] }
+    ],
+    "tasks": [],
+    "notTasks": [
+      { "text": "A level editor (a dream, not on any roadmap)", "match": [["level editor", "editor"]] },
+      { "text": "The Japanese font bug (already fixed)", "match": [["font", "japanese"]] },
+      { "text": "Moving the server docs to the wiki (already done)", "match": [["wiki", "docs"]] }
+    ],
+    "notes": "There are no tasks in this call. Any proposed task is invented."
+  }
+}

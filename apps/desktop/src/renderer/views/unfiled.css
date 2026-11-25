@@ -1,0 +1,73 @@
+.unfiled-body {
+  scrollbar-gutter: stable;
+  scrollbar-width: auto;
+  scrollbar-color: auto;
+}
+.unfiled-list .empty-copy p {
+  max-width: 60ch;
+  text-wrap: balance;
+}
+.unfiled-row .reason,
+.unfiled-row .right,
+.unfiled-row .mono,
+.unfiled-row .btn.small {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+.file-run-note {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+.dialog:has(.file-run-note) .btn.primary:disabled {
+  opacity: 1;
+  background: var(--raised);
+  border-color: var(--line);
+  color: var(--muted);
+}
+
+.unfiled-body {
+  --working: var(--muted);
+  --done: var(--muted);
+  --failed: var(--muted);
+}
+.unfiled-row .reason {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.unfiled-row .mono,
+.file-run-note .mono {
+  font-family: var(--mono);
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.unfiled-body::-webkit-scrollbar {
+  width: var(--space-8);
+}
+
+.unfiled-body::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: var(--radius-pill);
+}
+.unfiled-body:hover::-webkit-scrollbar-thumb {
+  background: var(--faint);
+}
+.unfiled-body::-webkit-scrollbar-button {
+  display: none;
+}
+
+:root .dialog:has(.file-run-note) .dialog-head .icon-btn {
+  width: var(--ctl-small);
+  height: var(--ctl-small);
+  border-radius: var(--radius-small);
+}
+
+.unfiled-action-label {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+:root .unfiled-row .machine-name {
+  font-family: var(--mono);
+}

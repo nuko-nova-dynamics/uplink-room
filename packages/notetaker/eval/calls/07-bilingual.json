@@ -1,0 +1,64 @@
+{
+  "id": "07-bilingual",
+  "kind": "A call in Spanish with English technical words, short replies, and one sentence in English",
+  "channel": "infra",
+  "language": "es",
+  "people": [
+    { "id": "julio", "name": "Julio Díaz", "voice": "Reed (Spanish (Spain))" },
+    { "id": "lucia", "name": "Lucía Fernández", "voice": "Paulina (Spanish (Mexico))" },
+    { "id": "tomas", "name": "Tomás Ruiz", "voice": "Eddy (Spanish (Mexico))", "gain": 0.7 }
+  ],
+  "turns": [
+    { "speaker": "julio", "text": "¿Me oís bien?" },
+    { "speaker": "lucia", "text": "Sí, perfecto." },
+    { "speaker": "tomas", "text": "Yo también te oigo." },
+    { "speaker": "lucia", "text": "Buenos días. Rápido, porque tengo otra reunión: el servidor de staging se cayó anoche otra vez." },
+    { "speaker": "tomas", "text": "Sí, lo vi. Es el disco. Está lleno de logs, otra vez." },
+    { "speaker": "julio", "text": "¿Cuánto espacio tiene?" },
+    { "speaker": "tomas", "text": "Cincuenta gigas, y los logs ocupan cuarenta y ocho." },
+    { "speaker": "julio", "text": "Vale." },
+    { "speaker": "lucia", "text": "Hay que configurar la rotación de logs. Ya no podemos seguir borrándolos a mano." },
+    { "speaker": "tomas", "text": "Yo me encargo. Configuro la rotación de logs hoy por la tarde." },
+    { "speaker": "julio", "text": "Perfecto, Tomás." },
+    { "speaker": "lucia", "text": "¿Y no deberíamos pagar por un servicio de monitoreo? Algo como Datadog." },
+    { "speaker": "julio", "text": "Lo pensé, pero es caro para lo que necesitamos. Por ahora no. Con la alerta de disco que ya tenemos es suficiente." },
+    { "speaker": "tomas", "text": "Esa alerta llegaba a mi correo viejo, por eso nadie la vio. La cambio al canal ahora mismo." },
+    { "speaker": "lucia", "text": "Bien." },
+    { "speaker": "lucia", "text": "Otra cosa. Ayer el deploy de producción tardó veinte minutos. ¿Alguien sabe por qué?" },
+    { "speaker": "tomas", "text": "Es la caché de Docker. Se invalidó con el cambio de la imagen base. Hoy ya debería tardar cinco minutos." },
+    { "speaker": "julio", "text": "Entonces no hacemos nada, y vemos cómo va el de hoy." },
+    { "speaker": "tomas", "text": "¿Y la copia de seguridad de la base de datos? ¿Sigue funcionando?" },
+    { "speaker": "lucia", "text": "Sí, lo comprobé ayer. Funciona bien." },
+    { "speaker": "lucia", "text": "Y lo último: el certificado del dominio vence el día veinte. Hay que renovarlo antes." },
+    { "speaker": "julio", "text": "Eso lo hago yo, tengo acceso al registrador. Lo renuevo esta semana." },
+    { "speaker": "tomas", "text": "By the way, the pull request for the login fix is ready for review. It's a small one.", "voice": "Eddy (English (US))" },
+    { "speaker": "lucia", "text": "La reviso yo esta tarde." },
+    { "speaker": "tomas", "text": "Gracias." },
+    { "speaker": "julio", "text": "Y una decisión: el mes que viene movemos staging a una máquina con más disco, pero no antes, porque ahora no hay presupuesto." },
+    { "speaker": "lucia", "text": "De acuerdo." },
+    { "speaker": "tomas", "text": "Sí, me parece bien." },
+    { "speaker": "lucia", "text": "Una cosa más: la semana que viene estoy de vacaciones, de lunes a miércoles." },
+    { "speaker": "julio", "text": "Vale, gracias por avisar." },
+    { "speaker": "julio", "text": "Bueno, eso es todo. Gracias a los dos." }
+  ],
+  "truth": {
+    "decisions": [
+      { "text": "No paid monitoring service for now; the existing disk alert is enough.", "match": [["monitoreo", "monitoring", "datadog"]] },
+      { "text": "Staging moves to a machine with more disk next month, not before (no budget now).", "match": [["mes que viene", "proximo mes", "next month", "mes proximo"]] },
+      { "text": "Nothing to do about the slow deploy: wait and see how today's goes.", "match": [["deploy", "docker", "cache"]], "optional": true }
+    ],
+    "tasks": [
+      { "title": "Configurar la rotación de logs en staging (hoy por la tarde)", "owner": "tomas", "match": [["rotacion", "rotation", "rotar"]] },
+      { "title": "Renovar el certificado del dominio esta semana, antes del día 20", "owner": "julio", "match": [["certificado", "certificate"]] },
+      { "title": "Revisar el pull request del arreglo del login (esta tarde)", "owner": "lucia", "match": [["pull request", "login", "revis", "review"]], "exclude": [["certificado", "certificate", "rotacion", "rotation"]] },
+      { "title": "Cambiar la alerta de disco del correo viejo de Tomás al canal", "owner": "tomas", "optional": true, "match": [["alerta", "alert"]] },
+      { "title": "Mover staging a una máquina con más disco el mes que viene", "owner": null, "optional": true, "match": [["maquina", "machine", "mover staging", "migrar"]] }
+    ],
+    "notTasks": [
+      { "text": "Paying for a monitoring service such as Datadog (decided against for now)", "match": [["datadog", "monitoreo de pago", "paid monitoring", "servicio de monitoreo"]] },
+      { "text": "The slow production deploy (Docker cache; nothing to do)", "match": [["docker", "cache", "deploy"]] },
+      { "text": "The database backup (Lucía checked it yesterday; it works)", "match": [["copia de seguridad", "backup", "respaldo"]] }
+    ],
+    "notes": "The notes and tasks should be in Spanish, since most of the call is in Spanish."
+  }
+}

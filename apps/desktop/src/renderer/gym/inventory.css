@@ -1,0 +1,41 @@
+.inventory-page {
+  height: 100%;
+  overflow: auto;
+  padding: var(--gutter);
+  display: flex;
+  flex-direction: column;
+}
+.inventory-page > section {
+  margin-block: 16px;
+  max-width: 760px;
+}
+.inventory-page .row-flex {
+  flex-wrap: wrap;
+}
+.inventory-page > h1 {
+  order: -2;
+}
+.inventory-page > [data-inventory="controls"] {
+  order: -1;
+}
+.inventory-page .panel-section.row-flex {
+  flex-direction: row;
+  align-items: center;
+}
+.inventory-page > section {
+  flex-shrink: 0;
+  width: min(760px, 100%);
+}
+.inventory-page .pop {
+  position: relative;
+}
+
+.inventory-media {
+  position: relative;
+  min-height: 120px;
+}
+.inventory-media video {
+  position: relative;
+  width: 160px;
+  height: 90px;
+}

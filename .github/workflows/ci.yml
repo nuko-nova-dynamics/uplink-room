@@ -1,0 +1,134 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  check:
+    name: check (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      # macOS runs on manual dispatch. Jobs run on GitHub-hosted runners. CI_RUNS_ON and
+      # CI_RUNS_ON_WINDOWS (repository variables, JSON runner labels) move pushes and manual runs to
+      # other runners; pull requests always stay on GitHub-hosted runners, so a fork's code never
+      # runs on a self-hosted machine.
+      matrix:
+        os: ${{ fromJSON(github.event_name == 'workflow_dispatch' && '["linux","windows","macos-latest"]' || '["linux","windows"]') }}
+        include:
+          - os: linux
+            linux-runner: ${{ fromJSON(github.event_name != 'pull_request' && vars.CI_RUNS_ON || '"ubuntu-latest"') }}
+          - os: linux-static
+            linux-runner: ${{ fromJSON(github.event_name != 'pull_request' && vars.CI_RUNS_ON || '"ubuntu-latest"') }}
+    runs-on: ${{ matrix.linux-runner || (matrix.os == 'windows' && fromJSON(github.event_name != 'pull_request' && vars.CI_RUNS_ON_WINDOWS || '"windows-latest"')) || matrix.os }}
+    # Immutable index for node:24-bookworm, verified 2026-11-19.
+    # Refresh with: docker buildx imagetools inspect node:24-bookworm
+    # The Linux tests run in this container on every runner: they run as its unprivileged node user and
+    # use tini to reap orphaned children. Self-hosted fleet runners require a container for every job.
+    container: ${{ (matrix.os == 'linux' || contains(matrix.linux-runner, 'fleet')) && fromJSON('{"image":"node:24-bookworm@sha256:9d266751ca3d7fdbe651c878ffd5ad0a42fed49a18c283509267c97f025b7496","options":"--init"}') || '' }}
+    env:
+      # Unit tests and type-checks don't need Electron's binary.
+      ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
+      # The bundled bridge below is a release build; CI runs never send error reports.
+      UPLINK_NO_TELEMETRY: "1"
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          # These directories are also excluded by .oxlintrc.json.
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/concept/
+            !/design/
+            !/research/
+      - uses: pnpm/action-setup@v6.1.0
+        with:
+          dest: ${{ runner.temp }}/setup-pnpm
+          cache: ${{ runner.environment == 'github-hosted' }}
+      - name: Reuse the fleet's Linux pnpm store
+        if: contains(matrix.linux-runner, 'fleet')
+        shell: bash
+        run: echo "pnpm_config_store_dir=$(dirname "$(dirname "$GITHUB_WORKSPACE")")/.pnpm-store" >> "$GITHUB_ENV"
+      - name: Reuse the Windows runner's pnpm store
+        if: runner.os == 'Windows' && runner.environment == 'self-hosted'
+        shell: bash
+        run: echo "pnpm_config_store_dir=$RUNNER_TOOL_CACHE/pnpm-store" >> "$GITHUB_ENV"
+      - uses: actions/setup-node@v7.1.0
+        if: ${{ !job.container.id }}
+        with:
+          node-version: 24
+      # node-pty has no Linux prebuild, so Linux compiles it (the runner has python3, make and g++).
+      - id: install
+        run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+        if: matrix.os != 'linux'
+      - run: pnpm typecheck
+        if: ${{ !cancelled() && steps.install.outcome == 'success' && matrix.os != 'linux' }}
+      - name: Restore the Convex local backend download
+        if: matrix.os == 'linux'
+        uses: actions/cache@v6.1.0
+        with:
+          path: ${{ runner.temp }}/uplink-test-home/.cache/convex/binaries
+          key: convex-local-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('pnpm-lock.yaml') }}
+      # The bridge tests use a real pty: a Unix pty on Linux and macOS, ConPTY on Windows.
+      # In the Linux container the job runs as root, which ignores file modes, so tests that expect a
+      # refused socket or an unwritable folder would pass through. The tests run as the image's
+      # unprivileged node user instead, with its own home folder.
+      # Windows keeps its own shell: Git's bash would put its own whoami.exe ahead of Windows'.
+      - name: Test as the node user
+        if: matrix.os == 'linux'
+        shell: bash
+        # Two workspace suites with two workers each fit the four-vCPU runner.
+        env:
+          VITEST_MAX_WORKERS: "2"
+          pnpm_config_workspace_concurrency: "2"
+        run: |
+          chown -R node:node "$GITHUB_WORKSPACE"
+          HOME="$RUNNER_TEMP/uplink-test-home"
+          mkdir -p "$HOME"
+          chown -R node:node "$HOME"
+          export HOME
+          setpriv --reuid=node --regid=node --init-groups pnpm test
+      - name: Test
+        if: ${{ !cancelled() && steps.install.outcome == 'success' && runner.os != 'Linux' }}
+        run: pnpm test
+      - name: Bundle the bridge and run the bundle
+        if: ${{ !cancelled() && steps.install.outcome == 'success' && matrix.os != 'linux' }}
+        run: |
+          pnpm --filter @uplink-room/bridge build
+          node packages/bridge/dist/uplink-bridge.mjs limits
+
+  specs:
+    name: Check the TLA+ models
+    runs-on: ${{ fromJSON(github.event_name != 'pull_request' && vars.CI_RUNS_ON || '"ubuntu-latest"') }}
+    container: ${{ contains(fromJSON(github.event_name != 'pull_request' && vars.CI_RUNS_ON || '"ubuntu-latest"'), 'fleet') && 'node:24-bookworm@sha256:9d266751ca3d7fdbe651c878ffd5ad0a42fed49a18c283509267c97f025b7496' || '' }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/specs.mjs
+            /specs/
+      - uses: actions/setup-node@v7.1.0
+        if: ${{ !job.container.id }}
+        with:
+          node-version: 24
+      - uses: actions/setup-java@v6.2.0
+        if: job.container.id
+        with:
+          distribution: temurin
+          java-version: "25"
+          java-package: jre
+          cache-jdk: true
+      - name: Select Java 25 from the Ubuntu runner image
+        if: ${{ !job.container.id }}
+        shell: bash
+        run: echo "JAVA_HOME=${JAVA_HOME_25_X64:?Java 25 is missing from the CI image}" >> "$GITHUB_ENV"
+      - name: Check the TLA+ models
+        run: node scripts/specs.mjs

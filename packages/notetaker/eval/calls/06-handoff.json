@@ -1,0 +1,54 @@
+{
+  "id": "06-handoff",
+  "kind": "Volunteer then hand off: a task taken and later passed to someone else, a claim given up, and a volunteer whose task turns out to be unneeded",
+  "channel": "reef-runner",
+  "language": "en",
+  "people": [
+    { "id": "julio", "name": "Julio Díaz", "voice": "Reed (English (US))" },
+    { "id": "ben", "name": "Ben Okafor", "voice": "Daniel" },
+    { "id": "priya", "name": "Priya Raman", "voice": "Tara", "gain": 0.7 },
+    { "id": "ana", "name": "Ana García", "voice": "Samantha" }
+  ],
+  "turns": [
+    { "speaker": "julio", "text": "Hi, all. Ana, you're a bit quiet. Can you move closer to your mic?" },
+    { "speaker": "ana", "text": "Is this better?" },
+    { "speaker": "julio", "text": "Much better." },
+    { "speaker": "julio", "text": "Quick sync before the release. First, the App Store screenshots. The current ones still show the old main menu, so they need to be redone for 1.4." },
+    { "speaker": "ben", "text": "I'll take it. I have all the devices on my desk." },
+    { "speaker": "julio", "text": "Thanks, Ben. Next, the Spanish translation. The translator sent the new strings yesterday, and someone should review them before they go in." },
+    { "speaker": "ana", "text": "I'll review the Spanish strings. I'm a native speaker, so it's quick for me. I'll do it tomorrow morning." },
+    { "speaker": "julio", "text": "Perfect. Then the press kit. Who's updating the press kit for the launch?" },
+    { "speaker": "ana", "text": "I can do that too." },
+    { "speaker": "priya", "text": "Actually, I already started the press kit last week. I just need to add the new screenshots and the fact sheet. Let me finish it." },
+    { "speaker": "ana", "text": "Oh, great. It's yours, then." },
+    { "speaker": "julio", "text": "OK, Priya finishes the press kit. Last thing: the App Store review is taking forever. Should we file a ticket with Apple?" },
+    { "speaker": "ben", "text": "I'll file a ticket with Apple about the review delay." },
+    { "speaker": "julio", "text": "Wait, no need. I just got the email. The build was approved this morning." },
+    { "speaker": "ben", "text": "Even better." },
+    { "speaker": "priya", "text": "So we can still release on Tuesday?" },
+    { "speaker": "julio", "text": "Yes. The release is still Tuesday, at ten in the morning, Pacific time, same as always." },
+    { "speaker": "ana", "text": "Should I post the release notes in the channel on Tuesday, too?" },
+    { "speaker": "julio", "text": "Yes, please, once it's live." },
+    { "speaker": "ben", "text": "Oh, about the screenshots. I just remembered that I'm out on Thursday and Friday, for my sister's wedding. Priya, could you take the screenshots instead?" },
+    { "speaker": "priya", "text": "Yes, I can do that. Since I'm doing the press kit anyway, I'll use the same screenshots there. I'll do them on Wednesday." },
+    { "speaker": "ben", "text": "Thank you. I'll send you the list of devices and sizes that Apple needs, today." },
+    { "speaker": "julio", "text": "Great, thanks. And have a good wedding, Ben." },
+    { "speaker": "ben", "text": "Thanks!" }
+  ],
+  "truth": {
+    "decisions": [
+      { "text": "The release is still Tuesday at 10 a.m. Pacific; the build was approved this morning.", "match": [["tuesday"]] }
+    ],
+    "tasks": [
+      { "title": "Redo the App Store screenshots for 1.4 on Wednesday", "owner": "priya", "match": [["screenshot"]], "exclude": [["press kit"], ["device", "size"]] },
+      { "title": "Review the new Spanish strings tomorrow morning", "owner": "ana", "match": [["spanish", "translation", "strings"]] },
+      { "title": "Finish the press kit: add the new screenshots and the fact sheet", "owner": "priya", "match": [["press kit"]] },
+      { "title": "Post the release notes in the channel once 1.4 is live on Tuesday", "owner": "ana", "match": [["release note"]] },
+      { "title": "Send Priya the list of devices and screenshot sizes Apple needs", "owner": "ben", "optional": true, "match": [["device", "size"]] }
+    ],
+    "notTasks": [
+      { "text": "Filing a ticket with Apple about the review delay (the build was approved)", "match": [["ticket", "review delay"]] }
+    ],
+    "notes": "Ben took the screenshots first and later handed them to Priya, who accepted: their owner is Priya. Ana offered to do the press kit, but Priya had already started it and keeps it: its owner is Priya. Ben's Apple ticket is not needed."
+  }
+}

@@ -1,0 +1,15 @@
+.pending-file,
+.pending-error {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+.pending-error {
+  color: var(--amber-text);
+}
+/* At 2x the open arc's painted center is half a CSS pixel below the file's. */
+@media (min-resolution: 1.5dppx) {
+  .pending-file.uploading > span {
+    position: relative;
+    top: calc(var(--space-1) / 2);
+  }
+}

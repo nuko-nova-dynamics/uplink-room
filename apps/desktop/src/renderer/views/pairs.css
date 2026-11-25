@@ -1,0 +1,342 @@
+/* Pairs (views/Pairs.tsx): the app's tokens and chat's own pieces, with only what a Pair adds. */
+
+/* An ended Pair stays in the list, quieter. */
+.pair-item.ended .label-text {
+  color: var(--muted);
+}
+
+/* Start or join: the new direct message's popover, sized for a menu or a short form. */
+.pair-start {
+  width: 300px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.pair-start-intro {
+  margin: 0 9px 6px;
+  line-height: var(--line-13);
+  font-size: var(--font-13);
+}
+.pair-join {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 2px 2px;
+}
+.pair-join .pop-title {
+  padding-left: 0;
+}
+.pair-join .hint,
+.pair-join-error {
+  margin: 0;
+  line-height: var(--line-13);
+  font-size: var(--font-13);
+}
+.pair-join-error {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  color: var(--text);
+}
+/* The icon sits on the first line of the reason, however many lines it wraps to. */
+.pair-join-error > :first-child {
+  flex: none;
+  margin-top: 2px;
+}
+
+/* Under the box: runs a message didn't reach because their inbox was full. It was posted, so muted, not failed. */
+.pair-not-delivered {
+  margin: 0;
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  color: var(--muted);
+  line-height: var(--line-13);
+  font-size: var(--font-13);
+}
+.pair-not-delivered > :first-child {
+  flex: none;
+  margin-top: 2px;
+}
+
+/* The page: what a Pair is, both ways in, then the Pairs there are. */
+.pairs-landing {
+  padding: 28px var(--gutter) 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.pairs-intro {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  max-width: 640px;
+}
+.pairs-intro > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+/* 20 px: a clear step above the 15 px title row and the 13 px text. */
+.pairs-intro h2 {
+  margin: 0;
+  font-size: var(--font-20);
+  line-height: var(--line-20);
+}
+/* About 75 characters a line: ch is a zero's width, wider than this face's average letter. */
+.pairs-intro p {
+  margin: 0;
+  line-height: var(--line-13);
+  max-width: 480px;
+  font-size: var(--font-13);
+}
+.pairs-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 640px;
+  border-top: 1px solid var(--line);
+}
+.pairs-row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 8px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: none;
+  text-align: left;
+}
+.pairs-row:hover {
+  background: var(--hover);
+}
+.pairs-row-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* A Pair's conversation. */
+.pair-view {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+.pair-code-wrap {
+  position: relative;
+}
+.pair-live-runs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 14px;
+  color: var(--text);
+}
+.pair-live-run {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.pair-quiet,
+.pair-gone {
+  text-align: center;
+  padding: 0 var(--gutter);
+}
+.pair-ended {
+  margin: 0;
+  padding: 10px 0 0;
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+.pair-people-note {
+  margin: 2px 9px;
+}
+
+/* A code, shown once: large enough to read out, in mono because it is typed. */
+.pair-code-pop {
+  width: 340px;
+  padding: 8px 10px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pair-code-pop .pop-title {
+  padding-left: 0;
+}
+.pair-code-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pair-code {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--ui);
+  font-size: var(--font-13);
+  font-weight: 700;
+  height: var(--ctl-h);
+  padding: var(--space-4) var(--space-10);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-inline);
+  background: var(--ground);
+  overflow-wrap: anywhere;
+  user-select: all;
+  line-height: var(--line-13);
+}
+.pair-code-note {
+  margin: 0;
+  line-height: var(--line-13);
+  font-size: var(--font-13);
+}
+
+/* The home of someone in no team: making or joining a team, under their Pairs. */
+.no-team {
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.no-team h2 {
+  margin: 0;
+  font-size: var(--font-20);
+  line-height: var(--line-20);
+}
+.no-team p {
+  margin: 0;
+  line-height: var(--line-13);
+  max-width: 480px;
+  font-size: var(--font-13);
+}
+.no-team-name {
+  cursor: default;
+}
+.no-team-name:hover {
+  background: none;
+}
+
+/* Do not fade a final actionable row, its focus ring, or its neighbours. */
+:root .sidebar-scroll:has(.more-pairs) {
+  mask-image: none;
+}
+.more-pairs {
+  position: relative;
+  isolation: isolate;
+}
+.more-pairs:focus-visible {
+  z-index: var(--layer-conversation-focus);
+}
+.more-pairs:hover {
+  background: var(--hover);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--faint);
+}
+.pair-view .messages .msg {
+  background: transparent;
+}
+.pair-view .messages .msg:hover {
+  background: var(--hover);
+}
+.pair-people .member-row {
+  padding-inline: var(--space-4);
+}
+.pair-people > button {
+  padding-inline: var(--space-4);
+  gap: var(--space-8);
+}
+.pair-action-icon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--space-24);
+  height: var(--line-13);
+  flex: none;
+}
+.pair-people .pop-title {
+  padding-inline: var(--space-4);
+}
+.pair-code-row > .copy-btn {
+  width: auto;
+  flex: none;
+  justify-content: center;
+}
+.pair-code-row .copy-labels > span:not([data-shown]) {
+  display: none;
+}
+.pairs-intro .cmd {
+  display: inline-block;
+  white-space: nowrap;
+}
+:root .pair-code-wrap {
+  width: fit-content;
+}
+:root .pair-join-error > svg {
+  margin-top: var(--space-2);
+}
+
+:root .pair-code-row > .copy-btn {
+  width: calc-size(fit-content, round(up, size, var(--pixel-pair)));
+}
+.pair-code-row .copy-labels {
+  width: calc-size(fit-content, round(up, size, var(--pixel-pair)));
+}
+.pair-start .pop-title,
+.pair-join-error {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .pair-code-row > .copy-btn {
+  min-width: calc(var(--space-40) * 2);
+}
+
+.more-pairs:focus-visible {
+  background: var(--sidebar);
+}
+.pair-view :is(.msg-body, .msg-head, .pair-live-run, .pair-not-delivered) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+:root .pair-code-row > .copy-btn {
+  height: var(--ctl-small);
+  min-height: var(--ctl-small);
+  padding-block: var(--space-2);
+  border-radius: var(--radius-small);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+  color: var(--text);
+}
+:root .pair-code-row > .copy-btn > svg {
+  width: var(--icon-12);
+  height: var(--icon-12);
+  margin-top: var(--space-3);
+}
+
+.pairs-heading {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+
+/* Reserve the send target before the input takes the remaining width. */
+.pair-view .composer-line {
+  gap: var(--space-8);
+}
+.pair-view .pair-input {
+  flex: 1;
+  width: 0;
+  min-width: 0;
+}
+:root .pair-view .composer-send {
+  flex: none;
+  width: var(--ctl-h);
+  height: var(--ctl-h);
+}
+.more-pairs:focus-visible {
+  outline-offset: calc(-1 * var(--focus-width));
+}
+:root .pair-view .composer-send {
+  border-radius: var(--radius-control);
+}

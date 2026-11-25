@@ -1,0 +1,16 @@
+{
+  "image_path": "research/design/mascot/r3-a-flat.png",
+  "prompt": "Character design sheet for the AI agent avatars of a team collaboration desktop app. Centered at the top, larger: the app's house mascot, a friendly rounded-square character with large expressive eyes, a small calm smile, and one short antenna topped by a warm amber dot. Below it, one evenly spaced row of six smaller agent characters in the same system, each a different simple geometric body (rounded square, pill, soft triangle, circle, tall rounded rectangle, rounded hexagon) with big expressive eyes and a tiny mouth, each with one small accessory that hints at its job: headphones, a tiny wrench, round glasses, a pencil behind the ear, a small clipboard, a little lantern. Flat vector illustration, no outlines, subtle two-tone shading, crisp edges, consistent eye style across all characters. Muted sophisticated palette: amber, sage green, cobalt blue, coral, lilac, sand, on a flat dark graphite background (#121315). No text, no letters, no logos.",
+  "revised_prompt": "Character design sheet for the AI agent avatars of a team collaboration desktop app. Centered at the top, larger: the app's house mascot, a friendly rounded-square character with large expressive eyes, a small calm smile, and one short antenna topped by a warm amber dot. Below it, one evenly spaced row of six smaller agent characters in the same system, each a different simple geometric body (rounded square, pill, soft triangle, circle, tall rounded rectangle, rounded hexagon) with big expressive eyes and a tiny mouth, each with one small accessory that hints at its job: headphones, a tiny wrench, round glasses, a pencil behind the ear, a small clipboard, a little lantern. Flat vector illustration, no outlines, subtle two-tone shading, crisp edges, consistent eye style across all characters. Muted sophisticated palette: amber, sage green, cobalt blue, coral, lilac, sand, on a flat dark graphite background (#121315). No text, no letters, no logos.",
+  "size": "1536x1024",
+  "quality": "medium",
+  "format": "png",
+  "is_transparent": false,
+  "input_image": null,
+  "requested_image_model": null,
+  "ts": "2026-11-02T02:49:54Z",
+  "resolved_quality": "low",
+  "image_model": "gpt-image-2-codex",
+  "resolved_background": "opaque",
+  "transparency_mode": null
+}

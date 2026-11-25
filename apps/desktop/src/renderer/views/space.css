@@ -1,0 +1,272 @@
+/* The Space view (spec #6). Layout, bar, pill and side panel come from the terminal view's
+   classes in styles.css; this adds the screen area. Like a terminal's screen, it stays dark in
+   both themes, since it shows another computer's own desktop. */
+
+.space-stage {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  background: var(--term-bg);
+  display: grid;
+  place-items: stretch;
+  overflow: hidden;
+}
+
+.space-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: var(--term-bg);
+}
+
+.space-state {
+  place-self: center;
+  max-width: 420px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  color: #c3c6cc;
+  line-height: var(--line-13);
+  font-size: var(--font-13);
+}
+/* No screen yet (opening, unreachable, stopped): the stage takes the theme's own surface, not a black
+   screen, and its text and buttons the theme's colors. */
+.space-stage.idle {
+  background: var(--sidebar);
+}
+.space-stage.idle .space-state {
+  color: var(--muted);
+}
+.space-stage.idle .space-state svg {
+  color: var(--muted);
+}
+.space-state p {
+  margin: 0;
+}
+.space-state h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--font-20);
+  line-height: var(--line-20);
+  font-weight: 700;
+}
+.space-state svg {
+  width: 20px;
+  height: 20px;
+  color: #8f939b;
+}
+.space-state .spin {
+  animation: spin var(--motion-spin) var(--ease-linear) infinite;
+  color: var(--focus-color-on-dark);
+}
+@media (prefers-reduced-motion: reduce) {
+  .space-state .spin {
+    animation: none;
+  }
+}
+
+/* The badge sits over the remote desktop, which can be any color. */
+.space-stage .kb-badge {
+  bottom: 12px;
+}
+
+.terminal-side .log-line b {
+  flex: none;
+}
+.space-failed {
+  color: var(--muted);
+}
+.space-ref {
+  font-size: var(--font-13);
+  overflow-wrap: anywhere;
+  line-height: var(--line-13);
+}
+
+/* Match the Space toolbar to its title gutter, without changing terminal views. */
+:root .space-layout .terminal-bar {
+  padding-inline: var(--gutter);
+}
+/* Round the leading label's advance so the whole access group starts on a pixel. */
+.space-layout .terminal-bar > .label {
+  flex: none;
+  width: calc-size(max-content, round(up, size, var(--border-hairline)));
+}
+/* Center the title glyph on the name's cap band, preserving the shared heading size. */
+.space-layout .work-head h1 {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+.space-title-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-box: trim-both cap alphabetic;
+}
+/* The hinted cap band is one device pixel higher at 2x. A one-pixel margin
+   in this centered row moves the text by half a CSS pixel, keeping the glyph fixed. */
+@media (min-resolution: 1.5dppx) {
+  .space-title-name {
+    margin-top: var(--space-1);
+  }
+}
+.space-layout .access-cap:not(.space-access-cap) {
+  display: none;
+}
+
+:root .space-stage:has(.space-input-strip) {
+  grid-template-rows: minmax(0, 1fr) var(--ctl-stage);
+  padding-bottom: 0;
+}
+.space-input-strip {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-inline: var(--space-14);
+}
+:root .space-input-strip .kb-badge {
+  position: static;
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+  align-items: flex-end;
+  height: var(--space-28);
+  padding: var(--space-3) var(--space-10);
+}
+:root .space-input-strip .kb-badge > svg {
+  margin-top: 0;
+  margin-bottom: var(--space-3);
+}
+:root .space-suggest h2,
+:root .space-suggest .input {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .space-handoff-menu [data-slot="menu-item"] {
+  align-items: center;
+  gap: var(--space-8);
+}
+.space-handoff-face {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-24);
+  height: var(--space-24);
+  flex: none;
+}
+.space-handoff-face .face:not(.agent) {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+  white-space: nowrap;
+}
+.space-layout .face-fallback {
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
+:root .space-layout .seg button:disabled,
+:root .space-suggest .btn:disabled {
+  opacity: 1;
+  color: var(--muted);
+  background: var(--sidebar);
+  border-color: var(--line);
+}
+
+/* A theme-colored backing keeps the primary-text ring readable over any remote screen. */
+.space-stage:focus-visible::after,
+.space-stage:has(> .space-frame:focus)::after {
+  content: "";
+  position: absolute;
+  inset: var(--focus-gap);
+  border: var(--focus-width) solid var(--text);
+  box-shadow:
+    0 0 0 var(--focus-gap) var(--ground),
+    inset 0 0 0 var(--focus-gap) var(--ground);
+  pointer-events: none;
+}
+
+.space-layout {
+  overflow-wrap: anywhere;
+}
+:root .space-layout :is(.side-block h2, .hint, .where, .log-line, .watching, .driver-pill) {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .space-layout .access-line,
+:root .space-layout .label,
+:root .space-layout .pop-title {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .space-layout .driver-pill {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+.space-layout .where {
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+:root .space-layout .driver-pill.ended,
+:root .space-layout .driver-pill.ended svg {
+  color: var(--muted);
+}
+.space-layout :is(.row-flex, .log-line, .watching, .driver-pill) {
+  min-width: 0;
+}
+.space-layout :is(.row-flex, .watching, .driver-pill) > span:not(.face),
+.space-layout .log-line > b,
+.space-handoff-menu [data-slot="menu-item"] > span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.space-layout :is(.row-flex, .watching, .driver-pill) > :is(svg, .face) {
+  flex: none;
+}
+.space-layout .log-line > span {
+  min-width: 0;
+}
+.space-handoff-menu.pop {
+  max-width: calc(100vw - var(--space-32));
+}
+.space-handoff-menu [data-slot="menu-item"] {
+  min-width: 0;
+}
+:root .space-layout .space-offline {
+  margin: var(--space-10) var(--gutter) 0;
+  color: var(--muted);
+  background: var(--raised);
+  border-color: var(--line);
+}
+:root .space-layout .space-suggest .input {
+  height: var(--ctl-h);
+}
+
+/* The side panel keeps one fixed gutter whether its contents need to scroll. */
+:root .space-layout .terminal-side {
+  scrollbar-gutter: stable;
+  scrollbar-width: auto;
+  scrollbar-color: auto;
+}
+.space-layout .terminal-side .rail-close {
+  right: calc(var(--edge) - var(--space-8));
+}
+.space-layout .terminal-side::-webkit-scrollbar {
+  width: var(--space-8);
+}
+.space-layout .terminal-side::-webkit-scrollbar-button {
+  display: none;
+}
+.space-layout .terminal-side::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: var(--radius-pill);
+}
+.space-layout .terminal-side:hover::-webkit-scrollbar-thumb {
+  background: var(--line);
+}

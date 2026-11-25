@@ -1,0 +1,22 @@
+{
+  "rules": [
+    {
+      "id": "third-party-dom",
+      "classes": ["excalidraw", "xterm"],
+      "frame": { "path": "/pdf-frame.html", "selector": ".page canvas" },
+      "checks": "all",
+      "reason": "Excalidraw, xterm and PDF.js own their internal DOM. Uplink's surrounding controls and frame remain in scope."
+    },
+    {
+      "id": "drawings",
+      "classes": ["face", "char-host", "wordmark"],
+      "checks": ["icon-alignment", "icon-drawing", "icon-sizes", "icon-pixels"],
+      "reason": "Character faces and the wordmark are drawings with their own coordinates and dimensions, not interface icons. Their other UI checks remain in scope."
+    },
+    {
+      "id": "running-rotation",
+      "checks": ["icon-alignment", "icon-drawing"],
+      "reason": "A running rotation changes ink bounds during a capture. New captures pause rotation at time zero; older captures exclude its alignment and drawing checks."
+    }
+  ]
+}

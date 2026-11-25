@@ -1,0 +1,19 @@
+{
+  "ask": "calls-calm-round-1",
+  "question": "sidebar",
+  "prompt": "What does the sidebar show for a channel with a call?",
+  "level": 3,
+  "revision": 1,
+  "choice": [
+    "list"
+  ],
+  "values": {},
+  "notes": "",
+  "options": {
+    "list": {
+      "label": "Keep today's list",
+      "detail": "Everyone in the call listed under the channel: 5 names, then \"and 7 more\".",
+      "folder": "list/"
+    }
+  }
+}

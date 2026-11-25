@@ -1,0 +1,92 @@
+{
+  "apps/desktop/src/renderer/browser-harness.tsx": {
+    "ui/no-inline-px": 2
+  },
+  "apps/desktop/src/renderer/cloud-harness.tsx": {
+    "ui/no-inline-px": 3
+  },
+  "apps/desktop/src/renderer/components/A2ARun.tsx": {
+    "ui/no-inline-px": 2
+  },
+  "apps/desktop/src/renderer/components/Faces.tsx": {
+    "ui/no-inline-px": 1
+  },
+  "apps/desktop/src/renderer/components/blockquote.css": {
+    "css/scale": 1,
+    "css/tokens": 2
+  },
+  "apps/desktop/src/renderer/components/chat/MessageItem.tsx": {
+    "ui/no-inline-px": 1
+  },
+  "apps/desktop/src/renderer/components/files/FilesView.tsx": {
+    "ui/no-inline-px": 1
+  },
+  "apps/desktop/src/renderer/harness.tsx": {
+    "ui/no-inline-px": 6
+  },
+  "apps/desktop/src/renderer/styles.css": {
+    "css/no-important": 8,
+    "css/scale": 605,
+    "css/tokens": 1029
+  },
+  "apps/desktop/src/renderer/views/ChannelView.tsx": {
+    "ui/no-inline-px": 2
+  },
+  "apps/desktop/src/renderer/views/SpaceView.tsx": {
+    "ui/no-inline-px": 1
+  },
+  "apps/desktop/src/renderer/views/TerminalView.tsx": {
+    "ui/no-inline-px": 4
+  },
+  "apps/desktop/src/renderer/views/browser/BrowserPanel.tsx": {
+    "ui/no-inline-px": 1
+  },
+  "apps/desktop/src/renderer/views/pairs.css": {
+    "css/scale": 24,
+    "css/tokens": 36
+  },
+  "apps/desktop/src/renderer/views/settings/Agents.tsx": {
+    "ui/no-inline-px": 2
+  },
+  "apps/desktop/src/renderer/views/settings/Browsers.tsx": {
+    "ui/no-inline-px": 4
+  },
+  "apps/desktop/src/renderer/views/settings/CloudMachine.tsx": {
+    "ui/no-inline-px": 3
+  },
+  "apps/desktop/src/renderer/views/settings/GitHub.tsx": {
+    "ui/no-inline-px": 1
+  },
+  "apps/desktop/src/renderer/views/settings/Machines.tsx": {
+    "ui/no-inline-px": 3
+  },
+  "apps/desktop/src/renderer/views/settings/Members.tsx": {
+    "ui/no-inline-px": 1
+  },
+  "apps/desktop/src/renderer/views/settings/Notifications.tsx": {
+    "ui/no-inline-px": 1
+  },
+  "apps/desktop/src/renderer/views/settings/Profiles.tsx": {
+    "ui/no-inline-px": 2
+  },
+  "apps/desktop/src/renderer/views/settings/commandLine.css": {
+    "css/scale": 5,
+    "css/tokens": 6
+  },
+  "apps/desktop/src/renderer/views/settings/members.css": {
+    "css/scale": 10,
+    "css/tokens": 12
+  },
+  "apps/desktop/src/renderer/views/space.css": {
+    "css/scale": 4,
+    "css/tokens": 8
+  },
+  "apps/desktop/src/renderer/views/thread.css": {
+    "css/scale": 61,
+    "css/tokens": 84
+  },
+  "apps/desktop/src/renderer/views/work.css": {
+    "css/scale": 69,
+    "css/tokens": 103
+  }
+}

@@ -1,0 +1,241 @@
+/* The sidebar's Voice section (VoiceRooms.tsx): every channel is a room, one click joins its call. */
+.voice-rooms {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+:root body .sidebar .voice-room {
+  flex-direction: column;
+  align-items: stretch;
+  height: auto;
+  min-height: var(--space-40);
+  padding-block: var(--space-4);
+  cursor: pointer;
+}
+:root body .sidebar .voice-room:focus-visible {
+  outline: var(--focus-width) solid var(--focus-color);
+  outline-offset: calc(var(--focus-width) * -1);
+}
+.voice-room[data-highlighted],
+.voice-room:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+/* The room you're in: the current fill, as the open conversation has. */
+.voice-room[data-selected] {
+  background: var(--current);
+  color: var(--text);
+}
+.voice-room-line {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  min-height: var(--space-32);
+}
+.voice-room-line > svg {
+  flex: none;
+  box-sizing: border-box;
+  width: var(--space-32);
+  height: var(--space-32);
+  padding: var(--space-8);
+  border-radius: var(--radius-pill);
+  background: var(--chip);
+}
+.voice-room.is-live .voice-room-line > svg,
+.voice-room[data-selected] .voice-room-line > svg {
+  color: var(--text);
+}
+.voice-room-line .label-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--font-13);
+}
+.voice-room-count,
+.voice-room-here {
+  flex: none;
+  color: var(--muted);
+  font-size: var(--font-12);
+  line-height: var(--line-12);
+}
+/* "Join" waits for a pointer or focus, so a quiet list reads as names. */
+.voice-room-join {
+  flex: none;
+  padding: var(--space-2) var(--space-8);
+  border-radius: var(--radius-pill);
+  background: var(--text);
+  color: var(--ground);
+  font-size: var(--font-12);
+  font-weight: 600;
+  line-height: var(--line-12);
+  opacity: 0;
+  transition: opacity var(--motion-fast) var(--ease-out);
+}
+.voice-room:hover .voice-room-join,
+.voice-room[data-highlighted] .voice-room-join {
+  opacity: 1;
+}
+.voice-room .call-members {
+  margin: 0;
+}
+.voice-room .call-member {
+  padding-left: calc(var(--space-32) + var(--space-10));
+}
+
+/* People beside a channel (People.tsx), as Discord's member list. */
+.channel-layout.with-people {
+  grid-template-columns: minmax(0, 1fr) var(--people-width);
+}
+/* :where keeps it below the small window's narrower width in styles.css, whatever the load order. */
+:where(.app) {
+  --people-width: 280px;
+}
+.people-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--space-8);
+}
+.people-list {
+  display: flex;
+  flex-direction: column;
+}
+.people-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-bottom: var(--space-12);
+}
+.people-group-label {
+  padding: var(--space-8) var(--space-8) var(--space-4);
+  color: var(--muted);
+  font-size: var(--font-12);
+  font-weight: 700;
+  line-height: var(--line-12);
+}
+.people-group-count {
+  margin-left: var(--space-4);
+  color: var(--faint);
+  font-weight: 400;
+}
+.person-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  min-height: var(--space-48);
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-row);
+  color: var(--text);
+  cursor: pointer;
+}
+.person-row:hover,
+.person-row[data-highlighted] {
+  background: var(--hover);
+}
+.person-row:focus-visible {
+  outline: var(--focus-width) solid var(--focus-color);
+  outline-offset: calc(var(--focus-width) * -1);
+}
+/* Offline people stay listed, quieter. */
+.person-row.in-offline .face,
+.person-row.in-offline .person-name {
+  opacity: 0.55;
+}
+.person-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+.person-name {
+  font-size: var(--font-13);
+  font-weight: 500;
+  line-height: var(--line-13);
+}
+.person-you {
+  color: var(--muted);
+  font-weight: 400;
+}
+.person-doing {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  color: var(--muted);
+  font-size: var(--font-12);
+  line-height: var(--line-12);
+}
+.person-doing > svg {
+  flex: none;
+}
+.person-doing.is-hint {
+  color: var(--faint);
+}
+
+/* A person's card: the UI SDK popover opens in the top layer, so it brings the app's popover look. */
+.person-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  width: var(--people-card-width);
+  margin: 0;
+  padding: var(--space-16);
+  color: var(--text);
+}
+.person-card {
+  --people-card-width: 300px;
+}
+.person-card-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+}
+.person-card-who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.person-card-name {
+  margin: 0;
+  font-size: var(--font-15);
+  font-weight: 600;
+  line-height: var(--line-15);
+}
+.person-card-facts {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-4) var(--space-12);
+  margin: 0;
+}
+.person-card-facts dt {
+  color: var(--muted);
+}
+.person-card-facts dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.person-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-8);
+}
+.status-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+.status-form [data-slot="field"] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+.status-label {
+  font-weight: 600;
+}
+.status-hint {
+  margin: 0;
+  font-size: var(--font-12);
+  line-height: var(--line-12);
+}

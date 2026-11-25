@@ -1,0 +1,99 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "apps/desktop/src/renderer/components/blockquote.css"
+        ],
+        "createdAt": "2026-11-03T16:45:11.764Z",
+        "reason": "The .md blockquote quote rule in rendered Markdown, from before #63: a standard quotation convention, not an accent stripe on a card. Kept on purpose."
+      },
+      {
+        "rule": "text-occlusion",
+        "value": "*",
+        "files": [
+          "uplink-room://app/gym.html?state=many-members*"
+        ],
+        "createdAt": "2026-11-04T07:38:22.577Z",
+        "reason": "The gym's many-members state opens the members popover on purpose; a popover lying over the message list under it is how popovers work (DESIGN.md, Conversations)."
+      },
+      {
+        "rule": "text-occlusion",
+        "value": "*",
+        "files": [
+          "uplink-room://app/gym.html?state=task*"
+        ],
+        "createdAt": "2026-11-04T08:14:55.218Z",
+        "reason": "The gym's task state opens the task drawer on purpose: a drawer lying over the dimmed view behind it is how drawers work (DESIGN.md, Window chrome)."
+      },
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "uplink-room://app/gym.html?state=space*"
+        ],
+        "createdAt": "2026-11-04T11:40:00.000Z",
+        "reason": "The Space side panel's section headings are h2 since #102 (no skipped heading levels) but keep the 12 px label style DESIGN.md gives side-panel labels; weight and color separate them from the 13 px body and the 15 px title. Advisory only."
+      },
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "uplink-room://app/gym.html?state=thread*"
+        ],
+        "createdAt": "2026-11-04T22:10:00.000Z",
+        "reason": "The thread view's side panel uses the same side-panel section headings as the Space and terminal views (h2 in the 12 px label style DESIGN.md gives side-panel labels); weight and color separate them from the 13 px body and the 15 px title. Advisory only."
+      },
+      {
+        "rule": "text-occlusion",
+        "value": "*",
+        "files": [
+          "uplink-room://app/gym.html?state=runs-mention-list*"
+        ],
+        "createdAt": "2026-11-05T13:30:00.000Z",
+        "reason": "The gym's runs-mention-list state opens the composer's @ list on purpose; a popover lying over the messages above the composer is how popovers work (DESIGN.md, Conversations)."
+      },
+      {
+        "rule": "text-occlusion",
+        "value": "*",
+        "files": [
+          "uplink-room://app/gym.html?state=runs-panel*"
+        ],
+        "createdAt": "2026-11-05T13:30:00.000Z",
+        "reason": "The gym's runs-panel states open the run drawer on purpose: a drawer lying over the dimmed view behind it is how drawers work (DESIGN.md, Window chrome)."
+      },
+      {
+        "rule": "text-occlusion",
+        "value": "*",
+        "files": [
+          "uplink-room://app/gym.html?state=hosted-mention-list*"
+        ],
+        "createdAt": "2026-11-05T20:21:50.832Z",
+        "reason": "The gym's hosted-mention-list state opens the composer's @ list on purpose; a popover lying over the messages above the composer is how popovers work (DESIGN.md, Conversations)."
+      },
+      {
+        "rule": "text-occlusion",
+        "value": "*",
+        "files": [
+          "uplink-room://app/gym.html?state=thread-mode-menu*",
+          "uplink-room://app/gym.html?state=thread-menu-*"
+        ],
+        "createdAt": "2026-11-06T06:00:00.000Z",
+        "reason": "These gym states open the thread header's menu on purpose (ADR 0043); a popover lying over the conversation under it is how popovers work (DESIGN.md, Conversations). Inside the menu nothing overlaps: WorkHead.test.tsx checks the levels' layout at every access level."
+      },
+      {
+        "rule": "first-viewport-column-overflow",
+        "value": "*",
+        "files": [
+          "uplink-room://app/gym.html?state=settings-machine-mode*"
+        ],
+        "createdAt": "2026-11-06T06:00:00.000Z",
+        "reason": "Settings, Machines lists one machine beside its long panel; the base commit's settings-rex state fires the same rule (158% of the viewport before ADR 0043's section, 165% after). The layout is older than this change; a follow-up can balance it."
+      }
+    ]
+  }
+}

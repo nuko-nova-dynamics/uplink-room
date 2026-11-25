@@ -1,0 +1,805 @@
+/* A T3 Code thread's conversation (ThreadView.tsx, ADR 0022). Tokens and type from DESIGN.md:
+   bubbles for messages, a turn's work folded into one line, one-line events centered between them,
+   and tool output and diffs on the terminal's own dark ground in both themes. */
+
+.thread-main {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.thread-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 var(--gutter);
+}
+.thread-notes:not(:empty) {
+  padding-top: 10px;
+}
+.thread-ask {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+}
+
+.thread-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+/* One column of reading width, so a long answer keeps a readable line. */
+.thread-column {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 18px var(--gutter) 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.thread-earlier,
+.thread-start,
+.thread-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+
+/* Messages: what was sent to the agent sits on the right, the agent's answer on the left. */
+.thread-msg {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.thread-msg.to-agent {
+  align-items: flex-end;
+}
+.thread-msg-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+.thread-msg-head b {
+  font-weight: 500;
+}
+.thread-bubble {
+  padding: 8px 12px;
+  line-height: var(--line-13);
+  font-size: var(--font-13);
+}
+.thread-msg.to-agent .thread-bubble {
+  background: color-mix(in srgb, var(--text) 11%, transparent);
+}
+.thread-plain {
+  white-space: pre-wrap;
+}
+.thread-files {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+/* An image sent from the box, from the room's copy (ADR 0043): at most 360 × 240, as in chat. */
+.thread-image {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  border-radius: var(--radius-inline);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  line-height: 0;
+}
+.thread-image img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(360px, 100%);
+  max-height: 240px;
+}
+.to-agent .thread-files {
+  justify-content: flex-end;
+}
+.thread-composer .pending-files {
+  margin: 2px 2px 4px;
+}
+
+/* A turn's work: one line until opened. */
+.thread-work,
+.thread-step {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.thread-fold {
+  all: unset;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 24px;
+  padding: 0 8px;
+  margin-left: -8px;
+  border-radius: var(--radius-small);
+  color: var(--muted);
+  cursor: pointer;
+  min-width: 0;
+}
+.thread-fold > span:last-of-type,
+.thread-fold > span.mono {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.thread-fold:hover:not(:disabled) {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.thread-fold:disabled {
+  cursor: default;
+}
+.thread-fold:disabled .fold-mark {
+  visibility: hidden;
+}
+.thread-fold .fold-mark {
+  flex: none;
+  transition: transform var(--motion-fast) var(--ease-out);
+}
+.thread-fold[aria-expanded="true"] .fold-mark {
+  transform: rotate(90deg);
+}
+.thread-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 20px;
+  border-left: 1px solid var(--line);
+  margin-left: 6px;
+}
+.thread-step .thread-fold.step {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+.thread-reasoning {
+  white-space: pre-wrap;
+  color: var(--muted);
+  font-size: var(--font-15);
+  line-height: var(--line-15);
+  padding: 2px 0 4px 20px;
+}
+
+/* Output and diffs are the machine's own text: dark in both themes, like a terminal. */
+.thread-output,
+.thread-diff {
+  background: var(--term-bg);
+  color: #ebecee;
+  border-radius: var(--radius-card);
+  font-family: var(--mono);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+  margin: 0;
+  max-height: 360px;
+  overflow: auto;
+}
+.thread-output {
+  padding: 10px 12px;
+}
+.thread-output pre {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.thread-output-cmd {
+  color: var(--focus-color-on-dark);
+  margin-bottom: 6px;
+  white-space: pre-wrap;
+}
+.thread-output-cut {
+  margin-top: 6px;
+  color: #8f939b;
+}
+.thread-diff {
+  padding: 10px 0;
+  white-space: pre;
+}
+.thread-diff span {
+  display: block;
+  padding: 0 12px;
+  min-height: 1.45em;
+}
+.thread-diff .diff-add {
+  background: color-mix(in srgb, var(--focus-color-on-dark) 12%, transparent);
+  color: var(--focus-color-on-dark);
+}
+.thread-diff .diff-del {
+  background: color-mix(in srgb, var(--focus-color-on-dark) 8%, transparent);
+  color: var(--focus-color-on-dark);
+}
+.thread-diff .diff-hunk {
+  color: var(--focus-color-on-dark);
+}
+.thread-diff .diff-file {
+  color: #ebecee;
+  font-weight: 700;
+}
+
+/* A plan: its steps, each with its state's icon. */
+.thread-plan {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: 10px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.thread-plan-head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.thread-plan-head b {
+  font-weight: 500;
+}
+.thread-plan-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.thread-plan-steps li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: var(--line-15);
+  font-size: var(--font-15);
+}
+.thread-plan-steps li.plan-completed span:last-child {
+  color: var(--muted);
+}
+
+/* One-line events between messages: a checkpoint, an answered request, a notice. */
+.thread-event {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: var(--font-13);
+  text-align: center;
+  flex-wrap: wrap;
+  line-height: var(--line-13);
+}
+.thread-checkpoint {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.thread-diff-state {
+  text-align: center;
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+
+/* The bottom band: what the thread waits on, or where it stands. */
+.thread-foot {
+  padding: 10px var(--gutter) 16px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.thread-foot > * {
+  width: min(760px, 100%);
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+.thread-scroll {
+  scrollbar-gutter: stable;
+}
+.thread-foot {
+  padding-right: calc(var(--gutter) + var(--space-6));
+}
+.thread-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+/* A decision card: the raised surface with the amber edge of "needs you", not an amber wash, so its
+   options and Send read at full contrast. */
+.prompt-box.thread-waiting {
+  background: var(--raised);
+  padding: 12px 14px;
+  border-radius: var(--radius-dialog);
+  box-shadow: var(--shadow);
+}
+.thread-waiting {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  /* A prompt with many questions scrolls here, so Send answer stays reachable. */
+  max-height: 55vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* A link styled as a control (Open in T3 Code) looks like every other header control. */
+.work-head a.btn {
+  color: var(--text);
+  text-decoration: none;
+}
+/* A state icon's hidden label is read aloud, not seen: it takes the text color, not the icon's. */
+.thread-main .state-icon .sr-only {
+  color: var(--text);
+}
+
+/* The message box (ADR 0023): the chat composer's box, with its hint and Send under the text. */
+.thread-composer {
+  padding: 4px 6px 6px;
+}
+.thread-composer-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 4px;
+}
+.thread-composer-row .hint {
+  flex: 1;
+  min-width: 0;
+}
+.thread-foot-note {
+  text-align: center;
+}
+.thread-state .btn {
+  margin-left: 8px;
+}
+
+/* A question's form: each question, its options, and room for your own words. */
+.thread-questions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.thread-question {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.thread-question legend {
+  padding: 0;
+  margin-bottom: 4px;
+  line-height: var(--line-13);
+  font-size: var(--font-13);
+}
+.thread-question legend b {
+  font-weight: 700;
+  display: block;
+}
+/* The question on its own line under its short title, never run into it. */
+.thread-question-text {
+  display: block;
+}
+/* Each option is a row you pick, its whole width the target, as a choice card's rows are. */
+.thread-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: var(--line-13);
+  cursor: pointer;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--raised);
+  font-size: var(--font-13);
+}
+.thread-option:hover {
+  border-color: var(--faint);
+}
+.thread-option:has([data-checked]) {
+  border-color: var(--text);
+}
+.thread-write-anyway {
+  align-self: flex-start;
+  color: var(--muted);
+}
+.thread-option-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+/* The radio or checkbox (UI SDK) in an option row: a small box at the start of its first line. */
+.thread-option :is([data-slot="radio"], [data-slot="checkbox"]) {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: var(--icon-14);
+  height: var(--icon-14);
+  margin-top: var(--space-2);
+  padding: 0;
+  border: var(--border-hairline) solid var(--faint);
+  border-radius: var(--radius-small);
+  background: var(--raised);
+  color: var(--text);
+}
+.thread-option [data-slot="radio"] {
+  border-radius: var(--radius-pill);
+}
+.thread-option :is([data-slot="radio"], [data-slot="checkbox"])[data-checked] {
+  border-color: var(--text);
+}
+.thread-option [data-slot="radio-indicator"] {
+  width: var(--space-6);
+  height: var(--space-6);
+  border-radius: var(--radius-pill);
+  background: var(--text);
+}
+.thread-sugg-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: var(--line-13);
+  font-size: var(--font-13);
+}
+
+/* A narrow thread column keeps its title: the header's text controls fold to icons with the same names. */
+@container (max-width: 760px) {
+  .thread-main .work-head .btn-label {
+    display: none;
+  }
+}
+
+/* One question with one answer: each option is a button that sends it, as a choice card's rows do. */
+.thread-option-send {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--ground);
+  color: var(--text);
+  text-align: start;
+  line-height: var(--line-13);
+  font-size: var(--font-13);
+}
+.thread-option-send:hover:not(:disabled) {
+  border-color: var(--text);
+  background: var(--hover);
+}
+.thread-option-send b {
+  font-weight: 700;
+}
+
+/* Teammates' access in the thread header's menu: the level picker stacked, then who's watching and
+   where it runs. */
+.access-menu {
+  position: relative;
+}
+.access-pop {
+  width: 380px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+/* The access levels in the menu: two even columns at their own height, so the line under them
+   (the machine's limit, what the level lets teammates do) sits below in flow at every level. The
+   popover's menu-row rule makes every button a full-width row, which here would stack the four
+   levels inside the control's fixed height and paint the lines over the last ones. */
+.access-pop .seg {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-flow: row;
+  grid-auto-columns: auto;
+  height: auto;
+  width: 100%;
+}
+.access-pop .seg button {
+  width: auto;
+  min-width: 0;
+  white-space: nowrap;
+}
+.access-pop .hint {
+  white-space: normal;
+  line-height: var(--line-13);
+  font-size: var(--font-13);
+}
+/* What the agent may do (ADR 0043): one row per mode, its line in the tooltip and under the list. */
+.access-pop .mode-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+.access-pop .mode-options .label {
+  margin: 0;
+}
+.access-pop .option-list.compact {
+  gap: 2px;
+}
+.access-pop .mode-option {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) 12px;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-small);
+  background: none;
+  box-shadow: none;
+}
+.access-pop .mode-option:is([aria-pressed="true"], [data-checked]) {
+  border-color: var(--line);
+  background: var(--raised);
+  box-shadow: none;
+  font-weight: 700;
+}
+/* The thread header's status for the agent's mode: status, not a control. */
+.mode-chip {
+  max-width: 180px;
+  min-width: 0;
+}
+@container (max-width: 640px) {
+  .work-head .mode-chip {
+    display: none;
+  }
+}
+.access-menu-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  width: 100%;
+}
+/* The control pill is the menu's button: the pill as it reads, with a chevron. */
+.access-menu-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+}
+.access-menu-btn:hover .driver-pill {
+  border-color: var(--faint);
+}
+.access-menu-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+}
+.access-menu-section + .access-menu-section {
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+.access-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: var(--radius-small);
+  background: none;
+  color: var(--text);
+  text-align: start;
+}
+.access-menu-item:hover {
+  background: var(--hover);
+}
+.access-menu-foot .btn {
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+.thread-bubble,
+.thread-plan-steps {
+  font-size: var(--font-15);
+  line-height: var(--line-15);
+}
+
+/* One reading column for transcript and composer. */
+.thread-foot > * {
+  max-width: calc(var(--conversation-reading-width) - var(--gutter) * 2);
+}
+:root .thread-msg .thread-bubble {
+  background: var(--raised);
+  max-width: 100%;
+}
+.thread-msg.from-agent .thread-bubble {
+  align-self: stretch;
+}
+.thread-plan-steps .state-icon {
+  margin-top: var(--space-4);
+}
+.thread-output pre {
+  font: inherit;
+}
+.thread-step .thread-output {
+  margin-left: calc(-1 * var(--space-8));
+}
+.thread-diff {
+  /* The initial viewport ends after a whole line, following the top inset. */
+  max-height: calc(var(--line-13) * 18 + var(--space-10));
+  padding-left: var(--space-6);
+  line-height: var(--line-13);
+  scrollbar-width: auto;
+  scrollbar-color: auto;
+}
+.thread-diff span {
+  min-height: var(--line-13);
+}
+.thread-scroll,
+.thread-output {
+  scrollbar-width: auto;
+  scrollbar-color: auto;
+}
+.thread-scroll:hover,
+.thread-output:hover,
+.thread-diff:hover {
+  scrollbar-width: auto;
+  scrollbar-color: auto;
+}
+:is(.thread-scroll, .thread-output, .thread-diff)::-webkit-scrollbar {
+  width: var(--conversation-scrollbar);
+  height: var(--conversation-scrollbar);
+}
+:is(.thread-scroll, .thread-output, .thread-diff)::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: var(--radius-pill);
+}
+:is(.thread-scroll, .thread-output, .thread-diff):hover::-webkit-scrollbar-thumb {
+  background: var(--muted);
+}
+:is(.thread-scroll, .thread-output, .thread-diff)::-webkit-scrollbar-button {
+  display: none;
+}
+.thread-diff span {
+  min-width: 100%;
+  width: max-content;
+}
+:root .thread-main .mode-chip,
+:root .thread-main .driver-pill {
+  height: var(--ctl-h);
+  min-height: var(--ctl-h);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .thread-main .driver-pill {
+  color: var(--text);
+  border-color: var(--text);
+}
+
+:root .access-pop .label,
+:root .access-pop .pop-title {
+  padding: 0;
+  margin: 0;
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+  font-weight: 700;
+}
+.thread-side-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+  min-height: var(--ctl-h);
+  margin-bottom: var(--space-8);
+}
+.thread-side-head h2 {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+.thread-side-head .rail-close {
+  position: static;
+  flex: none;
+}
+.thread-option,
+.thread-option-send {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  border-bottom: var(--border-hairline) solid var(--line);
+}
+.prompt-box.thread-waiting {
+  box-shadow: none;
+}
+.thread-option:has([data-checked]) {
+  background: var(--hover);
+  border-color: var(--faint);
+}
+.thread-questions .btn.primary:disabled {
+  opacity: 1;
+  background: var(--hover);
+  border-color: var(--line);
+  color: var(--muted);
+}
+:root .access-pop .hint,
+:root .access-pop .mode-option,
+:root .access-pop .access-menu-item {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+:root .thread-main .mode-chip > svg {
+  margin-top: var(--space-1);
+}
+:root .thread-composer-row > .btn:first-child > svg {
+  margin-top: var(--space-2);
+}
+@media (min-resolution: 1.5dppx) {
+  :root .thread-composer-row > .btn:first-child > svg {
+    margin-top: var(--space-1);
+  }
+}
+
+.thread-scroll {
+  scrollbar-gutter: stable both-edges;
+}
+.thread-output,
+.thread-diff {
+  scrollbar-gutter: stable;
+}
+.thread-suggestion-by {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+.thread-plain,
+.thread-sugg-text,
+.thread-plan-steps li > span:last-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.thread-diff .diff-add,
+.thread-diff .diff-del {
+  background: color-mix(in srgb, var(--focus-color-on-dark) 7%, var(--term-bg));
+  color: var(--focus-color-on-dark);
+}
+.thread-diff .diff-hunk,
+.thread-output-cmd {
+  color: var(--focus-color-on-dark);
+}
+
+/* At 2x the 13 px face's capitals sit one pixel above its line center. */
+@media (min-resolution: 1.5dppx) {
+  .thread-event > span {
+    transform: translateY(var(--space-1));
+  }
+  .thread-event .event-label {
+    transform: translateY(var(--space-1));
+  }
+}
+/* The title is a text block, so ellipsis applies to its own line at narrow widths. */
+:root .thread-main .work-head h1 {
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .thread-fold .fold-mark {
+    transition: none;
+  }
+}
+:root .thread-main .mode-chip {
+  width: calc-size(fit-content, round(up, size, var(--pixel-pair)));
+}
+:root .thread-main .mode-chip {
+  flex-shrink: 0;
+}

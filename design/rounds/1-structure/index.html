@@ -1,0 +1,641 @@
+<title>Uplink Room Design Decisions</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+<style>
+/* Layout: one reading column of questions; each question = context, a dark stage with the real UI, then choices that save on click. Sticky bar shows progress and save state. */
+:root{
+  --bg:#f6f7f8;--surface:#ffffff;--fg:#15171a;--muted:#5a606a;--line:#e1e4e8;--accent:#2f62d6;--accent-fg:#ffffff;--pick:#e9effc;--ok:#1d7f4f;--warn:#a86200;
+  --stage:#0e1012;
+  --display:"Schibsted Grotesk",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --body:"Schibsted Grotesk",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111316;--surface:#181b1f;--fg:#e8e9eb;--muted:#9da2ab;--line:#2a2e34;--accent:#7aa2f7;--accent-fg:#0d1320;--pick:#1b2436;--ok:#4cc28d;--warn:#f2a93b;--stage:#0b0c0e;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111316;--surface:#181b1f;--fg:#e8e9eb;--muted:#9da2ab;--line:#2a2e34;--accent:#7aa2f7;--accent-fg:#0d1320;--pick:#1b2436;--ok:#4cc28d;--warn:#f2a93b;--stage:#0b0c0e;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.55 var(--body);-webkit-font-smoothing:antialiased}
+.count,.prow .pm,.tbl,.ops .r2,.ops .log{font-variant-numeric:tabular-nums}
+::selection{background:color-mix(in srgb,var(--accent) 30%,transparent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 96px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid var(--line)}
+.bar-in{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.bar b{font:600 15px var(--display)}
+.prog{flex:1 1 160px;min-width:120px;height:6px;border-radius:99px;background:var(--line);overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .4s cubic-bezier(.22,1,.36,1)}
+.count{font-size:13px;color:var(--muted);white-space:nowrap}
+.save{font-size:13px;white-space:nowrap;color:var(--muted)}
+.save[data-s="ok"]{color:var(--ok)}.save[data-s="err"]{color:var(--warn)}
+.chk{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap}
+header.top{padding-block:40px 8px}
+h1{font:700 32px/1.12 var(--display);letter-spacing:-.015em;margin:0 0 10px;text-wrap:balance}
+.intro{max-width:64ch;color:var(--muted);margin:0}
+.intro b{color:var(--fg);font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin:16px 0 0;font-size:13px;color:var(--muted)}
+.group{margin-top:52px}
+.group>h2{font:600 13px var(--display);color:var(--muted);margin:0 0 4px;letter-spacing:.02em}
+.q{margin-top:22px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px clamp(16px,3vw,26px) 20px;scroll-margin-top:70px}
+.q[data-answered] .qn{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.q[data-new] .qh h3::after{content:"New";font:600 11px var(--body);color:var(--warn);border:1px solid color-mix(in srgb,var(--warn) 50%,transparent);border-radius:99px;padding:1px 8px;margin-left:10px;vertical-align:3px}
+.qh{display:flex;gap:12px;align-items:flex-start}
+.qn{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:600 12.5px var(--display);border:1.5px solid var(--line);color:var(--muted);margin-top:1px;transition:background .25s,color .25s,border-color .25s}
+.qh h3{font:600 19px/1.3 var(--display);margin:2px 0 4px;letter-spacing:-.005em;text-wrap:balance}
+.ctx{margin:0;color:var(--muted);max-width:66ch}
+.ctx b{color:var(--fg);font-weight:600}
+.ctx code,.opt code{font:13px var(--mono)}
+.stage{margin:16px 0 0;background:var(--stage);border-radius:var(--r);padding:16px;color:#e7e8ea;overflow:hidden}
+.stage img{display:block;width:100%;height:auto}
+.stage .scap{color:#989ca4;font-size:12.5px;margin:10px 0 0}
+.stage .slab{color:#e7e8ea;font-size:13px;font-weight:600;margin:0 0 8px;display:flex;gap:8px;align-items:baseline}
+.stage .slab span{color:#989ca4;font:600 12px var(--mono)}
+.stage+.stage{margin-top:10px}
+.opts{display:grid;gap:8px;margin-top:16px}
+.opt{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:start;padding:11px 14px;border:1px solid var(--line);border-radius:var(--r);cursor:pointer;background:var(--surface);transition:background .15s,border-color .15s}
+.opt:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.opt input{margin:4px 0 0;accent-color:var(--accent);width:16px;height:16px}
+.opt .ot{font-weight:600;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline}
+.opt .ok{font:600 12px var(--mono);color:var(--muted)}
+.opt .rec{font-size:11.5px;font-weight:600;color:var(--ok)}
+.opt .od{grid-column:2;color:var(--muted);font-size:14px}
+.opt:has(input:checked){background:var(--pick);border-color:var(--accent)}
+.other{grid-column:2;margin-top:6px;display:none}
+.opt:has(input:checked) .other{display:block}
+textarea,input[type=text]{width:100%;font:14px/1.5 var(--body);color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;resize:vertical}
+.note{margin-top:12px}
+.note label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+.note textarea{min-height:42px}
+.src{font-size:12.5px;color:var(--muted);margin:10px 0 0}
+.src a{color:inherit}
+body.hide-done .q[data-answered]{display:none}
+/* --- mini apps (Q5, Q6) --- */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px 12px}
+.app{display:grid;grid-template-columns:118px minmax(0,1fr);background:var(--bgm);color:var(--fg2);border:1px solid var(--bd);border-radius:8px;overflow:hidden;font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif}
+.sb{background:var(--sbm);border-right:1px solid var(--bd);padding:8px 6px;display:flex;flex-direction:column;gap:1px;min-width:0}
+.tm{font-weight:650;padding:2px 6px 8px;font-size:12px}
+.it{display:flex;align-items:center;gap:6px;padding:3px 6px;border-radius:5px;color:var(--mu);white-space:nowrap;overflow:hidden}
+.it.on{background:var(--el);color:var(--fg2)}
+.cnt{margin-left:auto;font-size:10px;font-weight:700;color:var(--bgm);background:var(--wait);border-radius:999px;padding:0 5px;line-height:15px;font-style:normal}
+.gh{font-size:10.5px;color:var(--mu);font-weight:600;padding:8px 6px 3px}
+.hs{font-family:var(--mono);width:13px;text-align:center;flex:none}
+.vu{display:flex;align-items:center;gap:6px;padding:2px 6px 2px 22px}
+.av{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:color-mix(in srgb,var(--fg2) 18%,var(--bgm));color:var(--fg2);font:650 9px/1 ui-sans-serif,system-ui,sans-serif;font-style:normal;flex:none}
+.av.sq{border-radius:5px;background:color-mix(in srgb,var(--ac) 32%,var(--bgm))}
+.talk .av{box-shadow:0 0 0 1.5px var(--sbm),0 0 0 3px var(--talk)}
+.mn{display:flex;flex-direction:column;min-width:0}
+.hd{display:flex;align-items:center;gap:6px;padding:0 10px;height:32px;border-bottom:1px solid var(--bd);white-space:nowrap;overflow:hidden;flex:none}
+.hd .mt{color:var(--mu);overflow:hidden;text-overflow:ellipsis}
+.msgs{padding:9px 10px;display:flex;flex-direction:column;gap:9px;flex:1}
+.msg{display:grid;grid-template-columns:18px minmax(0,1fr);gap:7px}
+.msg p{margin:0}
+.nm{font-weight:620;display:flex;gap:6px;align-items:baseline}
+.nm time{color:var(--mu);font-weight:400;font-size:10.5px}
+.tag{font-size:9.5px;font-weight:600;color:var(--mu);border:1px solid var(--bd);border-radius:4px;padding:0 4px;line-height:14px}
+.tool{color:var(--mu);font-size:11px}
+.tool code{font-family:var(--mono);color:var(--fg2)}
+.cmp{margin:0 10px 10px;border:1px solid var(--bd);border-radius:6px;padding:6px 8px;display:flex;align-items:center;gap:6px;color:var(--mu);white-space:nowrap;overflow:hidden}
+.cmp b{color:var(--fg2);font-weight:600}
+.si{width:13px;height:13px;flex:none}
+.c-work{color:var(--work)}.c-wait{color:var(--wait)}.c-done{color:var(--done)}
+.spin{animation:spin 1.2s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.term{display:none;margin:0;font:10.5px/1.45 var(--mono);background:color-mix(in srgb,var(--fg2) 5%,var(--bgm));border:1px solid var(--bd);border-radius:5px;padding:6px 8px;color:var(--fg2);white-space:pre-wrap}
+.term .okk{color:var(--done)}
+.showterm .term{display:block}
+.mlab{color:#e7e8ea;font-size:12.5px;font-weight:600;margin:0 0 6px;display:flex;gap:8px;align-items:baseline}
+.mlab span{color:#989ca4;font:600 11.5px var(--mono)}
+.mcap{color:#989ca4;font-size:12px;margin:6px 0 0}
+.sk-ur{--bgm:#16181b;--sbm:#121417;--el:#23262b;--bd:#2a2e33;--fg2:#e7e8ea;--mu:#989ca4;--ac:#7aa2f7;--work:#7aa2f7;--wait:#f2a93b;--done:#45c08a;--talk:#45c08a}
+.sk-ur.light{--bgm:#ffffff;--sbm:#f4f5f7;--el:#e6e9ee;--bd:#e1e4e8;--fg2:#16181b;--mu:#5b6069;--ac:#2f62d6;--work:#2f62d6;--wait:#b36a00;--done:#1d8a55;--talk:#1d8a55}
+.sk-ur.light .cnt{color:#fff}
+.sk-dc{--bgm:#313338;--sbm:#2b2d31;--el:#404249;--bd:#26282c;--fg2:#dbdee1;--mu:#949ba4;--ac:#5865f2;--work:#5865f2;--wait:#f0b232;--done:#23a55a;--talk:#23a55a}
+.sk-dc .app{font-size:12px}
+.sk-dc .av{width:22px;height:22px;background:#5865f2;color:#fff;font-size:10px}
+.sk-dc .av.sq{border-radius:50%;background:#23a55a}
+.sk-dc .vu .av{width:18px;height:18px}
+.sk-dc .msg{grid-template-columns:22px minmax(0,1fr);gap:10px}
+.sk-dc .msgs{gap:14px;padding:12px}
+.sk-dc .msg:first-child .nm{color:#f47b67}
+.sk-dc .tag{background:#5865f2;color:#fff;border:0}
+.sk-dc .cmp{background:#383a40;border:0;border-radius:8px;padding:8px 10px}
+.sk-dc .hd{border:0;box-shadow:0 1px 0 #1f2023}
+.sk-dc .cnt{background:#f23f43;color:#fff}
+.sk-sl{--bgm:#ffffff;--sbm:#3f0e40;--el:#1164a3;--bd:#dddddd;--fg2:#1d1c1d;--mu:#616061;--ac:#1264a3;--work:#1264a3;--wait:#e8912d;--done:#2bac76;--talk:#2bac76}
+.sk-sl .sb{border:0}
+.sk-sl .sb .it,.sk-sl .gh{color:#cfc3cf}.sk-sl .sb .it.on{color:#fff}.sk-sl .tm,.sk-sl .vu{color:#fff}
+.sk-sl .av{border-radius:4px;background:#e8912d;color:#fff;width:22px;height:22px}
+.sk-sl .vu .av{width:16px;height:16px}
+.sk-sl .av.sq{background:#611f69}
+.sk-sl .msg{grid-template-columns:22px minmax(0,1fr)}
+.sk-sl .nm{font-weight:800}
+.sk-sl .tag{background:#e8e8e8;border:0}
+.sk-sl .cnt{background:#cd2553;color:#fff}
+.sk-sl .talk .av{box-shadow:0 0 0 1.5px #3f0e40,0 0 0 3px #2bac76}
+.sk-ln{--bgm:#0f1012;--sbm:#0f1012;--el:#1c1d21;--bd:#222327;--fg2:#e2e3e6;--mu:#8a8f98;--ac:#5e6ad2;--work:#f2c94c;--wait:#f2994a;--done:#4cb782;--talk:#4cb782}
+.sk-ln .app{font-size:11px}
+.sk-ln .vc,.sk-ln .vu{display:none}
+.sk-ln .av{width:16px;height:16px;font-size:8px}
+.sk-ln .msg{grid-template-columns:16px minmax(0,1fr)}
+.sk-ln .cnt{background:none;color:var(--mu)}
+.sk-ln .tag{border:0;padding:0}
+.sk-tu{--bgm:#0a0a0a;--sbm:#0a0a0a;--el:#183018;--bd:#3a3a3a;--fg2:#d0d0d0;--mu:#7a7a7a;--ac:#5fd75f;--work:#5fd75f;--wait:#ffaf00;--done:#5fd75f;--talk:#5fd75f}
+.sk-tu .app{border-radius:2px;font:10.5px/1.45 var(--mono)}
+.sk-tu .app *{font-family:var(--mono)}
+.sk-tu .av{display:none}
+.sk-tu .msg{grid-template-columns:1fr}
+.sk-tu .nm{color:var(--ac)}.sk-tu .msg:first-child .nm{color:#5fafff}
+.sk-tu .it,.sk-tu .cmp,.sk-tu .tag{border-radius:0}
+.sk-tu .tm{color:var(--ac)}
+.sk-tu .talk{color:var(--talk)}
+.sk-tu .vu{padding-left:20px}
+.sk-tu .cnt{border-radius:0}
+/* --- Q1 table + sounds --- */
+.tbl{width:100%;border-collapse:collapse;font-size:13px;color:#e7e8ea}
+.tbl th,.tbl td{text-align:left;padding:7px 8px;border-bottom:1px solid #2a2e33;vertical-align:top}
+.tbl th{font-weight:600;font-size:12.5px;vertical-align:bottom}
+.tbl th.o,.tbl td.o{text-align:center;width:88px}
+.tbl td small{display:block;color:#989ca4;font-size:12px}
+.tbl .y{color:#45c08a;font-weight:600}.tbl .n{color:#7d828b}
+.tblwrap{overflow-x:auto}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.sbtn{font:inherit;font-size:12.5px;display:inline-flex;align-items:center;gap:7px;padding:6px 12px 6px 9px;border-radius:8px;border:1px solid #2a2e33;background:#1a1d21;color:#e7e8ea;cursor:pointer}
+.sbtn:hover{background:#23262b}
+.sbtn svg{width:11px;height:11px;color:#7aa2f7}
+/* --- Q4 brand boxes --- */
+.bx{border-radius:8px;padding:16px;display:grid;grid-template-columns:170px minmax(0,1fr);gap:16px;align-items:center;border:1px solid #2a2e33}
+.bx+.bcap{margin:7px 0 16px;color:#989ca4;font-size:12.5px}
+.wm{display:flex;align-items:center;gap:9px;white-space:nowrap}
+.run{border-radius:8px;padding:10px 12px;font-size:12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.r1{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.r1 b{font-weight:600}
+.r2{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:11.5px}
+.lit{background:#071433;color:#e9eefc;position:relative;overflow:hidden;border-color:#071433}
+.lit::before{content:"";position:absolute;inset:0;background-image:radial-gradient(1px 1px at 12% 30%,#ffffffa0 50%,transparent 51%),radial-gradient(1px 1px at 40% 74%,#ffffff80 50%,transparent 51%),radial-gradient(1.5px 1.5px at 72% 16%,#ffffffb0 50%,transparent 51%),radial-gradient(1px 1px at 90% 62%,#ffffff90 50%,transparent 51%),radial-gradient(1px 1px at 24% 86%,#ffffff70 50%,transparent 51%);pointer-events:none}
+.lit>*{position:relative}
+.lit .wm{font:700 14px/1 "Orbitron",ui-sans-serif,sans-serif;letter-spacing:.16em}
+.lit .wm svg{width:26px;height:26px;color:#ff7a1a}
+.lit .run{background:#0e2150;border:1px solid #20407f}
+.lit .pill{background:#ff7a1a;color:#071433;font-weight:700;border-radius:999px;padding:0 8px;font-size:10.5px;letter-spacing:.08em}
+.lit .r2{color:#9fb3e6;font-family:"Orbitron",ui-sans-serif,sans-serif;font-size:10px;letter-spacing:.08em}
+.ops{background:#16181b;color:#e7e8ea}
+.ops .wm{font:600 16px/1 ui-sans-serif,system-ui,sans-serif}
+.ops .wm svg{width:22px;height:22px;color:#f2a93b}
+.ops .run{background:#1d2024;border:1px solid #2a2e33}
+.ops .r2{color:#989ca4}
+.ops .mono{font-family:var(--mono);font-size:11px;color:#c9ccd1}
+.ops .st{display:inline-flex;align-items:center;gap:5px;color:#7aa2f7;font-weight:600}
+.ops .st svg{width:13px;height:13px;animation:spin 1.2s linear infinite}
+.ops .log{font-family:var(--mono);font-size:11px;color:#989ca4;border-top:1px solid #2a2e33;padding-top:6px}
+.ops .log span{color:#e7e8ea}
+.neu{background:#fff;color:#18181b;border-color:#e2e2e6}
+.neu .wm{font:600 16px/1 system-ui,sans-serif}
+.neu .wm i{width:22px;height:22px;border-radius:6px;background:#2f6fde;display:inline-block}
+.neu .run{background:#f7f7f8;border:1px solid #e2e2e6}
+.neu .pill{background:#e3ecfc;color:#1d4fb8;border-radius:999px;padding:0 8px;font-size:11px;font-weight:600}
+.neu .r2{color:#5c5c66}
+/* --- Home prototype --- */
+.proto{--bgm:#16181b;--sbm:#121417;--el:#1f2226;--bd:#2a2e33;--fg2:#e7e8ea;--mu:#989ca4;--ac:#7aa2f7;--work:#7aa2f7;--wait:#f2a93b;--done:#45c08a;
+  display:grid;grid-template-columns:168px minmax(0,1fr);background:var(--bgm);border:1px solid var(--bd);border-radius:8px;overflow:hidden;font:13px/1.45 ui-sans-serif,system-ui,-apple-system,sans-serif;color:var(--fg2);min-height:470px}
+.proto .side{background:var(--sbm);border-right:1px solid var(--bd);padding:10px 8px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.proto .side .tmn{font-weight:650;padding:2px 8px 10px}
+.pnav{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;color:var(--mu);cursor:pointer;border:0;background:none;font:inherit;text-align:left;width:100%}
+.pnav:hover{background:#1b1e22;color:var(--fg2)}
+.pnav[aria-pressed="true"]{background:var(--el);color:var(--fg2)}
+.pnav .n{margin-left:auto;font-size:11px;font-weight:700;color:#16181b;background:var(--wait);border-radius:99px;padding:0 6px;line-height:17px}
+.pnav .n[hidden]{display:none}
+.pgh{font-size:11.5px;color:var(--mu);font-weight:600;padding:12px 8px 4px}
+.pdot{width:8px;height:8px;border-radius:2px;flex:none}
+.pmain{display:flex;flex-direction:column;min-width:0}
+.ptop{display:flex;align-items:center;gap:10px;padding:0 14px;height:44px;border-bottom:1px solid var(--bd);flex-wrap:wrap}
+.ptop b{font-size:14px}
+.ptabs{display:flex;gap:2px;margin-left:6px}
+.ptab{border:0;background:none;font:inherit;font-size:12.5px;color:var(--mu);padding:4px 9px;border-radius:6px;cursor:pointer}
+.ptab[aria-pressed="true"]{background:var(--el);color:var(--fg2)}
+.ptools{margin-left:auto;display:flex;gap:6px;align-items:center}
+.pbtn{border:1px solid var(--bd);background:#1b1e22;color:var(--fg2);font:inherit;font-size:12px;padding:4px 10px;border-radius:6px;cursor:pointer;white-space:nowrap}
+.pbtn:hover{background:#23272c}
+.pbtn.pri{background:var(--ac);border-color:var(--ac);color:#0d1320;font-weight:600}
+.pbtn.pri:hover{background:#93b4f9}
+.pbtn.gh2{background:none;border-color:transparent;color:var(--mu)}
+.pbtn.gh2:hover{color:var(--fg2);background:#1f2226}
+.pbody{padding:6px 14px 16px;display:flex;flex-direction:column;gap:4px;flex:1}
+.psec{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--mu);padding:12px 2px 6px}
+.psec svg{width:13px;height:13px}
+.psec .c{font-weight:500}
+.psub{font-size:11.5px;color:var(--mu);padding:6px 4px 2px 26px}
+.prow{display:grid;grid-template-columns:16px 22px minmax(0,1fr) auto;gap:4px 10px;align-items:start;padding:9px 10px;border-radius:8px;background:#1b1e22;border:1px solid transparent}
+.prow+.prow{margin-top:4px}
+.prow[data-sec="needs"]{background:color-mix(in srgb,var(--wait) 7%,#1b1e22);border-color:color-mix(in srgb,var(--wait) 22%,transparent)}
+.prow .si2{width:14px;height:14px;margin-top:3px}
+.prow .pav{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:9.5px;font-weight:700;background:#2b2f35;color:#e7e8ea}
+.prow .pav.sq{border-radius:6px;background:#2c3a57}
+.prow .pt{min-width:0}
+.prow .pt b{font-weight:600;display:block;overflow-wrap:anywhere}
+.prow .pl{color:var(--mu);font-size:12.5px}
+.prow .pl code{font:11.5px var(--mono);color:var(--fg2);background:#121417;border:1px solid var(--bd);border-radius:4px;padding:1px 5px}
+.prow .chip{display:inline-block;font-size:11px;color:var(--mu);border:1px solid var(--bd);border-radius:99px;padding:0 7px;margin-left:6px;font-weight:500;vertical-align:1px}
+.prow .chip.unf{border-style:dashed}
+.prow .pa{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.prow .pm{font-size:11.5px;color:var(--mu);white-space:nowrap}
+.prow .runs{grid-column:3/5;display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--mu)}
+.prow .runs span{display:inline-flex;align-items:center;gap:5px}
+.prow .runs svg{width:12px;height:12px}
+.pempty{color:var(--mu);font-size:12.5px;padding:6px 4px 6px 26px}
+.pzero{margin:28px auto 8px;text-align:center;color:var(--mu);max-width:36ch}
+.pzero b{display:block;color:var(--fg2);font-size:15px;margin-bottom:4px}
+.psim{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px;font-size:12.5px;color:#989ca4}
+.psim .pbtn{font-size:12px}
+@media (max-width:620px){
+  .bar b,.chk span{display:none}.bar-in{gap:10px}
+
+  .proto{grid-template-columns:1fr}.proto .side{display:none}
+  .bx{grid-template-columns:1fr}
+  .prow{grid-template-columns:16px 22px minmax(0,1fr)}.prow .pa{grid-column:3;flex-direction:row;align-items:center;justify-content:space-between}
+  .prow .runs{grid-column:3}
+}
+@media (prefers-reduced-motion:reduce){.spin,.ops .st svg{animation:none}.prog i{transition:none}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="work" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-opacity=".28"/><path d="M8 2.5a5.5 5.5 0 0 1 5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="wait" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.25" fill="currentColor"/><path d="M8 4.8v3.9M8 11.1v.1" style="stroke:#16181b" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="done" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5.3 8.2l1.9 1.9 3.6-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="inbox" viewBox="0 0 16 16"><path d="M2.5 9h3l1 1.75h3l1-1.75h3M4.2 3.5h7.6l1.7 5.5v3.5h-11V9z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+<symbol id="vol" viewBox="0 0 16 16"><path d="M2.75 6.25h2.1L8 3.6v8.8L4.85 9.75h-2.1z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10.6 6a2.8 2.8 0 0 1 0 4M12.3 4.4a5.2 5.2 0 0 1 0 7.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+<symbol id="wheel" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.75" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="8" r="1.6" fill="currentColor"/><path d="M2.4 7.2C4.4 6.6 6.2 6.4 8 6.4s3.6.2 5.6.8M8 9.6v4.1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+<symbol id="play" viewBox="0 0 16 16"><path d="M5 3.5v9L12.5 8z" fill="currentColor"/></symbol>
+<symbol id="hash" viewBox="0 0 16 16"><path d="M6 2.5l-1.2 11M11.2 2.5l-1.2 11M3 6h10.5M2.5 10H13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></symbol>
+<symbol id="rocket" viewBox="0 0 24 24"><path d="M12 2.5c3 2.3 4.4 5.6 4.4 9.6L14.6 15H9.4l-1.8-2.9c0-4 1.4-7.3 4.4-9.6z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="9" r="1.6" fill="currentColor"/><path d="M8.3 13.2L5.5 16.5l3.2-.4M15.7 13.2l2.8 3.3-3.2-.4M10.6 17.5L12 21l1.4-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="mark" viewBox="0 0 24 24"><path d="M4.5 20h15M12 20V10.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="6" r="2.6" fill="currentColor"/></symbol>
+</defs></svg>
+
+<template id="mini"><div class="app">
+<aside class="sb">
+<div class="tm">Nuko Nova</div>
+<div class="it"><svg class="si"><use href="#inbox"/></svg>Inbox<i class="cnt">2</i></div>
+<div class="gh">Reef Runner</div>
+<div class="it"><span class="hs">#</span>reef-runner</div>
+<div class="it on"><svg class="si c-work spin"><use href="#work"/></svg>Fix double jump</div>
+<div class="it"><svg class="si c-wait"><use href="#wait"/></svg>Level 3 layout</div>
+<div class="it vc"><svg class="si"><use href="#vol"/></svg>Standup</div>
+<div class="vu talk"><i class="av">J</i>Julio</div>
+<div class="vu"><i class="av">A</i>Ana</div>
+<div class="vu"><i class="av sq">N</i>Notetaker</div>
+</aside>
+<main class="mn">
+<header class="hd"><svg class="si c-work spin"><use href="#work"/></svg><b>Fix double jump on ledges</b><span class="mt">Claude Code on build-linux</span></header>
+<div class="msgs">
+<div class="msg"><i class="av">J</i><div><p class="nm">Julio<time>10:41</time></p><p>Players can double jump after walking off a ledge. Find out why and fix it.</p></div></div>
+<div class="msg"><i class="av sq">cc</i><div><p class="nm">Claude Code<span class="tag">Harness</span><time>10:42</time></p><p class="tool">Edited <code>movement.ts</code> +9 −4</p><p>The jump counter resets when the player leaves the ground. I'll reset it only on landing.</p></div></div>
+<pre class="term">$ pnpm test movement
+<span class="okk">✓</span> no second jump after leaving a ledge
+Tests  3 passed (3)</pre>
+</div>
+<footer class="cmp"><svg class="si"><use href="#wheel"/></svg><b>You're driving</b><span>Message Claude Code</span></footer>
+</main>
+</div></template>
+
+<div class="bar"><div class="bar-in">
+  <b>Uplink Room design</b>
+  <div class="prog" aria-hidden="true"><i id="progbar"></i></div>
+  <span class="count" id="count">0 of 0 answered</span>
+  <span class="save" id="save" data-s="idle">Connecting</span>
+  <label class="chk"><input type="checkbox" id="hideDone" aria-label="Hide answered"><span>Hide answered</span></label>
+</div></div>
+
+<div class="wrap">
+<header class="top">
+  <h1>Design, UI and brand: round 1</h1>
+  <p class="intro">Pick one answer per question. Each choice saves as soon as you click, and Claude reads the saved answers straight from this page. Add a note anywhere you want to explain or change an option. The <b>Recommended</b> tag marks Claude's proposal. Colors and type in the mockups are placeholders until the brand round.</p>
+</header>
+
+<section class="group" aria-labelledby="g1"><h2 id="g1">Scope and process</h2>
+
+<article class="q" id="q01"><div class="qh"><span class="qn">1</span><div><h3>What this design phase produces</h3>
+<p class="ctx">Three possible scopes. The table shows what each makes, and the buttons play sample sound cues so "sound" is concrete.</p></div></div>
+<div class="stage"><div class="tblwrap"><table class="tbl">
+<thead><tr><th>Deliverable</th><th class="o">(a) Full</th><th class="o">(b) Brand only</th><th class="o">(c) Screens only</th></tr></thead>
+<tbody>
+<tr><td>Design brief<small>What the brand stands for, who it's for, how it should feel</small></td><td class="o y">Yes</td><td class="o y">Yes</td><td class="o n">No</td></tr>
+<tr><td>Name treatment and mark<small>Wordmark, app icon, favicon</small></td><td class="o y">Yes</td><td class="o y">Yes</td><td class="o n">No</td></tr>
+<tr><td>DESIGN.md tokens<small>Color, type, spacing, radius, motion curves, sound</small></td><td class="o y">Yes</td><td class="o">Color and type</td><td class="o n">No</td></tr>
+<tr><td>Screen prototypes in code<small>Inbox, channel with a thread, board, call, terminal, machine settings</small></td><td class="o y">Yes</td><td class="o n">No</td><td class="o">Placeholder look</td></tr>
+<tr><td>Motion and sound<small>State changes, passing the wheel, join and leave cues</small></td><td class="o y">Yes</td><td class="o n">No</td><td class="o n">No</td></tr>
+</tbody></table></div>
+<div class="btns">
+<button class="sbtn" type="button" data-s="join"><svg><use href="#play"/></svg>Someone joins a call</button>
+<button class="sbtn" type="button" data-s="leave"><svg><use href="#play"/></svg>Someone leaves</button>
+<button class="sbtn" type="button" data-s="mention"><svg><use href="#play"/></svg>You're mentioned</button>
+<button class="sbtn" type="button" data-s="wait"><svg><use href="#play"/></svg>A run needs you</button>
+<button class="sbtn" type="button" data-s="wheel"><svg><use href="#play"/></svg>You get the wheel</button>
+<button class="sbtn" type="button" data-s="settle"><svg><use href="#play"/></svg>You settle a run</button>
+</div></div>
+<div class="opts" data-q="q01"></div></article>
+
+<article class="q" id="q02"><div class="qh"><span class="qn">2</span><div><h3>Where design happens</h3>
+<p class="ctx">The animated scenes on this page are React components built with the stageshow kit, filmed to images. Designing in code means these become the start of the real Electron UI.</p></div></div>
+<div class="opts" data-q="q02"></div></article>
+
+<article class="q" id="q03"><div class="qh"><span class="qn">3</span><div><h3>How polished, how soon</h3>
+<p class="ctx">The USPTO search on "Uplink Room" hasn't been done yet (<code>research/naming.md</code>), so a public marketing site would come before the name is cleared.</p></div></div>
+<div class="opts" data-q="q03"></div></article>
+</section>
+
+<section class="group" aria-labelledby="g2"><h2 id="g2">Brand and feel</h2>
+
+<article class="q" id="q04"><div class="qh"><span class="qn">4</span><div><h3>How much mission control in the brand</h3>
+<p class="ctx">The name comes from JPL's uplink room. Here is the same run, branded three ways.</p></div></div>
+<div class="stage">
+<div class="bx lit"><div class="wm"><svg><use href="#rocket"/></svg>UPLINK ROOM</div><div class="run"><div class="r1"><span class="pill">IN ORBIT</span><b>Mission 0427: Fix double jump</b></div><div class="r2"><span>T+ 00:14:32</span><span>PILOT JULIO</span><span>STATION BUILD-LINUX</span></div></div></div>
+<p class="bcap">(a) Literal space. Tasks become missions and runs "launch" and "land", which fights the glossary.</p>
+<div class="bx ops"><div class="wm"><svg><use href="#mark"/></svg>Uplink Room</div><div class="run"><div class="r1"><span class="st"><svg><use href="#work"/></svg>Working</span><b>Fix double jump on ledges</b></div><div class="r2"><span>Claude Code</span><span class="mono">build-linux</span><span>Driver Julio</span><span>14:32 elapsed</span></div><div class="log">10:42:07 <span>Julio started the run</span><br>10:44:51 <span>Ana suggested a prompt</span></div></div></div>
+<p class="bcap">(b) Borrowed discipline. Exact times, one named driver, plain state words, a log you can trust.</p>
+<div class="bx neu"><div class="wm"><i></i>Uplink Room</div><div class="run"><div class="r1"><span class="pill">In progress</span><b>Fix double jump on ledges</b></div><div class="r2"><span>Julio</span><span>Updated 2 min ago</span></div></div></div>
+<p class="bcap" style="margin-bottom:0">(c) Ignore the origin. Looks like any project tool.</p>
+</div>
+<div class="opts" data-q="q04"></div></article>
+
+<article class="q" id="q05"><div class="qh"><span class="qn">5</span><div><h3>What it should feel like</h3>
+<p class="ctx">One screen with the same content in four reference styles and the proposed mix.</p></div></div>
+<div class="stage"><div class="grid">
+<div><p class="mlab"><span>a</span>Discord</p><div class="sk-dc stamp"></div><p class="mcap">Warm, social, strong presence, loose density.</p></div>
+<div><p class="mlab"><span>b</span>Slack</p><div class="sk-sl stamp"></div><p class="mcap">Businesslike. Loud sidebar, quiet content.</p></div>
+<div><p class="mlab"><span>c</span>Linear</p><div class="sk-ln stamp"></div><p class="mcap">Precise, dense, fast. No sense of who's around.</p></div>
+<div><p class="mlab"><span>d</span>Terminal-native</p><div class="sk-tu stamp"></div><p class="mcap">Honest for code, tiring for chat and calls.</p></div>
+</div>
+<div class="showterm" style="margin-top:16px"><p class="mlab"><span>e</span>Linear's precision with Discord's presence</p><div class="sk-ur stamp"></div><p class="mcap">Quiet chrome, dense lists, exact state icons; the speaking ring, who's in the call and who holds the wheel stay visible.</p></div>
+</div>
+<div class="opts" data-q="q05"></div></article>
+
+<article class="q" id="q06"><div class="qh"><span class="qn">6</span><div><h3>Dark or light first</h3>
+<p class="ctx">The proposed style in both themes, with terminal output in the thread.</p></div></div>
+<div class="stage showterm"><div class="grid">
+<div><p class="mlab">Dark</p><div class="sk-ur stamp"></div></div>
+<div><p class="mlab">Light</p><div class="sk-ur light stamp"></div></div>
+</div></div>
+<div class="opts" data-q="q06"></div></article>
+</section>
+
+<section class="group" aria-labelledby="g3"><h2 id="g3">Home, inbox and navigation</h2>
+
+<article class="q" id="q07" data-new><div class="qh"><span class="qn">7</span><div><h3>What the app opens to</h3>
+<p class="ctx">Your note: work by <b>Inbox Zero</b>, as T3 Code does. Everything lands in one view grouped as <b>Needs you</b>, <b>Working</b> and <b>Done</b>. You settle what's done, and projects exist without being the tree you navigate. The prototype below is option (c). Click <b>Allow once</b>, <b>Settle</b>, the project filters, <b>Mine</b> and <b>Team</b>, or the buttons under it.</p></div></div>
+<div class="stage">
+<div class="proto" id="proto">
+  <aside class="side">
+    <div class="tmn">Nuko Nova</div>
+    <button class="pnav" type="button" id="navInbox" aria-pressed="true"><svg class="si"><use href="#inbox"/></svg>Inbox<span class="n" id="navCount">2</span></button>
+    <div class="pgh">Projects</div>
+    <button class="pnav" type="button" data-proj="Reef Runner" aria-pressed="false"><span class="pdot" style="background:#7aa2f7"></span>Reef Runner</button>
+    <button class="pnav" type="button" data-proj="Website" aria-pressed="false"><span class="pdot" style="background:#45c08a"></span>Website</button>
+    <button class="pnav" type="button" data-proj="Ops" aria-pressed="false"><span class="pdot" style="background:#e58f6b"></span>Ops</button>
+    <div class="pgh">Channels</div>
+    <div class="pnav" style="cursor:default"><svg class="si"><use href="#hash"/></svg>general</div>
+    <div class="pnav" style="cursor:default"><svg class="si"><use href="#vol"/></svg>Standup</div>
+  </aside>
+  <div class="pmain">
+    <div class="ptop">
+      <b id="ptitle">Inbox</b>
+      <div class="ptabs" role="group" aria-label="Whose work"><button class="ptab" type="button" data-tab="mine" aria-pressed="true">Mine</button><button class="ptab" type="button" data-tab="team" aria-pressed="false">Team</button></div>
+      <div class="ptools"><button class="pbtn gh2" type="button" id="grp" aria-pressed="false">Group by project</button></div>
+    </div>
+    <div class="pbody" id="pbody"></div>
+  </div>
+</div>
+<div class="psim">Simulate: <button class="pbtn" type="button" id="simDone">A run finishes</button><button class="pbtn" type="button" id="simNeed">A run needs you</button><button class="pbtn" type="button" id="simReset">Reset</button><label class="chk" style="color:#989ca4"><input type="checkbox" id="snd" checked> Sound</label></div>
+</div>
+<div class="opts" data-q="q07"></div>
+<p class="src">T3 Code reference: its Sidebar V2 replaced project trees with an inbox where threads settle, snooze and auto-settle; project grouping lives on as a Labs option. Sources: <a href="https://github.com/pingdotgg/t3code/discussions/7917" target="_blank" rel="noopener">discussion #7917</a>, <a href="https://github.com/pingdotgg/t3code/discussions/16459" target="_blank" rel="noopener">#16459</a>, <a href="https://github.com/pingdotgg/t3code/issues/13630" target="_blank" rel="noopener">#13630</a>.</p>
+</article>
+
+<article class="q" id="q08" data-new><div class="qh"><span class="qn">8</span><div><h3>What to call that view</h3>
+<p class="ctx">The glossary defines <b>Inbox</b> as "the runs waiting on one person". Inbox Zero needs a name for the whole view, including Working and Done.</p></div></div>
+<div class="opts" data-q="q08"></div></article>
+
+<article class="q" id="q09" data-new><div class="qh"><span class="qn">9</span><div><h3>How finished work leaves the view</h3>
+<p class="ctx">In the prototype, Done rows wait for you to settle them, and one shows an auto-settle rule ("Settles now: PR merged"). Settled work stays findable in its project and in search.</p></div></div>
+<div class="opts" data-q="q09"></div></article>
+
+<article class="q" id="q10" data-new><div class="qh"><span class="qn">10</span><div><h3>What one row is</h3>
+<p class="ctx">In the prototype, "Fix double jump on ledges" is a task row with its two runs inside, and "Try Vite 7 on the website" is a run nobody filed into a task (an unfiled run).</p></div></div>
+<div class="opts" data-q="q10"></div></article>
+
+<article class="q" id="q11" data-new><div class="qh"><span class="qn">11</span><div><h3>Whose work the view shows</h3>
+<p class="ctx">"Mine" means tasks you own and runs you drive. The prototype's <b>Team</b> tab adds teammates' rows with their names on them.</p></div></div>
+<div class="opts" data-q="q11"></div></article>
+
+<article class="q" id="q12" data-new><div class="qh"><span class="qn">12</span><div><h3>Do projects stay required</h3>
+<p class="ctx">The glossary says a task is "a piece of work in a project". You said "it's not like we have projects, but you can have projects".</p></div></div>
+<div class="opts" data-q="q12"></div></article>
+
+<article class="q" id="q13"><div class="qh"><span class="qn">13</span><div><h3>The sidebar</h3>
+<p class="ctx">The two stills are the earlier project-first sidebars. The prototype in question 7 is the attention-first one.</p></div></div>
+<div class="stage"><p class="slab"><span>a</span>Project tree, one team per window</p><img src="media/q8-nav-a.png" alt="Sidebar grouped by project" loading="lazy"></div>
+<div class="stage"><p class="slab"><span>b</span>Team rail plus project tree</p><img src="media/q8-nav-b.png" alt="Team rail beside a project sidebar" loading="lazy"></div>
+<div class="opts" data-q="q13"></div></article>
+
+<article class="q" id="q14"><div class="qh"><span class="qn">14</span><div><h3>Platforms in scope</h3>
+<p class="ctx">A run starts waiting on Julio. The same card shows on the desktop and at phone width, and allowing it on the phone clears it on the desktop.</p></div></div>
+<div class="stage"><img src="media/q7-inbox.webp" alt="Desktop inbox and a phone showing the same waiting card" loading="lazy"></div>
+<div class="opts" data-q="q14"></div></article>
+</section>
+
+<section class="group" aria-labelledby="g4"><h2 id="g4">People, agents and state</h2>
+
+<article class="q" id="q15"><div class="qh"><span class="qn">15</span><div><h3>How agents look different from people</h3>
+<p class="ctx">Hover an agent to see who added it, then Julio passes the wheel to Ana and gets it back.</p></div></div>
+<div class="stage"><img src="media/q9-wheel.webp" alt="Members list with round people and square agents, an agent hover card, and the wheel passing" loading="lazy"></div>
+<div class="opts" data-q="q15"></div></article>
+
+<article class="q" id="q16"><div class="qh"><span class="qn">16</span><div><h3>Run states</h3>
+<p class="ctx">Codex's run turns Waiting on its own pill; a beat later the task's state and the Inbox count follow. A task shows its most urgent run, in the order Waiting, Failed, Working, Done, Stopped.</p></div></div>
+<div class="stage"><img src="media/q10-states.webp" alt="Board with runs in five states" loading="lazy"></div>
+<div class="opts" data-q="q16"></div></article>
+
+<article class="q" id="q17"><div class="qh"><span class="qn">17</span><div><h3>Claude Code's label</h3>
+<p class="ctx">The concept page tags Claude Code as "Agent". The glossary calls it a <b>harness</b>; agents are team members such as Hermes that a person adds and answers for.</p></div></div>
+<div class="opts" data-q="q17"></div></article>
+
+<article class="q" id="q18"><div class="qh"><span class="qn">18</span><div><h3>Channels per project</h3>
+<p class="ctx">The concept mock shows <code>#design</code> and <code>#build</code> under Reef Runner; the glossary says each project has exactly one channel.</p></div></div>
+<div class="opts" data-q="q18"></div></article>
+</section>
+</div>
+
+<script>
+/* ---------- questions ---------- */
+const Q = {
+ q01:[["a","Full set","Brief, mark, DESIGN.md tokens, screens in code, motion and sound.",1],["b","Brand only","Brief, mark, color and type. No screens."],["c","Screens only","Prototypes with the placeholder look."]],
+ q02:[["a","In code","HTML and React with CSS-variable tokens, as on this page.",1],["b","Figma first","Design in Figma, then rebuild in code."],["c","Claude Design or Adobe Express","Canvas tools, exported later."]],
+ q03:[["a","Product-grade app, no marketing site yet","Polish now; the site waits for the trademark search.",1],["b","Internal taste now","Fast and rough; polish when it becomes a product."],["c","Product-grade plus a marketing site","Both now."]],
+ q04:[["a","Literal space","Space imagery and mission vocabulary."],["b","Borrowed discipline","Ops-room precision, no space imagery.",1],["c","Ignore the origin","Neutral project-tool look."]],
+ q05:[["a","Discord","Warm and social."],["b","Slack","Businesslike."],["c","Linear","Precise and dense."],["d","Terminal-native","Monospace everywhere."],["e","Linear's precision with Discord's presence","Quiet chrome, visible people and state.",1]],
+ q06:[["a","Dark first","Tuned light theme second.",1],["b","Light first","Dark second."],["c","Both equal","Design every screen twice."]],
+ q07:[["a","The last place you were","Like Slack and Discord."],["b","A project board","Pick a project, see its tasks."],["c","An attention view across everything","Needs you, Working, Done. Settle what's done; projects are filters and labels.",1]],
+ q08:[["a","Inbox, with sections Needs you, Working and Done","Matches \"Inbox Zero\" and T3 Code. The glossary entry for Inbox widens to the whole view.",1],["b","Home, with Inbox as its Needs you section","Keeps today's glossary meaning of Inbox."],["c","Something else","Write the name in the box."]],
+ q09:[["a","You settle it yourself","Nothing leaves until you say so."],["b","It settles on its own","After a few idle days, or when its pull request merges."],["c","Both, plus snooze","Settle by hand, auto-settle by rule, snooze until a time or an event. As in T3 Code.",1]],
+ q10:[["a","One row per task","Its runs listed inside the row."],["b","One row per run","A task with three runs shows three rows."],["c","Task rows, plus unfiled runs as their own rows","A run with no task still shows up, marked Unfiled, and can be filed later.",1]],
+ q11:[["a","Mine only","Teammates' work only through projects and channels."],["b","Mine by default, with a Team tab","The Team tab shows everyone's runs, with whose they are.",1],["c","Everything, always","The whole team in one list."]],
+ q12:[["a","Optional","A task can belong to no project; projects group work when you want them to.",1],["b","Required","Every task belongs to a project, as the glossary says today."]],
+ q13:[["a","Project tree sidebar (still a)","Projects as the main structure."],["b","Team rail plus project tree (still b)","Discord's model."],["c","Inbox first, projects as filters","As in the question 7 prototype; a group-by-project toggle covers the tree view.",1]],
+ q14:[["a","Desktop, with the inbox card built to work at phone width","A phone app later reuses the card.",1],["b","Desktop only","Phone later needs a redesign."],["c","Desktop and a phone app now","Roughly doubles the screens to design."]],
+ q15:[["a","Yes, all four","Round people and square agents, the accountable person on every agent, a Harness tag on harness messages, the wheel on the current driver only.",1],["b","Change something","Say what in the note."]],
+ q16:[["a","Yes, these five states and that order","Working, Waiting, Done, Failed, Stopped. Each gets one color and one icon everywhere.",1],["b","Change something","Say what in the note."]],
+ q17:[["a","Follow the glossary","Claude Code is labeled Harness; fix the concept page.",1],["b","Call harnesses agents too","Change the glossary."]],
+ q18:[["a","One channel per project","Extra topics become replies or channels outside projects.",1],["b","Several channels per project","Change the glossary."]]
+};
+const IDS = Object.keys(Q);
+const state = {}; // qid -> {choice, other, note}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+for (const id of IDS){
+  const box = document.querySelector(`.opts[data-q="${id}"]`);
+  box.setAttribute('role','radiogroup');
+  box.innerHTML = Q[id].map(([k,t,d,rec])=>`<label class="opt"><input type="radio" name="${id}" value="${k}" id="${id}-${k}"><span class="ot"><span class="ok">${k}</span>${esc(t)}${rec?'<span class="rec">Recommended</span>':''}</span><span class="od">${esc(d)}</span>${t==="Something else"?`<span class="other"><input type="text" id="${id}-other" placeholder="Your name for it"></span>`:''}</label>`).join('')
+   + '';
+  box.insertAdjacentHTML('afterend', `<div class="note"><label for="${id}-note">Note for Claude (optional)</label><textarea id="${id}-note" rows="1" placeholder="Anything to add, change or ask"></textarea></div>`);
+}
+document.querySelectorAll('.stamp').forEach(e=>e.innerHTML=document.getElementById('mini').innerHTML);
+
+/* ---------- progress + save ---------- */
+const saveEl = document.getElementById('save');
+function setSave(s,t){saveEl.dataset.s=s;saveEl.textContent=t}
+function refresh(){
+  let n=0;
+  for (const id of IDS){const a=state[id];const art=document.getElementById(id);if(a&&a.choice){n++;art.setAttribute('data-answered','')}else art.removeAttribute('data-answered')}
+  document.getElementById('count').textContent=`${n} of ${IDS.length} answered`;
+  document.getElementById('progbar').style.width=(n/IDS.length*100)+'%';
+}
+function applyToForm(id){
+  const a=state[id]||{};
+  const r=a.choice?document.getElementById(`${id}-${a.choice}`):null;
+  if(r&&document.activeElement!==r) r.checked=true;
+  const nt=document.getElementById(`${id}-note`); if(nt&&document.activeElement!==nt&&a.note!=null) nt.value=a.note;
+  const ot=document.getElementById(`${id}-other`); if(ot&&document.activeElement!==ot&&a.other!=null) ot.value=a.other;
+}
+let db=null; const timers={};
+function local(){try{return JSON.parse(localStorage.getItem('urd-answers')||'{}')}catch{return{}}}
+function saveLocal(){try{localStorage.setItem('urd-answers',JSON.stringify(state))}catch{}}
+function queue(id,delay){
+  clearTimeout(timers[id]);
+  timers[id]=setTimeout(async()=>{
+    saveLocal();
+    if(!db){setSave('err','Saved in this browser only');return}
+    setSave('busy','Saving');
+    try{
+      const a=state[id]||{};
+      await db.doc('answers/'+id).set({choice:a.choice||null,other:a.other||'',note:a.note||'',question:document.querySelector(`#${id} h3`).textContent,label:a.choice?(Q[id].find(o=>o[0]===a.choice)||[])[1]||'':'',at:new Date().toISOString()});
+      setSave('ok','Saved');
+    }catch(e){setSave('err',"Couldn't save: "+(e&&e.code||'error'))}
+  },delay);
+}
+document.addEventListener('change',e=>{
+  const t=e.target; if(t.type!=='radio') return;
+  const id=t.name; state[id]={...(state[id]||{}),choice:t.value}; refresh(); queue(id,0);
+});
+document.addEventListener('input',e=>{
+  const t=e.target; const m=t.id&&t.id.match(/^(q\d\d)-(note|other)$/); if(!m) return;
+  state[m[1]]={...(state[m[1]]||{}),[m[2]]:t.value}; queue(m[1],700);
+});
+document.getElementById('hideDone').addEventListener('change',e=>document.body.classList.toggle('hide-done',e.target.checked));
+Object.assign(state,local()); IDS.forEach(applyToForm); refresh();
+(async()=>{
+  const timeout=setTimeout(()=>{if(!db)setSave('err','Saved in this browser only')},10000);
+  try{ db = window.claude ? await window.claude.use('db') : null }catch{ db=null }
+  clearTimeout(timeout);
+  if(!db){setSave('err','Saved in this browser only');return}
+  setSave('ok','Connected');
+  let firstSnap=true;
+  db.collection('answers').onSnapshot(snap=>{
+    if(firstSnap){firstSnap=false;const have=new Set(snap.docs.map(d=>d.id));for(const id of IDS){if(state[id]&&state[id].choice&&!have.has(id))queue(id,0)}}
+    const focus=(document.activeElement&&document.activeElement.id)||'';
+    for(const d of snap.docs){
+      if(focus.startsWith(d.id+'-')) continue; // don't overwrite what the viewer is typing
+      const v=d.data()||{};
+      state[d.id]={choice:v.choice||null,other:v.other||'',note:v.note||''};
+      applyToForm(d.id);
+    }
+    saveLocal();
+    refresh();
+  },err=>setSave('err',"Couldn't load answers: "+(err&&err.code||'error')));
+})();
+
+/* ---------- sound ---------- */
+let actx;
+const S={join:[[659,.14,0],[880,.24,.09]],leave:[[880,.14,0],[587,.26,.09]],mention:[[1175,.09,0],[1568,.18,.05]],wait:[[784,.16,0],[988,.16,.14],[784,.32,.28]],wheel:[[523,.1,0],[659,.1,.07],[784,.28,.14]],settle:[[988,.07,0],[740,.2,.05]]};
+function play(k){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();const t=actx.currentTime+.02;for(const [f,d,o] of S[k]){const osc=actx.createOscillator(),g=actx.createGain();osc.type='sine';osc.frequency.value=f;g.gain.setValueAtTime(0,t+o);g.gain.linearRampToValueAtTime(.14,t+o+.012);g.gain.exponentialRampToValueAtTime(.0008,t+o+d);osc.connect(g).connect(actx.destination);osc.start(t+o);osc.stop(t+o+d+.05)}}catch{}}
+document.querySelectorAll('.sbtn[data-s]').forEach(b=>b.addEventListener('click',()=>play(b.dataset.s)));
+
+/* ---------- Home prototype ---------- */
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SEED = [
+ {id:'a1',sec:'needs',who:'Codex',ag:1,title:'Level 3 layout',proj:'Reef Runner',line:'Wants to run <code>pnpm add -D tiled-map</code>',act:'Allow once',meta:'2m',mine:1},
+ {id:'a2',sec:'needs',who:'Hermes',ag:1,title:'Release 0.4.2',proj:'Ops',line:'Asks: ship to playtest-pc now, or after Ana checks it?',act:'Ship now',meta:'9m',mine:1},
+ {id:'a3',sec:'working',who:'Julio',title:'Fix double jump on ledges',proj:'Reef Runner',line:'Owner Julio',runs:[['Claude Code','build-linux','work'],['Codex','julio-mbp','work']],meta:'14m',mine:1},
+ {id:'a4',sec:'working',who:'Claude Code',ag:1,title:'Try Vite 7 on the website',proj:null,line:'Started in T3 Code on julio-mbp',meta:'3m',mine:1},
+ {id:'a5',sec:'done',who:'Grok Build',ag:1,title:'Coyote time tuning',proj:'Reef Runner',line:'Diff +38 −12, 6 tests pass',meta:'Auto-settles in 3 days',mine:1},
+ {id:'a6',sec:'done',who:'Codex',ag:1,title:'Fix footer links',proj:'Website',line:'Pull request #41 merged',meta:'Settles now: PR merged',mine:1},
+ {id:'b1',sec:'needs',who:'Diego',title:'Menu music loop',proj:'Reef Runner',line:'Claude Code is waiting on Diego',meta:'5m',mine:0},
+ {id:'b2',sec:'working',who:'Ana',title:'Pricing page copy',proj:'Website',line:'Ana is driving Codex',meta:'22m',mine:0},
+ {id:'b3',sec:'done',who:'Ana',title:'Level 2 collision fix',proj:'Reef Runner',line:'Ready for Ana to review',meta:'1h',mine:0}
+];
+const P={items:SEED.map(x=>({...x})),tab:'mine',proj:null,group:false};
+const SEC=[['needs','Needs you','wait','var(--wait)'],['working','Working','work','var(--work)'],['done','Done','done','var(--done)']];
+const pbody=document.getElementById('pbody');
+function visible(){return P.items.filter(i=>(P.tab==='team'||i.mine)&&(!P.proj||i.proj===P.proj))}
+function initials(n){return n.split(' ').map(w=>w[0]).join('').slice(0,2)}
+function rowHTML(i){
+  const ico = i.sec==='needs'?'wait':i.sec==='working'?'work':'done';
+  const col = i.sec==='needs'?'var(--wait)':i.sec==='working'?'var(--work)':'var(--done)';
+  const chip = i.proj?`<span class="chip">${esc(i.proj)}</span>`:`<span class="chip unf">Unfiled</span>`;
+  const owner = (P.tab==='team'&&!i.mine)?`<span class="chip">${esc(i.who)}'s</span>`:'';
+  let act='';
+  if(i.sec==='needs'&&i.mine) act=`<button class="pbtn pri" type="button" data-act="allow" data-id="${i.id}">${esc(i.act)}</button>`;
+  else if(i.sec==='done'&&i.mine) act=`<button class="pbtn" type="button" data-act="settle" data-id="${i.id}">Settle</button>`;
+  const runs = i.runs?`<div class="runs">${i.runs.map(r=>`<span><svg style="color:${r[2]==='wait'?'var(--wait)':'var(--work)'}" class="${r[2]==='work'?'spin':''}"><use href="#${r[2]}"/></svg>${esc(r[0])} <span style="font-family:var(--mono);font-size:11px">${esc(r[1])}</span></span>`).join('')}</div>`:'';
+  return `<div class="prow" data-id="${i.id}" data-sec="${i.sec}"><svg class="si2 ${ico==='work'?'spin':''}" style="color:${col}"><use href="#${ico}"/></svg><span class="pav ${i.ag?'sq':''}">${esc(initials(i.who))}</span><div class="pt"><b>${esc(i.title)}${chip}${owner}</b><div class="pl">${i.who&&i.ag?esc(i.who)+': ':''}${i.line}</div></div><div class="pa"><span class="pm">${esc(i.meta)}</span>${act}</div>${runs}</div>`;
+}
+function render(){
+  const first={}; if(!reduce) pbody.querySelectorAll('.prow').forEach(el=>first[el.dataset.id]=el.getBoundingClientRect());
+  const vis=visible(); let html='';
+  const needsMine=P.items.filter(i=>i.mine&&i.sec==='needs').length;
+  const nc=document.getElementById('navCount'); nc.textContent=needsMine; nc.hidden=!needsMine;
+  document.getElementById('ptitle').textContent=P.proj||'Inbox';
+  const open = vis.filter(i=>i.sec!=='working').length;
+  for(const [k,label,ico,col] of SEC){
+    const rows=vis.filter(i=>i.sec===k);
+    html+=`<div class="psec"><svg style="color:${col}" class="${ico==='work'?'spin':''}"><use href="#${ico}"/></svg>${label}<span class="c">${rows.length}</span></div>`;
+    if(!rows.length){html+=`<div class="pempty">${k==='needs'?'Nothing needs you.':k==='working'?'Nothing running.':'Nothing to settle.'}</div>`;continue}
+    if(P.group){
+      const groups=[...new Set(rows.map(r=>r.proj||'Unfiled'))];
+      for(const g of groups){html+=`<div class="psub">${esc(g)}</div>`+rows.filter(r=>(r.proj||'Unfiled')===g).map(rowHTML).join('')}
+    } else html+=rows.map(rowHTML).join('');
+  }
+  if(!open) html=`<div class="pzero"><b>Inbox zero</b>Nothing needs you and nothing is waiting to be settled. ${vis.filter(i=>i.sec==='working').length} running in the background.</div>`+html;
+  pbody.innerHTML=html;
+  if(!reduce) pbody.querySelectorAll('.prow').forEach(el=>{
+    const f=first[el.dataset.id]; const l=el.getBoundingClientRect();
+    if(f){const dy=f.top-l.top; if(Math.abs(dy)>1) el.animate([{transform:`translateY(${dy}px)`},{transform:'none'}],{duration:420,easing:'cubic-bezier(.22,1,.36,1)'})}
+    else el.animate([{opacity:0,transform:'translateY(-6px)'},{opacity:1,transform:'none'}],{duration:320,easing:'cubic-bezier(.22,1,.36,1)'});
+  });
+}
+function sound(k){if(document.getElementById('snd').checked) play(k)}
+async function exitRow(id){
+  const el=pbody.querySelector(`.prow[data-id="${id}"]`);
+  if(el&&!reduce){const h=el.offsetHeight;await el.animate([{opacity:1,height:h+'px'},{opacity:0,height:'0px',paddingTop:'0px',paddingBottom:'0px',marginTop:'0px'}],{duration:260,easing:'cubic-bezier(.4,0,.2,1)',fill:'forwards'}).finished}
+}
+pbody.addEventListener('click',async e=>{
+  const b=e.target.closest('button[data-act]'); if(!b) return;
+  const it=P.items.find(i=>i.id===b.dataset.id); if(!it) return;
+  if(b.dataset.act==='allow'){it.sec='working';it.line=it.who==='Hermes'?'Shipping 0.4.2 to playtest-pc':'Allowed once. Running the command';it.meta='now';sound('wheel');render()}
+  else {sound('settle');await exitRow(it.id);P.items=P.items.filter(i=>i.id!==it.id);render()}
+});
+document.getElementById('simDone').addEventListener('click',()=>{const it=P.items.find(i=>i.mine&&i.sec==='working');if(!it)return;it.sec='done';it.runs=null;it.line=it.title.startsWith('Fix double')?'Both runs finished. Diff +9 −4, tests pass':'Finished. Ready to review';it.meta='Auto-settles in 3 days';sound('mention');render()});
+document.getElementById('simNeed').addEventListener('click',()=>{const it=P.items.find(i=>i.mine&&i.sec==='working');if(!it)return;it.sec='needs';it.runs=null;it.line='Asks: keep the old jump test or replace it?';it.act='Reply';it.meta='now';sound('wait');render()});
+document.getElementById('simReset').addEventListener('click',()=>{P.items=SEED.map(x=>({...x}));render()});
+document.querySelectorAll('.ptab').forEach(b=>b.addEventListener('click',()=>{P.tab=b.dataset.tab;document.querySelectorAll('.ptab').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));render()}));
+document.querySelectorAll('.pnav[data-proj]').forEach(b=>b.addEventListener('click',()=>{P.proj=P.proj===b.dataset.proj?null:b.dataset.proj;document.querySelectorAll('.pnav[data-proj]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.proj===P.proj)));document.getElementById('navInbox').setAttribute('aria-pressed',String(!P.proj));render()}));
+document.getElementById('navInbox').addEventListener('click',()=>{P.proj=null;document.querySelectorAll('.pnav[data-proj]').forEach(x=>x.setAttribute('aria-pressed','false'));document.getElementById('navInbox').setAttribute('aria-pressed','true');render()});
+document.getElementById('grp').addEventListener('click',e=>{P.group=!P.group;e.currentTarget.setAttribute('aria-pressed',String(P.group));e.currentTarget.textContent=P.group?'Ungroup':'Group by project';render()});
+render();
+</script>

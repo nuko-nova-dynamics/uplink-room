@@ -1,0 +1,16 @@
+{
+  "image_path": "research/design/mascot/r4-agents.png",
+  "prompt": "Image 1 is the style and character reference. Draw ONLY the six small agent characters from the bottom row of Image 1, in the same order (sage rounded square with headphones, blue pill with a wrench, coral soft triangle with round glasses, lilac circle with a pencil, sand tall rounded rectangle with a clipboard, golden rounded hexagon with a little lantern). Keep each one's exact shape, color, accessory, flat soft-shaded vector style and eye style. Show all six facing the viewer, standing upright, same height, evenly spaced in one horizontal row with generous gaps so none touch. Isolated characters only, no scene, no floor, no text, no letters, no logos.",
+  "revised_prompt": "Image 1 is the style and character reference. Draw ONLY the six small agent characters from the bottom row of Image 1, in the same order (sage rounded square with headphones, blue pill with a wrench, coral soft triangle with round glasses, lilac circle with a pencil, sand tall rounded rectangle with a clipboard, golden rounded hexagon with a little lantern). Keep each one's exact shape, color, accessory, flat soft-shaded vector style and eye style. Show all six facing the viewer, standing upright, same height, evenly spaced in one horizontal row with generous gaps so none touch. Isolated characters only, no scene, no floor, no text, no letters, no logos. Output the isolated subject on a genuinely transparent background with actual alpha.",
+  "size": "1536x1024",
+  "quality": "high",
+  "format": "png",
+  "is_transparent": true,
+  "input_image": "research/design/mascot/r3-a-flat.png",
+  "requested_image_model": null,
+  "ts": "2026-11-02T03:29:48Z",
+  "resolved_quality": "medium",
+  "image_model": "gpt-image-2-codex",
+  "resolved_background": "transparent",
+  "transparency_mode": "native"
+}

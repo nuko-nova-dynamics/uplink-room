@@ -1,0 +1,135 @@
+# electron-builder 26 (https://www.electron.build/v26/). `pnpm dist` builds the
+# renderer for release (.env.release) and then packages it for this OS.
+appId: com.nukonovadynamics.uplinkroom
+productName: Uplink Room
+copyright: Copyright © 2026 Nuko Nova Dynamics LLC
+artifactName: Uplink-Room-${version}-${os}-${arch}.${ext}
+
+directories:
+  output: dist
+  buildResources: build
+
+# Main, preload and renderer are bundled into out/. The only node_modules
+# packed is node-pty (package.json `dependencies`), which the bridge needs.
+files:
+  - out/**
+  - "!out/**/*.map"
+  - package.json
+# node-pty's native files, its macOS spawn-helper and its Windows conpty
+# helpers must be real files on disk, outside the asar archive.
+asarUnpack:
+  - "**/node_modules/node-pty/**"
+# node-pty uses Node-API, so the prebuilt (macOS, Windows) or locally built
+# (Linux) binary works in Electron as is. Rebuilding would also break builds
+# for another OS.
+npmRebuild: false
+
+# The launchers (resources/bin): `uplink-bridge`, which runs the bundled bridge, and `uplink` and
+# `uplink-mcp`, which run the bundled Room API command-line tool and MCP server (ADR 0042); the
+# `uplink` skill that `uplink skills install` copies into Claude Code and Codex; and the
+# notification icon (Link, waiting) that Windows and Linux banners show.
+extraResources:
+  - from: resources/bin
+    to: bin
+  - from: ../../packages/room-client/skills
+    to: skills
+  - from: build/notification.png
+    to: notification.png
+
+# Clerk's OAuth sign-in returns to uplink-room://app/ (see src/main/index.ts).
+protocols:
+  - name: Uplink Room
+    schemes: [uplink-room]
+
+# The update feed (src/main/updates.ts, docs/releases.md). electron-builder writes it into the app
+# as app-update.yml and names the feed files after the channel: latest.yml, latest-mac.yml and
+# latest-linux.yml for 0.2.0, test*.yml for 0.2.1-test.1. `${channel}` is the version's prerelease
+# tag, or "latest", so each channel is its own folder. uplinkroom.com rewrites
+# /updates/<channel>/<file> to the Vercel Blob store (apps/site/next.config.ts), so the store can
+# change without breaking installed apps. scripts/release.ts uploads a build's files there.
+publish:
+  provider: generic
+  url: https://uplinkroom.com/updates/${channel}
+  # Differential downloads ask for one byte range per request; multi-range responses through the
+  # site's rewrite to Blob aren't something we rely on.
+  useMultipleRangeRequest: false
+
+# Run-as-Node stays on: the bridge runs on the app's own binary that way.
+electronFuses:
+  runAsNode: true
+  enableCookieEncryption: true
+  enableNodeOptionsEnvironmentVariable: false
+  enableNodeCliInspectArguments: false
+  enableEmbeddedAsarIntegrityValidation: true
+  onlyLoadAppFromAsar: true
+
+mac:
+  category: public.app-category.developer-tools
+  icon: build/icon.png
+  hardenedRuntime: true
+  # Calls (spec #5): the microphone and camera, and a shared screen's sound
+  # (system-audio loopback needs NSAudioCaptureUsageDescription on macOS 14.2+).
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+  extendInfo:
+    # Electron's docs: a notification's extra buttons (Allow beside Open) show on macOS only when
+    # the app is signed and its alert style is "alert". People can still change it in System Settings.
+    NSUserNotificationAlertStyle: alert
+    NSMicrophoneUsageDescription: Uplink Room uses the microphone in calls.
+    NSCameraUsageDescription: Uplink Room uses the camera in calls when you turn it on.
+    NSAudioCaptureUsageDescription: Uplink Room shares a screen's sound when you choose to in a call.
+  # Signs with the Developer ID in the keychain (or CSC_LINK in CI) and
+  # notarizes when APPLE_API_KEY, APPLE_API_KEY_ID and APPLE_API_ISSUER (or the
+  # Apple ID or keychain-profile variables) are set. Without them it skips
+  # notarization with a warning. The dmg is for first installs; updates download
+  # the zip, which Squirrel.Mac needs, and work only in a signed app.
+  # Apple silicon only, since 0.2.22: macOS Tahoe is the last macOS for Intel Macs, and an Intel
+  # build doubled packaging, signing and notarization. An Intel install from before keeps running,
+  # but its update check finds no Intel zip and reports ERR_UPDATER_ZIP_FILE_NOT_FOUND.
+  target:
+    - target: dmg
+      arch: [arm64]
+    - target: zip
+      arch: [arm64]
+
+dmg:
+  artifactName: Uplink-Room-${version}-mac-${arch}.${ext}
+
+win:
+  icon: build/icon.png
+  target:
+    - target: nsis
+      arch: [x64, arm64]
+
+nsis:
+  # One installer per architecture, not an extra one holding both.
+  buildUniversalInstaller: false
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  artifactName: Uplink-Room-Setup-${version}-${arch}.${ext}
+
+linux:
+  icon: build/icon.png
+  executableName: uplink-room
+  category: Development
+  synopsis: The team layer above your agents' tools
+  maintainer: Nuko Nova Dynamics LLC
+  vendor: Nuko Nova Dynamics LLC
+  # The AppImage updates itself; a .deb install gets new versions from uplinkroom.com/download.
+  target:
+    - target: AppImage
+      arch: [x64]
+    - target: deb
+      arch: [x64]
+
+# The .deb links /usr/bin/uplink-bridge to the app's launcher when it installs, and removes that link
+# when it goes. Each script is electron-builder's default template with one block added at the end
+# (src/main/debScripts.test.ts keeps them in step). An AppImage can't do this: its path changes on
+# every launch.
+deb:
+  afterInstall: build/linux/after-install.sh
+  afterRemove: build/linux/after-remove.sh
+
+# Signs, notarizes and staples each .dmg too (electron-builder notarizes only the app).
+afterAllArtifactBuild: scripts/notarize-dmg.cjs

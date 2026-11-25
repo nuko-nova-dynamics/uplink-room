@@ -1,0 +1,19 @@
+{
+  "ask": "inbox-link-conversation",
+  "question": "composer",
+  "prompt": "Should the box say who your message goes to?",
+  "level": 3,
+  "revision": 2,
+  "choice": [
+    "target-chip"
+  ],
+  "values": {},
+  "notes": "",
+  "options": {
+    "target-chip": {
+      "label": "Target chip",
+      "detail": "“Link” by default. Pick New thread to skip Link's decision, or an agent to hand it the task directly.",
+      "folder": "target-chip/"
+    }
+  }
+}

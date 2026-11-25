@@ -1,0 +1,2 @@
+# The uplink skill ships inside the app on every platform; keep its line endings LF everywhere.
+packages/room-client/skills/** text eol=lf

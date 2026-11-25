@@ -1,0 +1,49 @@
+{
+  "id": "01-standup",
+  "kind": "Daily standup: round-robin updates, one blocker, a moved deadline, and a task nobody owns yet",
+  "channel": "reef-runner",
+  "language": "en",
+  "people": [
+    { "id": "julio", "name": "Julio Díaz", "voice": "Reed (English (US))" },
+    { "id": "ana", "name": "Ana García", "voice": "Samantha" },
+    { "id": "ben", "name": "Ben Okafor", "voice": "Daniel", "gain": 0.7 },
+    { "id": "priya", "name": "Priya Raman", "voice": "Tara" }
+  ],
+  "turns": [
+    { "speaker": "julio", "text": "Morning, everyone. Let's keep this one short, I know Priya has a hard stop at ten. Ana, do you want to start?" },
+    { "speaker": "ana", "text": "Sure. Yesterday I finished the controller remapping screen, and it's merged. Today I'm starting on the save slot bug, the one where saving to the third slot overwrites the first one. No blockers for me." },
+    { "speaker": "julio", "text": "Great. Ben?" },
+    { "speaker": "ben", "text": "Yesterday I spent most of the day on the Android build. It fails at the signing step, because the keystore password was rotated last week and the build machine still has the old one. So I'm blocked on that. Priya, I think you have the new password?" },
+    { "speaker": "priya", "text": "I do. I'll put it in the team vault right after this call. Please don't paste it in the chat, it ended up in a screenshot last time." },
+    { "speaker": "ben", "text": "Fair. Vault it is." },
+    { "speaker": "julio", "text": "Ben, once you have it, can you get a build to the testers by Thursday?" },
+    { "speaker": "ben", "text": "Yes. Thursday works. I'll send the build to the testers by Thursday." },
+    { "speaker": "julio", "text": "Thanks. Priya?" },
+    { "speaker": "priya", "text": "Yesterday I finished the leaderboard API, it's on staging now. Today I'm adding rate limiting to the leaderboard endpoint, because the beta players found they can submit scores in a loop. That will take me until tomorrow, so the leaderboard is about a day late." },
+    { "speaker": "julio", "text": "OK. That brings up the feature freeze. We said Wednesday, but with the leaderboard a day late I'd rather move the freeze to Friday. Does anyone object?" },
+    { "speaker": "ana", "text": "No, Friday is better for me too." },
+    { "speaker": "ben", "text": "Fine by me." },
+    { "speaker": "priya", "text": "Friday, yes please." },
+    { "speaker": "julio", "text": "Then the freeze is Friday. As for me, I'm updating the release checklist for 1.4 today, and I'll share it in the channel when it's done." },
+    { "speaker": "ana", "text": "One more thing. The crash reports from the beta still go to my personal email, and I'm the only one who sees them. Could we send them to this channel instead?" },
+    { "speaker": "julio", "text": "Yes, good point, they should come here. I don't know who has access to the crash reporting settings, though. Let's find out who can do it and pick someone later." },
+    { "speaker": "priya", "text": "I think it's in the Firebase console, but I don't have admin there." },
+    { "speaker": "julio", "text": "OK. Someone with admin will do it. That's it, thanks everyone." }
+  ],
+  "truth": {
+    "decisions": [
+      { "text": "The feature freeze moves from Wednesday to Friday, because the leaderboard is a day late.", "match": [["freeze"], ["friday"]] },
+      { "text": "The new keystore password is shared through the team vault, not the chat.", "match": [["vault"]], "optional": true }
+    ],
+    "tasks": [
+      { "title": "Put the new keystore password in the team vault for Ben", "owner": "priya", "match": [["keystore", "password", "vault"]] },
+      { "title": "Send the Android build to the testers by Thursday", "owner": "ben", "match": [["build"], ["tester"]] },
+      { "title": "Update the 1.4 release checklist and share it in the channel", "owner": "julio", "match": [["checklist"]] },
+      { "title": "Send the beta crash reports to the channel instead of Ana's email", "owner": null, "match": [["crash"]] },
+      { "title": "Fix the save slot bug (third slot overwrites the first)", "owner": "ana", "optional": true, "match": [["save slot", "slot"]] },
+      { "title": "Add rate limiting to the leaderboard endpoint", "owner": "priya", "optional": true, "match": [["rate limit"]] }
+    ],
+    "notTasks": [],
+    "notes": "Nobody took the crash reports task: Julio said to pick someone later, so it has no owner. The save slot bug and the rate limiting are work already in progress, reported as status; proposing them is fine but not required."
+  }
+}

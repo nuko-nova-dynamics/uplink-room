@@ -1,0 +1,93 @@
+[
+  {
+    "rule": "css/no-important",
+    "file": "apps/desktop/src/renderer/views/work.css",
+    "selector": ".terminal-main .xterm .xterm-viewport",
+    "property": "background-color",
+    "reason": "Override xterm's inline viewport background so the terminal matches its host."
+  },
+  {
+    "rule": "css/no-important",
+    "file": "apps/desktop/src/renderer/views/work.css",
+    "selector": ".terminal-main .xterm .xterm-scrollable-element>.scrollbar>.slider",
+    "property": "background",
+    "reason": "Override xterm's injected scrollbar paint on the dark terminal surface."
+  },
+  {
+    "rule": "css/no-important",
+    "file": "apps/desktop/src/renderer/views/work.css",
+    "selector": ".terminal-main .xterm .xterm-scrollable-element>.scrollbar.vertical",
+    "property": "width",
+    "reason": "Override xterm's injected scrollbar width with the existing terminal width."
+  },
+  {
+    "rule": "css/focus-visible",
+    "file": "apps/desktop/src/renderer/styles.css",
+    "selector": ".onboarding",
+    "property": "outline",
+    "reason": "The onboarding dialog takes focus when it opens so Tab starts inside it; its controls show their own rings, and a ring around the whole dialog would be noise."
+  },
+  {
+    "rule": "css/focus-visible",
+    "file": "apps/desktop/src/renderer/styles.css",
+    "selector": ".doc-prose",
+    "property": "outline",
+    "reason": "The document editor is a text surface: its caret shows focus, and a ring around the whole page while typing would be noise."
+  },
+  {
+    "rule": "css/focus-visible",
+    "file": "apps/desktop/src/renderer/styles.css",
+    "selector": ".doc-prose:focus-visible",
+    "property": "outline",
+    "reason": "The document editor is a text surface: its caret shows focus, and a ring around the whole page while typing would be noise."
+  },
+  {
+    "rule": "css/focus-visible",
+    "file": "apps/desktop/src/renderer/styles.css",
+    "selector": ".sidebar-search input",
+    "property": "outline",
+    "reason": "The search box shows focus on its container with .sidebar-search:focus-within; a second ring inside it would double the indicator."
+  },
+  {
+    "rule": "css/focus-visible",
+    "file": "apps/desktop/src/renderer/styles.css",
+    "selector": ".composer-box .textarea:focus-visible",
+    "property": "outline",
+    "reason": "The composer shows focus on its box with .composer-box:focus-within; a second ring inside it would double the indicator."
+  },
+  {
+    "rule": "css/focus-visible",
+    "file": "apps/desktop/src/renderer/styles.css",
+    "selector": ".inline-editor .textarea:focus-visible",
+    "property": "outline",
+    "reason": "The inline editor shows focus on its text box with .inline-editor .mention-input:focus-within .textarea; a second ring would double the indicator."
+  },
+  {
+    "rule": "css/focus-visible",
+    "file": "apps/desktop/src/renderer/look.css",
+    "selector": ":root body .drawer:focus-visible",
+    "property": "outline",
+    "reason": "A task or run drawer takes focus itself when it opens so Tab starts inside it (useDrawerFocus); its controls show their own rings, and a ring around the whole drawer would read as a stray border."
+  },
+  {
+    "rule": "css/focus-visible",
+    "file": "apps/desktop/src/renderer/look.css",
+    "selector": ":root body .settings-dialog:focus-visible",
+    "property": "outline",
+    "reason": "The Settings dialog takes focus itself when it opens so Escape and Tab start inside it (SettingsOverlay in Shell.tsx); its controls show their own rings, and a ring around the whole dialog would read as a stray border."
+  },
+  {
+    "rule": "css/focus-visible",
+    "file": "apps/desktop/src/renderer/look.css",
+    "selector": ".inbox-ask",
+    "property": "outline",
+    "reason": "The Inbox's message box shows focus on the composer pill around it (.inbox-composer .composer-box:focus-within), as the chat composer does; a ring on the bare input inside the pill would draw a box within a box."
+  },
+  {
+    "rule": "css/focus-visible",
+    "file": "apps/desktop/src/renderer/look.css",
+    "selector": ":root body .search-head .search-box input",
+    "property": "outline",
+    "reason": "The search box shows focus on the pill around it (.search-head .search-box:focus-within); a ring on the bare input inside the pill would draw a box within a box."
+  }
+]

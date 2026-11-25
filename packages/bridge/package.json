@@ -1,0 +1,44 @@
+{
+  "name": "@uplink-room/bridge",
+  "license": "MIT",
+  "version": "0.2.27",
+  "private": true,
+  "description": "The Uplink Room bridge: shares this machine's terminals with the room.",
+  "type": "module",
+  "exports": {
+    "./config": "./src/config.ts",
+    "./platform": "./src/platform.ts",
+    "./scrub": "./src/telemetry/scrub.ts",
+    "./t3-share-spec": "./src/t3ShareSpec.ts"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "bin": {
+    "uplink-bridge": "./dist/uplink-bridge.mjs"
+  },
+  "files": [
+    "dist/uplink-bridge.mjs"
+  ],
+  "scripts": {
+    "build": "node scripts/build.ts",
+    "start": "node src/bin.ts",
+    "test": "vitest run",
+    "typecheck": "tsc-rs -p tsconfig.json"
+  },
+  "dependencies": {
+    "node-pty": "1.1.0"
+  },
+  "devDependencies": {
+    "@sentry/bundler-plugins": "11.10.0",
+    "@sentry/node": "11.10.0",
+    "@types/ws": "8.18.2",
+    "@uplink-room/protocol": "workspace:*",
+    "@vercel/blob": "2.8.2",
+    "convex": "1.49.0",
+    "rolldown": "1.2.16",
+    "smol-toml": "1.9.1",
+    "vitest": "5.0.5",
+    "ws": "8.21.0"
+  }
+}

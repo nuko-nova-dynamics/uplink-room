@@ -1,0 +1,26 @@
+#!/bin/sh
+# Runs the Room API's command-line tool (packages/room-client) that ships inside Uplink Room, using the app's
+# own Electron binary as Node, so this computer needs nothing else installed (ADR 0042).
+# The app puts it on PATH with uplink-bridge: Add to PATH in Settings links /usr/local/bin/uplink
+# here on macOS, the .deb links /usr/bin/uplink, and on Windows this folder goes first in the
+# user's PATH. UPLINK_BIN_DIR tells the tool where its launchers are, for the hooks `uplink join`
+# writes and the MCP server `uplink mcp install` adds.
+set -e
+script="$0"
+# Follow symlinks to the real file inside the app.
+while [ -L "$script" ]; do
+  target=$(readlink "$script")
+  case "$target" in
+    /*) script="$target" ;;
+    *) script="$(dirname "$script")/$target" ;;
+  esac
+done
+bin=$(cd "$(dirname "$script")" && pwd -P)
+resources=$(dirname "$bin")
+case "$(uname)" in
+  Darwin) electron="$resources/../MacOS/Uplink Room" ;;
+  # Git Bash on Windows, which is where Claude Code runs its hooks.
+  MINGW* | MSYS* | CYGWIN*) electron="$resources/../Uplink Room.exe" ;;
+  *) electron="$resources/../uplink-room" ;;
+esac
+UPLINK_BIN_DIR="$bin" ELECTRON_RUN_AS_NODE=1 exec "$electron" "$resources/app.asar/out/main/uplink.js" "$@"

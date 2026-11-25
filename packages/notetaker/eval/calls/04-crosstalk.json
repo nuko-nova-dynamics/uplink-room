@@ -1,0 +1,73 @@
+{
+  "id": "04-crosstalk",
+  "kind": "Crosstalk and interruptions: people finish each other's sentences, correct themselves, and talk over each other",
+  "channel": "reef-runner",
+  "language": "en",
+  "people": [
+    { "id": "julio", "name": "Julio Díaz", "voice": "Reed (English (US))" },
+    { "id": "ana", "name": "Ana García", "voice": "Samantha" },
+    { "id": "ben", "name": "Ben Okafor", "voice": "Daniel" },
+    { "id": "bea", "name": "Bea", "voice": "Karen", "gain": 0.65 }
+  ],
+  "turns": [
+    { "speaker": "julio", "text": "Can everyone hear me? My headphones were acting up earlier." },
+    { "speaker": "bea", "text": "Loud and clear." },
+    { "speaker": "ana", "text": "Yep.", "during": 0.4 },
+    { "speaker": "ben", "text": "All good here." },
+    { "speaker": "julio", "text": "OK, the trailer. I want it finished before the Steam page goes live, which is on the" },
+    { "speaker": "ben", "text": "The 12th.", "overlapMs": 250 },
+    { "speaker": "julio", "text": "The 12th, right. So we have about ten days." },
+    { "speaker": "bea", "text": "I can cut the trailer. I did the last one, and I still have the project files. But I need new gameplay footage, because the old footage shows the old interface." },
+    { "speaker": "ana", "text": "Yeah.", "during": 0.6 },
+    { "speaker": "ana", "text": "I can record the footage on Thursday. No, wait, Wednesday. I'm out on Thursday." },
+    { "speaker": "bea", "text": "Wednesday is perfect, that gives me the weekend." },
+    { "speaker": "ben", "text": "And the music? Do we actually have the rights to use the" },
+    { "speaker": "julio", "text": "We do. We bought the license in March, and it covers trailers. I checked.", "overlapMs": 400 },
+    { "speaker": "ben", "text": "Oh, great. OK." },
+    { "speaker": "bea", "text": "How long should it be? The last one was ninety seconds, and people dropped off after" },
+    { "speaker": "ana", "text": "Way too long.", "overlapMs": 500 },
+    { "speaker": "bea", "text": "after forty. Yeah." },
+    { "speaker": "julio", "text": "Let's do sixty seconds. Sixty, not ninety." },
+    { "speaker": "bea", "text": "Sixty is better for Steam anyway." },
+    { "speaker": "ben", "text": "Do we need subtitles on it? Steam plays trailers without sound." },
+    { "speaker": "julio", "text": "Yes, burn the subtitles in." },
+    { "speaker": "bea", "text": "OK, I'll add them." },
+    { "speaker": "ben", "text": "Mm-hmm.", "during": 0.5 },
+    { "speaker": "ben", "text": "I'll write the copy for the Steam page. The description, the feature list, all of it." },
+    { "speaker": "julio", "text": "Can you send it to me by Monday, so I can read it before it goes in?" },
+    { "speaker": "ben", "text": "Monday, yes." },
+    { "speaker": "julio", "text": "Bea, could you also make a fifteen second version for social media?" },
+    { "speaker": "bea", "text": "I could, but that's a lot for one week, with the main trailer. Can the short one wait until after launch?" },
+    { "speaker": "julio", "text": "Fine, after launch. The sixty second one comes first." },
+    { "speaker": "ana", "text": "Do we want the new character in the trailer? Because if we do, I need to" },
+    { "speaker": "julio", "text": "Yes. Definitely.", "overlapMs": 300 },
+    { "speaker": "ana", "text": "OK, then I'll make sure the footage has the new character in the first level." },
+    { "speaker": "bea", "text": "Nice.", "during": 0.5 },
+    { "speaker": "bea", "text": "And Ana, please send me the raw files, not the compressed ones." },
+    { "speaker": "ana", "text": "Sure, raw files." },
+    { "speaker": "ben", "text": "Last thing. The capsule image for Steam, is that done?" },
+    { "speaker": "bea", "text": "That's done. I uploaded it on Monday." },
+    { "speaker": "ben", "text": "Oh, I missed that. Great." },
+    { "speaker": "julio", "text": "OK, I think we're good. Thanks, everyone." }
+  ],
+  "truth": {
+    "decisions": [
+      { "text": "The trailer is sixty seconds, not ninety.", "match": [["60", "sixty"]] },
+      { "text": "The trailer is finished before the Steam page goes live on the 12th.", "match": [["12th", "12", "twelfth"]] },
+      { "text": "The new character is in the trailer.", "match": [["character"]], "optional": true },
+      { "text": "The fifteen second social cut waits until after launch.", "match": [["15", "fifteen", "social"]], "optional": true },
+      { "text": "The trailer has burned-in subtitles, because Steam plays trailers without sound.", "match": [["subtitle"]], "optional": true }
+    ],
+    "tasks": [
+      { "title": "Cut the sixty second launch trailer, with burned-in subtitles, before the 12th", "owner": "bea", "match": [["trailer"]], "exclude": [["15", "fifteen", "social"]] },
+      { "title": "Record new gameplay footage on Wednesday, with the new character in the first level, and send Bea the raw files", "owner": "ana", "match": [["footage", "record"]] },
+      { "title": "Write the Steam page copy and send it to Julio by Monday", "owner": "ben", "match": [["copy", "feature list", "description", "write"], ["steam", "store"]], "exclude": [["capsule"]] },
+      { "title": "Make a fifteen second cut for social media after launch", "owner": "bea", "optional": true, "match": [["15", "fifteen", "social"]] }
+    ],
+    "notTasks": [
+      { "text": "The music license (already bought in March, covers trailers)", "match": [["license", "rights", "music"]] },
+      { "text": "The Steam capsule image (already uploaded on Monday)", "match": [["capsule"]] }
+    ],
+    "notes": "Ana corrected herself: the footage is recorded on Wednesday, not Thursday. Julio interrupted Ben to say the music license is already bought, so there's nothing to do about the music."
+  }
+}

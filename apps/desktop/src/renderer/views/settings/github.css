@@ -1,0 +1,105 @@
+:root .settings-pane:has(> .github-view) {
+  padding: 0 var(--edge) var(--space-40) var(--gutter);
+}
+.github-view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-18);
+}
+.github-view .pane-title {
+  height: var(--head-h);
+  flex: none;
+}
+.gh-group .label,
+.gh-group .hint,
+.gh-name .muted,
+.gh-who .sub,
+.gh-state,
+.gh-finish p.sub {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+.gh-actions {
+  gap: var(--space-8);
+}
+.gh-account > .gh-avatar {
+  align-self: start;
+  margin-top: calc(-1 * var(--space-6));
+}
+.gh-avatar {
+  border: 0;
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--line);
+}
+.gh-actions .btn[aria-busy="true"] {
+  opacity: 1;
+  cursor: default;
+}
+.github-disconnect {
+  max-width: 56ch;
+}
+:root .dialog:has(.github-disconnect) {
+  height: auto;
+}
+.dialog:has(.github-disconnect) .dialog-foot {
+  padding-block: var(--space-12);
+  border-top: 0;
+  box-shadow: inset 0 var(--border-hairline) 0 var(--line);
+}
+
+.gh-avatar {
+  position: relative;
+  overflow: hidden;
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+.gh-avatar img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  visibility: hidden;
+}
+.gh-avatar img.loaded {
+  visibility: visible;
+}
+.gh-who,
+.gh-who .sub,
+.gh-name {
+  overflow-wrap: anywhere;
+}
+.gh-name {
+  flex-wrap: wrap;
+}
+.gh-disconnect-error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-8);
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.gh-disconnect-error svg {
+  flex: none;
+  margin-top: var(--space-2);
+}
+.dialog:has(.github-disconnect) .btn[aria-busy="true"] {
+  opacity: 1;
+  cursor: default;
+}
+
+:root .dialog:has(.github-disconnect) .dialog-head .icon-btn {
+  width: var(--ctl-small);
+  height: var(--ctl-small);
+  border-radius: var(--radius-small);
+}
+
+:root .gh-actions .btn:disabled {
+  opacity: 1;
+  color: var(--muted);
+  border-style: dashed;
+  border-color: var(--line);
+}
+/* Reserve the loading label's width so Cancel never moves during the request. */
+:root .dialog:has(.github-disconnect) .dialog-foot .btn.primary {
+  min-width: 10em;
+}

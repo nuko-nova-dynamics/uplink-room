@@ -1,0 +1,1294 @@
+[
+ {
+  "udfPath": "teams:mine",
+  "args": {},
+  "value": [
+   {
+    "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+    "name": "Harbor Labs",
+    "role": "admin",
+    "teamId": "mx7aryh625bh16jd5rq5s2mrpx8hk6rc"
+   }
+  ]
+ },
+ {
+  "udfPath": "teams:members",
+  "args": {},
+  "value": [
+   {
+    "kind": "person",
+    "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+    "name": "Rosa Vega",
+    "role": "admin"
+   },
+   {
+    "kind": "person",
+    "memberId": "k57ftepxysqtwe96wzs2v674t18hjacf",
+    "name": "Ana Ruiz",
+    "role": "member"
+   }
+  ]
+ },
+ {
+  "udfPath": "calls:live",
+  "args": {},
+  "value": []
+ },
+ {
+  "udfPath": "channels:list",
+  "args": {},
+  "value": [
+   {
+    "callQuality": "standard",
+    "callQualityChosen": "standard",
+    "channelId": "jn72r8yysqvvh1rv8j55ma9wjx8hkf7p",
+    "kind": "channel",
+    "lastMessageAt": 1793767584997,
+    "lastSeq": 2,
+    "mentions": 0,
+    "name": "general",
+    "notify": "mentions",
+    "readSeq": 2,
+    "unread": 0
+   },
+   {
+    "callQuality": "standard",
+    "callQualityChosen": "standard",
+    "channelId": "jn768mhcqyc8c7tpv0vfcbnv0n8hjww9",
+    "kind": "channel",
+    "lastSeq": 0,
+    "mentions": 0,
+    "name": "tide-tables",
+    "notify": "mentions",
+    "projectId": "ks75q4hryk3kaf9ycvs0txnj3s8hk4be",
+    "readSeq": 0,
+    "unread": 0
+   },
+   {
+    "callQuality": "standard",
+    "callQualityChosen": "standard",
+    "channelId": "jn7f1jqvma7w6ane5q22eweznx8hksbg",
+    "createdBy": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+    "kind": "private",
+    "lastMessageAt": 1793767585897,
+    "lastSeq": 1,
+    "members": [
+     {
+      "kind": "person",
+      "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+      "name": "Rosa Vega"
+     },
+     {
+      "kind": "person",
+      "memberId": "k57ftepxysqtwe96wzs2v674t18hjacf",
+      "name": "Ana Ruiz"
+     }
+    ],
+    "mentions": 0,
+    "name": "design-crit",
+    "notify": "mentions",
+    "readSeq": 1,
+    "unread": 0
+   },
+   {
+    "callQuality": "standard",
+    "callQualityChosen": "standard",
+    "channelId": "jn76qg83gfmsz5hdzf9r99jggh8hj5h4",
+    "kind": "direct",
+    "lastMessageAt": 1793767587463,
+    "lastSeq": 2,
+    "members": [
+     {
+      "kind": "person",
+      "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+      "name": "Rosa Vega"
+     },
+     {
+      "kind": "person",
+      "memberId": "k57ftepxysqtwe96wzs2v674t18hjacf",
+      "name": "Ana Ruiz"
+     }
+    ],
+    "mentions": 0,
+    "name": "Ana Ruiz",
+    "notify": "all",
+    "readSeq": 2,
+    "unread": 0
+   }
+  ]
+ },
+ {
+  "udfPath": "inbox:get",
+  "args": {
+   "view": "mine"
+  },
+  "value": {
+   "done": [],
+   "needsYou": [],
+   "working": [
+    {
+     "changedAt": 1793767637172,
+     "owner": {
+      "kind": "person",
+      "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+      "name": "Rosa Vega"
+     },
+     "private": false,
+     "projectId": "ks75q4hryk3kaf9ycvs0txnj3s8hk4be",
+     "runs": [
+      {
+       "driver": {
+        "kind": "person",
+        "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+        "name": "Rosa Vega"
+       },
+       "harness": "claude-code",
+       "machine": {
+        "machineId": "k17bv5za6pv1krn8m1r35pkq1x8hkfmx",
+        "name": "studio-mini"
+       },
+       "private": false,
+       "repo": "harbor-labs/tide-tables",
+       "runId": "kx7d6dft5q005xtntgh606khnn8hj8hb",
+       "startedAt": 1793767637087.1626,
+       "state": "working",
+       "stateChangedAt": 1793767637172,
+       "taskId": "m570mcgjb9exh1xs4qd86ttxd98hjanv",
+       "terminalId": "mh73r259xe7yg67j5j1jnkyq9x8hk0ss"
+      }
+     ],
+     "state": "working",
+     "taskId": "m570mcgjb9exh1xs4qd86ttxd98hjanv",
+     "title": "Export tide tables as CSV",
+     "unfiled": false,
+     "waitingOn": []
+    }
+   ]
+  }
+ },
+ {
+  "udfPath": "projects:list",
+  "args": {},
+  "value": [
+   {
+    "channelId": "jn768mhcqyc8c7tpv0vfcbnv0n8hjww9",
+    "name": "Tide Tables",
+    "projectId": "ks75q4hryk3kaf9ycvs0txnj3s8hk4be",
+    "repos": [
+     "harbor-labs/tide-tables"
+    ]
+   }
+  ]
+ },
+ {
+  "udfPath": "inbox:get",
+  "args": {},
+  "value": {
+   "done": [],
+   "needsYou": [],
+   "working": [
+    {
+     "changedAt": 1793767637172,
+     "owner": {
+      "kind": "person",
+      "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+      "name": "Rosa Vega"
+     },
+     "private": false,
+     "projectId": "ks75q4hryk3kaf9ycvs0txnj3s8hk4be",
+     "runs": [
+      {
+       "driver": {
+        "kind": "person",
+        "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+        "name": "Rosa Vega"
+       },
+       "harness": "claude-code",
+       "machine": {
+        "machineId": "k17bv5za6pv1krn8m1r35pkq1x8hkfmx",
+        "name": "studio-mini"
+       },
+       "private": false,
+       "repo": "harbor-labs/tide-tables",
+       "runId": "kx7d6dft5q005xtntgh606khnn8hj8hb",
+       "startedAt": 1793767637087.1626,
+       "state": "working",
+       "stateChangedAt": 1793767637172,
+       "taskId": "m570mcgjb9exh1xs4qd86ttxd98hjanv",
+       "terminalId": "mh73r259xe7yg67j5j1jnkyq9x8hk0ss"
+      }
+     ],
+     "state": "working",
+     "taskId": "m570mcgjb9exh1xs4qd86ttxd98hjanv",
+     "title": "Export tide tables as CSV",
+     "unfiled": false,
+     "waitingOn": []
+    }
+   ]
+  }
+ },
+ {
+  "udfPath": "terminals:list",
+  "args": {},
+  "value": [
+   {
+    "access": "drive",
+    "driver": {
+     "kind": "person",
+     "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+     "name": "Rosa Vega"
+    },
+    "machine": {
+     "machineId": "k17bv5za6pv1krn8m1r35pkq1x8hkfmx",
+     "mostOpenAccess": "open",
+     "name": "studio-mini"
+    },
+    "outputSeq": 1,
+    "repo": "harbor-labs/tide-tables",
+    "runId": "kx7d6dft5q005xtntgh606khnn8hj8hb",
+    "startedBy": {
+     "kind": "person",
+     "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+     "name": "Rosa Vega"
+    },
+    "status": "live",
+    "terminalId": "mh73r259xe7yg67j5j1jnkyq9x8hk0ss",
+    "title": "Export tide tables as CSV",
+    "tool": "claude-code",
+    "usesSlot": false,
+    "watching": [
+     {
+      "kind": "person",
+      "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+      "name": "Rosa Vega"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "udfPath": "messages:addressed",
+  "args": {},
+  "value": [
+   {
+    "at": 1793767586733,
+    "author": {
+     "kind": "person",
+     "memberId": "k57ftepxysqtwe96wzs2v674t18hjacf",
+     "name": "Ana Ruiz"
+    },
+    "channel": {
+     "kind": "direct",
+     "label": "Ana Ruiz"
+    },
+    "channelId": "jn76qg83gfmsz5hdzf9r99jggh8hj5h4",
+    "messageId": "k979v9w7rkabmbaz6ffaakjcqs8hj29b",
+    "preview": "Can you join the call in #general at 3?",
+    "reason": "direct",
+    "seq": 1
+   }
+  ]
+ },
+ {
+  "udfPath": "runs:unfiled",
+  "args": {},
+  "value": []
+ },
+ {
+  "udfPath": "teams:roster",
+  "args": {},
+  "value": [
+   {
+    "kind": "harness",
+    "name": "claude-code",
+    "runs": 1,
+    "state": "working",
+    "line": "Export tide tables as CSV"
+   }
+  ]
+ },
+ {
+  "udfPath": "teams:settings",
+  "args": {},
+  "value": {
+   "callQualityLimit": "none",
+   "linkPreviews": "on",
+   "name": "Harbor Labs"
+  }
+ },
+ {
+  "udfPath": "messages:addressed",
+  "args": {
+   "after": 1,
+   "limit": 50
+  },
+  "value": []
+ },
+ {
+  "udfPath": "tasks:get",
+  "args": {
+   "taskId": "m570mcgjb9exh1xs4qd86ttxd98hjanv"
+  },
+  "value": {
+   "column": "working",
+   "owner": {
+    "kind": "person",
+    "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+    "name": "Rosa Vega"
+   },
+   "private": false,
+   "projectId": "ks75q4hryk3kaf9ycvs0txnj3s8hk4be",
+   "runs": [
+    {
+     "driver": {
+      "kind": "person",
+      "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+      "name": "Rosa Vega"
+     },
+     "harness": "claude-code",
+     "machine": {
+      "machineId": "k17bv5za6pv1krn8m1r35pkq1x8hkfmx",
+      "name": "studio-mini"
+     },
+     "private": false,
+     "repo": "harbor-labs/tide-tables",
+     "runId": "kx7d6dft5q005xtntgh606khnn8hj8hb",
+     "startedAt": 1793767637087.1626,
+     "state": "working",
+     "stateChangedAt": 1793767637172,
+     "taskId": "m570mcgjb9exh1xs4qd86ttxd98hjanv",
+     "terminalId": "mh73r259xe7yg67j5j1jnkyq9x8hk0ss"
+    }
+   ],
+   "state": "working",
+   "taskId": "m570mcgjb9exh1xs4qd86ttxd98hjanv",
+   "title": "Export tide tables as CSV",
+   "waitingOn": []
+  }
+ },
+ {
+  "udfPath": "browsers:list",
+  "args": {
+   "channelId": "jn72r8yysqvvh1rv8j55ma9wjx8hkf7p"
+  },
+  "value": []
+ },
+ {
+  "udfPath": "tasks:board",
+  "args": {},
+  "value": [
+   {
+    "column": "working",
+    "owner": {
+     "kind": "person",
+     "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+     "name": "Rosa Vega"
+    },
+    "private": false,
+    "projectId": "ks75q4hryk3kaf9ycvs0txnj3s8hk4be",
+    "runs": [
+     {
+      "driver": {
+       "kind": "person",
+       "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+       "name": "Rosa Vega"
+      },
+      "harness": "claude-code",
+      "machine": {
+       "machineId": "k17bv5za6pv1krn8m1r35pkq1x8hkfmx",
+       "name": "studio-mini"
+      },
+      "private": false,
+      "repo": "harbor-labs/tide-tables",
+      "runId": "kx7d6dft5q005xtntgh606khnn8hj8hb",
+      "startedAt": 1793767637087.1626,
+      "state": "working",
+      "stateChangedAt": 1793767637172,
+      "taskId": "m570mcgjb9exh1xs4qd86ttxd98hjanv",
+      "terminalId": "mh73r259xe7yg67j5j1jnkyq9x8hk0ss"
+     }
+    ],
+    "state": "working",
+    "taskId": "m570mcgjb9exh1xs4qd86ttxd98hjanv",
+    "title": "Export tide tables as CSV",
+    "waitingOn": []
+   }
+  ]
+ },
+ {
+  "udfPath": "calls:list",
+  "args": {
+   "channelId": "jn72r8yysqvvh1rv8j55ma9wjx8hkf7p",
+   "limit": 30
+  },
+  "value": [
+   {
+    "callId": "p979gtwj6str98cnncafwd7v6n8hk182",
+    "channelId": "jn72r8yysqvvh1rv8j55ma9wjx8hkf7p",
+    "endedAt": 1793769032553,
+    "everyone": [
+     {
+      "kind": "person",
+      "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+      "name": "Rosa Vega"
+     }
+    ],
+    "hasTranscript": false,
+    "participants": [],
+    "proposals": [],
+    "startedAt": 1793769028030,
+    "startedBy": {
+     "kind": "person",
+     "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+     "name": "Rosa Vega"
+    },
+    "transcriptKeptUntil": 1796361032553
+   },
+   {
+    "callId": "p9721htez0akv300sv1g2w61t58hj2bq",
+    "channelId": "jn72r8yysqvvh1rv8j55ma9wjx8hkf7p",
+    "endedAt": 1793767832888,
+    "everyone": [
+     {
+      "kind": "person",
+      "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+      "name": "Rosa Vega"
+     }
+    ],
+    "hasTranscript": false,
+    "participants": [],
+    "proposals": [],
+    "startedAt": 1793767824578,
+    "startedBy": {
+     "kind": "person",
+     "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+     "name": "Rosa Vega"
+    },
+    "transcriptKeptUntil": 1796359832888
+   }
+  ]
+ },
+ {
+  "udfPath": "messages:list",
+  "args": {
+   "channelId": "jn72r8yysqvvh1rv8j55ma9wjx8hkf7p",
+   "paginationOpts": {
+    "numItems": 50,
+    "cursor": null
+   }
+  },
+  "value": {
+   "continueCursor": "07f718b5f03cfed434e37400a6083a7dd7effa2dbd2b560cbe0d21d8a3791de1e403ed6eda1ac6116821fa51805c7ac50b485062020c63083754b3a3ac6f40041382c6bc953dfe",
+   "isDone": true,
+   "page": [
+    {
+     "attachments": [],
+     "author": {
+      "kind": "person",
+      "memberId": "k57ftepxysqtwe96wzs2v674t18hjacf",
+      "name": "Ana Ruiz"
+     },
+     "body": "Looking now. I'll leave notes on the board.",
+     "channelId": "jn72r8yysqvvh1rv8j55ma9wjx8hkf7p",
+     "format": "markdown",
+     "mentionedAgents": [],
+     "mentionedMembers": [],
+     "mentionedRuns": [],
+     "mentionedTasks": [],
+     "mentionsEveryone": false,
+     "mentionsMe": false,
+     "messageId": "k970rmpzzfr1gpczee3xwvwd7x8hk79e",
+     "postedAt": 1793767584997.1375,
+     "previews": [],
+     "previewsHidden": false,
+     "reactions": [],
+     "replyCount": 0,
+     "seq": 2
+    },
+    {
+     "attachments": [],
+     "author": {
+      "kind": "person",
+      "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+      "name": "Rosa Vega"
+     },
+     "body": "Morning. The tide table export is ready for review.",
+     "channelId": "jn72r8yysqvvh1rv8j55ma9wjx8hkf7p",
+     "format": "markdown",
+     "mentionedAgents": [],
+     "mentionedMembers": [],
+     "mentionedRuns": [],
+     "mentionedTasks": [],
+     "mentionsEveryone": false,
+     "mentionsMe": false,
+     "messageId": "k97bwmn0x3pz1a5y6f0ks9b2q18hj76d",
+     "postedAt": 1793767584265.3481,
+     "previews": [],
+     "previewsHidden": false,
+     "reactions": [],
+     "replyCount": 0,
+     "seq": 1
+    }
+   ],
+   "pageStatus": null,
+   "splitCursor": null
+  }
+ },
+ {
+  "udfPath": "channels:pins",
+  "args": {
+   "channelId": "jn72r8yysqvvh1rv8j55ma9wjx8hkf7p"
+  },
+  "value": []
+ },
+ {
+  "udfPath": "browsers:settings",
+  "args": {},
+  "value": {
+   "configured": true,
+   "envVar": "HYPERBEAM_API_KEY",
+   "idleMinutes": 10,
+   "limits": {
+    "idleMinutes": {
+     "max": 60,
+     "min": 1
+    },
+    "longestMinutes": {
+     "max": 480,
+     "min": 10
+    },
+    "maxLive": {
+     "max": 10,
+     "min": 1
+    }
+   },
+   "live": 0,
+   "longestMinutes": 120,
+   "maxLive": 2,
+   "minutesThisMonth": 0,
+   "mostOpenAccess": "open"
+  }
+ },
+ {
+  "udfPath": "savedLogins:list",
+  "args": {
+   "channelId": "jn72r8yysqvvh1rv8j55ma9wjx8hkf7p"
+  },
+  "value": []
+ },
+ {
+  "udfPath": "browsers:list",
+  "args": {
+   "channelId": "jn7f1jqvma7w6ane5q22eweznx8hksbg"
+  },
+  "value": []
+ },
+ {
+  "udfPath": "calls:list",
+  "args": {
+   "channelId": "jn7f1jqvma7w6ane5q22eweznx8hksbg",
+   "limit": 30
+  },
+  "value": []
+ },
+ {
+  "udfPath": "messages:list",
+  "args": {
+   "channelId": "jn7f1jqvma7w6ane5q22eweznx8hksbg",
+   "paginationOpts": {
+    "numItems": 50,
+    "cursor": null
+   }
+  },
+  "value": {
+   "continueCursor": "075d07c5cb269ca1cf325819d1c398a180a783dcd38a8bde9c17b8f9fc842b3455e84c639586560fd8c8eb468a8f4beeb89048fdf6ca575ca7869392b23b9039b5acb9716a2c0a",
+   "isDone": true,
+   "page": [
+    {
+     "attachments": [],
+     "author": {
+      "kind": "person",
+      "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+      "name": "Rosa Vega"
+     },
+     "body": "Header spacing pass, round two. Screenshots coming.",
+     "channelId": "jn7f1jqvma7w6ane5q22eweznx8hksbg",
+     "format": "markdown",
+     "mentionedAgents": [],
+     "mentionedMembers": [],
+     "mentionedRuns": [],
+     "mentionedTasks": [],
+     "mentionsEveryone": false,
+     "mentionsMe": false,
+     "messageId": "k9788gr9p86xfqdpgfff78jwa98hkvxz",
+     "postedAt": 1793767585897.6558,
+     "previews": [],
+     "previewsHidden": false,
+     "reactions": [],
+     "replyCount": 0,
+     "seq": 1
+    }
+   ],
+   "pageStatus": null,
+   "splitCursor": null
+  }
+ },
+ {
+  "udfPath": "channels:members",
+  "args": {
+   "channelId": "jn7f1jqvma7w6ane5q22eweznx8hksbg"
+  },
+  "value": {
+   "canRemove": true,
+   "creatorId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+   "kind": "private",
+   "members": [
+    {
+     "addedAt": 1793767583622,
+     "kind": "person",
+     "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+     "name": "Rosa Vega"
+    },
+    {
+     "addedAt": 1793767583622,
+     "addedBy": {
+      "kind": "person",
+      "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+      "name": "Rosa Vega"
+     },
+     "kind": "person",
+     "memberId": "k57ftepxysqtwe96wzs2v674t18hjacf",
+     "name": "Ana Ruiz"
+    }
+   ]
+  }
+ },
+ {
+  "udfPath": "browsers:list",
+  "args": {
+   "channelId": "jn768mhcqyc8c7tpv0vfcbnv0n8hjww9"
+  },
+  "value": []
+ },
+ {
+  "udfPath": "calls:list",
+  "args": {
+   "channelId": "jn768mhcqyc8c7tpv0vfcbnv0n8hjww9",
+   "limit": 30
+  },
+  "value": []
+ },
+ {
+  "udfPath": "messages:list",
+  "args": {
+   "channelId": "jn768mhcqyc8c7tpv0vfcbnv0n8hjww9",
+   "paginationOpts": {
+    "numItems": 50,
+    "cursor": null
+   }
+  },
+  "value": {
+   "continueCursor": "072d72fc58b12a4bea41497b9f42b4c0e8175db5a2769c0567ea7fd87850c05f94574ddbff375981641134b8482e7ac4c6a4a082c591afb791f2681ed71a14bf3a36825e484a3f",
+   "isDone": true,
+   "page": [],
+   "pageStatus": null,
+   "splitCursor": null
+  }
+ },
+ {
+  "udfPath": "browsers:list",
+  "args": {
+   "channelId": "jn76qg83gfmsz5hdzf9r99jggh8hj5h4"
+  },
+  "value": []
+ },
+ {
+  "udfPath": "calls:list",
+  "args": {
+   "channelId": "jn76qg83gfmsz5hdzf9r99jggh8hj5h4",
+   "limit": 30
+  },
+  "value": []
+ },
+ {
+  "udfPath": "messages:list",
+  "args": {
+   "channelId": "jn76qg83gfmsz5hdzf9r99jggh8hj5h4",
+   "paginationOpts": {
+    "numItems": 50,
+    "cursor": null
+   }
+  },
+  "value": {
+   "continueCursor": "0754241d9b910441e68581332535a94d5de00b663be410fcdba469077a22ec02ef93eda3077a704582c8c3e5f0ab2bfe27c37daa8fdaa301728d64496f4b6bffe8ddf14cd15429",
+   "isDone": true,
+   "page": [
+    {
+     "attachments": [],
+     "author": {
+      "kind": "person",
+      "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+      "name": "Rosa Vega"
+     },
+     "body": "Yes, see you there.",
+     "channelId": "jn76qg83gfmsz5hdzf9r99jggh8hj5h4",
+     "format": "markdown",
+     "mentionedAgents": [],
+     "mentionedMembers": [],
+     "mentionedRuns": [],
+     "mentionedTasks": [],
+     "mentionsEveryone": false,
+     "mentionsMe": false,
+     "messageId": "k979w8h2wsjbwhhxec2wf2jdrh8hk6bq",
+     "postedAt": 1793767587463.4153,
+     "previews": [],
+     "previewsHidden": false,
+     "reactions": [],
+     "replyCount": 0,
+     "seq": 2
+    },
+    {
+     "attachments": [],
+     "author": {
+      "kind": "person",
+      "memberId": "k57ftepxysqtwe96wzs2v674t18hjacf",
+      "name": "Ana Ruiz"
+     },
+     "body": "Can you join the call in #general at 3?",
+     "channelId": "jn76qg83gfmsz5hdzf9r99jggh8hj5h4",
+     "format": "markdown",
+     "mentionedAgents": [],
+     "mentionedMembers": [],
+     "mentionedRuns": [],
+     "mentionedTasks": [],
+     "mentionsEveryone": false,
+     "mentionsMe": false,
+     "messageId": "k979v9w7rkabmbaz6ffaakjcqs8hj29b",
+     "postedAt": 1793767586733.2388,
+     "previews": [],
+     "previewsHidden": false,
+     "reactions": [],
+     "replyCount": 0,
+     "seq": 1
+    }
+   ],
+   "pageStatus": null,
+   "splitCursor": null
+  }
+ },
+ {
+  "udfPath": "tasks:board",
+  "args": {
+   "projectId": "ks75q4hryk3kaf9ycvs0txnj3s8hk4be"
+  },
+  "value": [
+   {
+    "column": "working",
+    "owner": {
+     "kind": "person",
+     "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+     "name": "Rosa Vega"
+    },
+    "private": false,
+    "projectId": "ks75q4hryk3kaf9ycvs0txnj3s8hk4be",
+    "runs": [
+     {
+      "driver": {
+       "kind": "person",
+       "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+       "name": "Rosa Vega"
+      },
+      "harness": "claude-code",
+      "machine": {
+       "machineId": "k17bv5za6pv1krn8m1r35pkq1x8hkfmx",
+       "name": "studio-mini"
+      },
+      "private": false,
+      "repo": "harbor-labs/tide-tables",
+      "runId": "kx7d6dft5q005xtntgh606khnn8hj8hb",
+      "startedAt": 1793767637087.1626,
+      "state": "working",
+      "stateChangedAt": 1793767637172,
+      "taskId": "m570mcgjb9exh1xs4qd86ttxd98hjanv",
+      "terminalId": "mh73r259xe7yg67j5j1jnkyq9x8hk0ss"
+     }
+    ],
+    "state": "working",
+    "taskId": "m570mcgjb9exh1xs4qd86ttxd98hjanv",
+    "title": "Export tide tables as CSV",
+    "waitingOn": []
+   }
+  ]
+ },
+ {
+  "udfPath": "files:list",
+  "args": {
+   "projectId": "ks75q4hryk3kaf9ycvs0txnj3s8hk4be"
+  },
+  "value": []
+ },
+ {
+  "udfPath": "messages:search",
+  "args": {
+   "cursor": null,
+   "query": "tide"
+  },
+  "value": {
+   "cursor": null,
+   "isDone": true,
+   "results": [
+    {
+     "attachments": [],
+     "author": {
+      "kind": "person",
+      "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+      "name": "Rosa Vega"
+     },
+     "body": "Morning. The tide table export is ready for review.",
+     "channel": {
+      "channelId": "jn72r8yysqvvh1rv8j55ma9wjx8hkf7p",
+      "kind": "channel",
+      "name": "general"
+     },
+     "channelId": "jn72r8yysqvvh1rv8j55ma9wjx8hkf7p",
+     "format": "markdown",
+     "mentionedAgents": [],
+     "mentionedMembers": [],
+     "mentionedRuns": [],
+     "mentionedTasks": [],
+     "mentionsEveryone": false,
+     "mentionsMe": false,
+     "messageId": "k97bwmn0x3pz1a5y6f0ks9b2q18hj76d",
+     "postedAt": 1793767584265.3481,
+     "previews": [],
+     "previewsHidden": false,
+     "reactions": [],
+     "replyCount": 0,
+     "seq": 1
+    }
+   ]
+  }
+ },
+ {
+  "udfPath": "machines:list",
+  "args": {},
+  "value": [
+   {
+    "belongsTo": {
+     "kind": "person",
+     "member": {
+      "kind": "person",
+      "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+      "name": "Rosa Vega"
+     }
+    },
+    "hostname": "studio-mini.local",
+    "lastSeenAt": 1793767634803,
+    "limits": {
+     "longestProfileMs": 604800000,
+     "mostOpenAccess": "open",
+     "slots": 4
+    },
+    "liveTerminals": 1,
+    "longestProfileMs": 604800000,
+    "machineId": "k17bv5za6pv1krn8m1r35pkq1x8hkfmx",
+    "mostOpenAccess": "open",
+    "name": "studio-mini",
+    "online": false,
+    "os": "macOS arm64",
+    "sharingStopped": false,
+    "slots": 3,
+    "slotsInUse": 0,
+    "tools": [
+     "tmux",
+     "claude-code"
+    ]
+   }
+  ]
+ },
+ {
+  "udfPath": "spaces:found",
+  "args": {
+   "machineId": "k17bv5za6pv1krn8m1r35pkq1x8hkfmx"
+  },
+  "value": [
+   {
+    "kind": "vm",
+    "name": "Review Mac",
+    "os": "macos",
+    "shared": true,
+    "spaceId": "q975phzkwz4hwbcqj9cv0scb658hjnbs",
+    "spaceRef": "space-review-mac",
+    "state": "running"
+   }
+  ]
+ },
+ {
+  "udfPath": "spaces:list",
+  "args": {
+   "machineId": "k17bv5za6pv1krn8m1r35pkq1x8hkfmx"
+  },
+  "value": [
+   {
+    "access": "watch",
+    "driver": {
+     "kind": "person",
+     "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+     "name": "Rosa Vega"
+    },
+    "kind": "vm",
+    "machine": {
+     "machineId": "k17bv5za6pv1krn8m1r35pkq1x8hkfmx",
+     "mostOpenAccess": "open",
+     "name": "studio-mini"
+    },
+    "name": "Review Mac",
+    "os": "macos",
+    "power": "running",
+    "sharedBy": {
+     "kind": "person",
+     "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+     "name": "Rosa Vega"
+    },
+    "spaceId": "q975phzkwz4hwbcqj9cv0scb658hjnbs",
+    "spaceRef": "space-review-mac",
+    "status": "live",
+    "watching": []
+   }
+  ]
+ },
+ {
+  "udfPath": "terminals:list",
+  "args": {
+   "machineId": "k17bv5za6pv1krn8m1r35pkq1x8hkfmx"
+  },
+  "value": [
+   {
+    "access": "drive",
+    "driver": {
+     "kind": "person",
+     "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+     "name": "Rosa Vega"
+    },
+    "machine": {
+     "machineId": "k17bv5za6pv1krn8m1r35pkq1x8hkfmx",
+     "mostOpenAccess": "open",
+     "name": "studio-mini"
+    },
+    "outputSeq": 1,
+    "repo": "harbor-labs/tide-tables",
+    "runId": "kx7d6dft5q005xtntgh606khnn8hj8hb",
+    "startedBy": {
+     "kind": "person",
+     "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+     "name": "Rosa Vega"
+    },
+    "status": "live",
+    "terminalId": "mh73r259xe7yg67j5j1jnkyq9x8hk0ss",
+    "title": "Export tide tables as CSV",
+    "tool": "claude-code",
+    "usesSlot": false,
+    "watching": [
+     {
+      "kind": "person",
+      "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+      "name": "Rosa Vega"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "udfPath": "profiles:onMachine",
+  "args": {
+   "machineId": "k17bv5za6pv1krn8m1r35pkq1x8hkfmx"
+  },
+  "value": []
+ },
+ {
+  "udfPath": "profiles:mine",
+  "args": {},
+  "value": []
+ },
+ {
+  "udfPath": "invites:list",
+  "args": {},
+  "value": []
+ },
+ {
+  "udfPath": "activity:list",
+  "args": {
+   "limit": 100
+  },
+  "value": [
+   {
+    "action": "space.shared",
+    "actor": {
+     "kind": "person",
+     "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+     "name": "Rosa Vega"
+    },
+    "at": 1793767638861,
+    "details": {
+     "access": "watch",
+     "machineId": "k17bv5za6pv1krn8m1r35pkq1x8hkfmx",
+     "spaceRef": "space-review-mac"
+    },
+    "target": "q975phzkwz4hwbcqj9cv0scb658hjnbs"
+   },
+   {
+    "action": "terminal.started",
+    "actor": {
+     "kind": "person",
+     "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+     "name": "Rosa Vega"
+    },
+    "at": 1793767637087,
+    "details": {
+     "access": "drive",
+     "machineId": "k17bv5za6pv1krn8m1r35pkq1x8hkfmx",
+     "usesSlot": false
+    },
+    "target": "mh73r259xe7yg67j5j1jnkyq9x8hk0ss"
+   },
+   {
+    "action": "machine.settings_changed",
+    "actor": {
+     "kind": "person",
+     "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+     "name": "Rosa Vega"
+    },
+    "at": 1793767636056,
+    "details": {
+     "mostOpenAccess": "open",
+     "slots": 3
+    },
+    "target": "k17bv5za6pv1krn8m1r35pkq1x8hkfmx"
+   },
+   {
+    "action": "machine.unlinked",
+    "actor": {
+     "kind": "person",
+     "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+     "name": "Rosa Vega"
+    },
+    "at": 1793767630344,
+    "target": "k175x4ftg1jepgpgthg8j618g18hk5yz"
+   },
+   {
+    "action": "channel.private_created",
+    "actor": {
+     "kind": "person",
+     "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+     "name": "Rosa Vega"
+    },
+    "at": 1793767583622,
+    "details": {
+     "channelId": "jn7f1jqvma7w6ane5q22eweznx8hksbg",
+     "memberIds": [
+      "k57ftepxysqtwe96wzs2v674t18hjacf"
+     ]
+    },
+    "target": "jn7f1jqvma7w6ane5q22eweznx8hksbg"
+   },
+   {
+    "action": "project.created",
+    "actor": {
+     "kind": "person",
+     "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+     "name": "Rosa Vega"
+    },
+    "at": 1793767582433,
+    "details": {
+     "name": "Tide Tables"
+    },
+    "target": "ks75q4hryk3kaf9ycvs0txnj3s8hk4be"
+   },
+   {
+    "action": "invite.created",
+    "actor": {
+     "kind": "person",
+     "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+     "name": "Rosa Vega"
+    },
+    "at": 1793767578791,
+    "details": {
+     "role": "member"
+    },
+    "target": "jx71p1b0vmjzg2bkf7nhrr6g958hjfmw"
+   }
+  ]
+ },
+ {
+  "udfPath": "terminals:output",
+  "args": {
+   "afterSeq": 0,
+   "terminalId": "mh73r259xe7yg67j5j1jnkyq9x8hk0ss"
+  },
+  "value": {
+   "chunks": [
+    {
+     "data": "~/tide-tables claude\r\n\r\n> Export the tide tables as CSV.\r\n\r\n* Reading src/export.ts\r\n",
+     "seq": 1
+    }
+   ],
+   "cursor": 1,
+   "more": false,
+   "outputSeq": 1
+  }
+ },
+ {
+  "udfPath": "terminals:suggestions",
+  "args": {
+   "terminalId": "mh73r259xe7yg67j5j1jnkyq9x8hk0ss"
+  },
+  "value": []
+ },
+ {
+  "udfPath": "terminals:wheelRequests",
+  "args": {
+   "terminalId": "mh73r259xe7yg67j5j1jnkyq9x8hk0ss"
+  },
+  "value": []
+ },
+ {
+  "udfPath": "terminals:inputLog",
+  "args": {
+   "paginationOpts": {
+    "numItems": 8,
+    "cursor": null
+   },
+   "terminalId": "mh73r259xe7yg67j5j1jnkyq9x8hk0ss"
+  },
+  "value": {
+   "continueCursor": "07b5de6b7abc4bb884f3c885bb7804a5a61d0204494c2e44a5ebc12f380cd4bbaa1940e5a7c19fa00f4a8a0a7ce89b46f5f6ceb553185eac41c0043fd5ddbf37ad9ba7cf6af8c7",
+   "isDone": true,
+   "page": [],
+   "pageStatus": null,
+   "splitCursor": null
+  }
+ },
+ {
+  "udfPath": "terminals:get",
+  "args": {
+   "terminalId": "mh73r259xe7yg67j5j1jnkyq9x8hk0ss"
+  },
+  "value": {
+   "access": "drive",
+   "driver": {
+    "kind": "person",
+    "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+    "name": "Rosa Vega"
+   },
+   "machine": {
+    "machineId": "k17bv5za6pv1krn8m1r35pkq1x8hkfmx",
+    "mostOpenAccess": "open",
+    "name": "studio-mini"
+   },
+   "outputSeq": 1,
+   "repo": "harbor-labs/tide-tables",
+   "runId": "kx7d6dft5q005xtntgh606khnn8hj8hb",
+   "startedBy": {
+    "kind": "person",
+    "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+    "name": "Rosa Vega"
+   },
+   "status": "live",
+   "terminalId": "mh73r259xe7yg67j5j1jnkyq9x8hk0ss",
+   "title": "Export tide tables as CSV",
+   "tool": "claude-code",
+   "usesSlot": false,
+   "watching": [
+    {
+     "kind": "person",
+     "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+     "name": "Rosa Vega"
+    }
+   ]
+  }
+ },
+ {
+  "udfPath": "terminals:output",
+  "args": {
+   "afterSeq": 1,
+   "terminalId": "mh73r259xe7yg67j5j1jnkyq9x8hk0ss"
+  },
+  "value": {
+   "chunks": [],
+   "cursor": 1,
+   "more": false,
+   "outputSeq": 1
+  }
+ },
+ {
+  "udfPath": "spaces:get",
+  "args": {
+   "spaceId": "q975phzkwz4hwbcqj9cv0scb658hjnbs"
+  },
+  "value": {
+   "access": "watch",
+   "driver": {
+    "kind": "person",
+    "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+    "name": "Rosa Vega"
+   },
+   "kind": "vm",
+   "machine": {
+    "machineId": "k17bv5za6pv1krn8m1r35pkq1x8hkfmx",
+    "mostOpenAccess": "open",
+    "name": "studio-mini"
+   },
+   "name": "Review Mac",
+   "os": "macos",
+   "power": "running",
+   "sharedBy": {
+    "kind": "person",
+    "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+    "name": "Rosa Vega"
+   },
+   "spaceId": "q975phzkwz4hwbcqj9cv0scb658hjnbs",
+   "spaceRef": "space-review-mac",
+   "status": "live",
+   "watching": [
+    {
+     "kind": "person",
+     "memberId": "k57f766zqnvt0gavr4e2kx15mh8hkvp5",
+     "name": "Rosa Vega"
+    }
+   ]
+  }
+ },
+ {
+  "udfPath": "spaces:myView",
+  "args": {
+   "spaceId": "q975phzkwz4hwbcqj9cv0scb658hjnbs"
+  },
+  "value": {
+   "interactive": true,
+   "status": "requested",
+   "urls": [],
+   "viewId": "q173zys2s8mqz15y7ff8de0qn18hk5pd"
+  }
+ },
+ {
+  "udfPath": "spaces:wheelRequests",
+  "args": {
+   "spaceId": "q975phzkwz4hwbcqj9cv0scb658hjnbs"
+  },
+  "value": []
+ },
+ {
+  "udfPath": "spaces:suggestions",
+  "args": {
+   "spaceId": "q975phzkwz4hwbcqj9cv0scb658hjnbs"
+  },
+  "value": []
+ },
+ {
+  "udfPath": "spaces:actions",
+  "args": {
+   "spaceId": "q975phzkwz4hwbcqj9cv0scb658hjnbs"
+  },
+  "value": []
+ }
+]

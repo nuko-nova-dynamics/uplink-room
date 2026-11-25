@@ -1,0 +1,9 @@
+out/
+dist/
+test-results/
+playwright-report/
+.env.local
+.shots-profile/
+.shots-profile-2/
+.shots-notifications.jsonl
+.soak/

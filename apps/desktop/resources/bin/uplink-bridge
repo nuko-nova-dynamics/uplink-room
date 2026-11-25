@@ -1,0 +1,26 @@
+#!/bin/sh
+# Runs the bridge that ships inside Uplink Room, using the app's own Electron
+# binary as Node, so this computer needs nothing else installed.
+# The app puts it on PATH: Add to PATH in Settings, Setup links /usr/local/bin/uplink-bridge
+# here on macOS, and the .deb links /usr/bin/uplink-bridge when it installs. By hand:
+#   macOS:  ln -s "/Applications/Uplink Room.app/Contents/Resources/bin/uplink-bridge" /usr/local/bin/uplink-bridge
+#   Linux:  sudo ln -s "/opt/Uplink Room/resources/bin/uplink-bridge" /usr/local/bin/uplink-bridge
+set -e
+script="$0"
+# Follow symlinks to the real file inside the app.
+while [ -L "$script" ]; do
+  target=$(readlink "$script")
+  case "$target" in
+    /*) script="$target" ;;
+    *) script="$(dirname "$script")/$target" ;;
+  esac
+done
+bin=$(cd "$(dirname "$script")" && pwd -P)
+resources=$(dirname "$bin")
+case "$(uname)" in
+  Darwin) electron="$resources/../MacOS/Uplink Room" ;;
+  # Git Bash on Windows, which is where Claude Code runs its hooks.
+  MINGW* | MSYS* | CYGWIN*) electron="$resources/../Uplink Room.exe" ;;
+  *) electron="$resources/../uplink-room" ;;
+esac
+UPLINK_BRIDGE_BIN_DIR="$bin" ELECTRON_RUN_AS_NODE=1 exec "$electron" "$resources/app.asar/out/main/bridge.js" "$@"

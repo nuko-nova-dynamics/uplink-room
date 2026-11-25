@@ -1,0 +1,1098 @@
+/* The work surfaces: the task panel and its run cards, the run panel, the board's empty state and
+   the terminal and Space headers at small window sizes. Tokens come from styles.css (DESIGN.md). */
+
+/* ---------- task panel ---------- */
+.drawer-head .drawer-title {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--font-15);
+  font-weight: 700;
+  line-height: var(--line-15);
+  padding-top: 0;
+  /* The title tooltip carries the full name without displacing the header controls. */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.drawer-head:has(.drawer-title) > .btn,
+.drawer-head:has(.drawer-title) > .icon-btn {
+  flex: none;
+}
+.drawer-head:has(.drawer-title) {
+  height: var(--head-h);
+  min-height: var(--head-h);
+  padding-block: 0;
+}
+
+.task-facts {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 6px 14px;
+  align-items: center;
+}
+.task-state {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+/* Settled work is put away, not a state of its runs: quiet beside the runs' own summary. */
+.task-settled {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--muted);
+  font-weight: 400;
+}
+.task-fact {
+  display: contents;
+}
+.task-fact > span:first-child {
+  color: var(--muted);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+.task-fact-value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: var(--muted);
+}
+.task-fact-value .select {
+  width: auto;
+  max-width: 100%;
+  min-width: 180px;
+  height: 28px;
+  color: var(--text);
+}
+.task-description {
+  color: var(--text);
+  white-space: pre-wrap;
+  line-height: var(--line-15);
+  max-width: 68ch;
+  font-size: var(--font-15);
+}
+
+/* A task's plan (ADR 0050, ADR 0051): what it waits for, its queue, its pull requests, one per line. */
+.task-plan {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+.task-plan li {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.task-plan-label {
+  margin-right: var(--space-8);
+  color: var(--muted);
+}
+
+.section-label {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: var(--font-13);
+  font-weight: 700;
+  color: var(--muted);
+  line-height: var(--line-13);
+}
+.section-label .hint {
+  font-weight: 400;
+}
+
+.runs-empty {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-card);
+  color: var(--muted);
+}
+.runs-empty p {
+  flex: 1;
+  line-height: var(--line-13);
+  font-size: var(--font-13);
+}
+
+/* Runs sit side by side to compare them, and wrap instead of scrolling out of sight. */
+.runs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 10px;
+  align-items: start;
+}
+.runs-grid .run-card {
+  min-width: 0;
+}
+.run-card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.run-card-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.run-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: var(--font-13);
+  color: var(--muted);
+  min-width: 0;
+  line-height: var(--line-13);
+}
+.run-card-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chip.kept-chip {
+  border-color: var(--done);
+  color: var(--done);
+}
+.run-fail {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+  color: var(--text);
+  padding: 7px 10px;
+  border-radius: var(--radius-card);
+  border: 1px solid color-mix(in srgb, var(--failed) 45%, var(--line));
+  background: color-mix(in srgb, var(--failed) 7%, var(--raised));
+}
+
+/* The last lines a run's terminal printed. Like the terminal, it stays dark in both themes. */
+.run-output {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  width: 100%;
+  min-width: 0;
+  padding: 7px 10px;
+  border-radius: var(--radius-card);
+  border: 1px solid #26282c;
+  background: var(--term-bg);
+  color: #c3c6cc;
+  font-family: var(--mono);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+  text-align: left;
+}
+.run-output:hover {
+  border-color: #5d6168;
+}
+.run-output-line {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre;
+}
+.run-output.wrap .run-output-line {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.run-output-line.quiet {
+  color: #8f939b;
+}
+.run-output-fail {
+  color: var(--focus-color-on-dark);
+  white-space: normal;
+}
+
+/* ---------- state text ---------- */
+/* Waiting is amber; as text in the light theme it takes amber-text, so the label reads at 4.5:1
+   (DESIGN.md, light theme). The sidebar's roster has its own rule. */
+:root[data-theme="light"] .main .state-waiting {
+  color: var(--amber-text);
+}
+
+/* ---------- view headers (the work views only) ---------- */
+/* A long project or terminal name gives way to the controls instead of wrapping out of the bar. */
+.work-head h1 {
+  min-width: 48px;
+  flex: 0 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.work-head .tabs,
+.work-head .btn,
+.work-head .driver-pill {
+  flex: none;
+}
+.work-head .tabs button {
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.work-head .head-note {
+  line-height: var(--line-12);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--font-12);
+}
+.work-head .driver-pill span {
+  white-space: nowrap;
+}
+.work-head .chip {
+  flex: none;
+}
+
+/* ---------- board ---------- */
+.column-rule {
+  padding: 2px 4px 6px;
+  font-size: var(--font-12);
+  color: var(--muted);
+  line-height: var(--line-12);
+}
+.column-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 2px 4px;
+}
+.column-head .badge.zero {
+  background: none;
+  color: var(--faint);
+}
+.column-empty .column-rule {
+  padding: 0;
+}
+.card.closed .t {
+  color: var(--muted);
+}
+.run-chip {
+  max-width: 100%;
+  min-width: 0;
+}
+.run-chip.kept {
+  border-color: var(--done);
+}
+
+/* ---------- terminal and Space ---------- */
+.terminal-layout.rail-closed {
+  grid-template-columns: minmax(0, 1fr);
+}
+.driver-pill {
+  white-space: nowrap;
+}
+.driver-pill.ended {
+  color: var(--muted);
+}
+.driver-pill.ended svg {
+  color: var(--stopped);
+}
+.driver-pill.ended.failed svg {
+  color: var(--failed);
+}
+.work-head .btn .badge {
+  margin-left: 2px;
+}
+.terminal-side[hidden] {
+  display: none;
+}
+
+/* ---------- Inbox ---------- */
+.inbox-row .reason .step {
+  color: var(--muted);
+}
+/* Mono runs narrow, so a repo name keeps the reason line's size instead of shrinking under it. */
+.inbox-row .reason .mono {
+  font-size: var(--font-12);
+  line-height: var(--line-12);
+}
+
+/* An approval inside a run card is a band across the card, not a card of its own. */
+.run-card .prompt-box.band {
+  margin-inline: -12px;
+  border-radius: 0;
+  border-inline: 0;
+  border-color: color-mix(in srgb, var(--amber) 40%, var(--line));
+  padding-inline: 12px;
+}
+
+/* A machine that can't take the run keeps its name readable and says why in a tag. */
+.option.machine-option:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+/* ---------- Unfiled ---------- */
+.inbox-row.unfiled-row {
+  align-items: start;
+  row-gap: 6px;
+}
+.unfiled-row > .right {
+  padding-top: 1px;
+}
+.unfiled-actions {
+  grid-column: 2 / 4;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+/* Picking a machine or agent is a selection, not something that needs you: no amber (DESIGN.md). */
+.option.machine-option.selected,
+.option.machine-option[aria-pressed="true"],
+.option.machine-option[data-checked] {
+  background: var(--hover);
+  border-color: var(--faint);
+  box-shadow: none;
+}
+
+.hint .faint-time {
+  color: var(--muted);
+}
+
+/* ---------- terminal and Space: access, where, panel close ---------- */
+.access-read {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.access-read .label {
+  margin: 0;
+}
+.access-read .access-what {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.terminal-bar .where {
+  display: flex;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  white-space: pre;
+}
+.terminal-machine-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Two rows: the access control and where it runs, then the access control's line (what the level
+   lets teammates do) with who else is watching at the right. */
+.terminal-bar {
+  row-gap: 6px;
+}
+.terminal-bar .bar-break {
+  order: 1;
+  flex-basis: 100%;
+  height: 0;
+}
+.terminal-bar .access-line {
+  order: 2;
+  flex: 1 1 22em;
+  line-height: var(--line-12);
+  font-size: var(--font-12);
+}
+.terminal-bar .watching {
+  order: 3;
+  margin-left: auto;
+}
+.terminal-side {
+  position: relative;
+}
+/* On the title row's center line (y 26 of the 52 px row), at the window's right inset. */
+.terminal-side .rail-close {
+  position: absolute;
+  top: calc((var(--head-h) - var(--ctl-h)) / 2);
+  right: var(--edge);
+}
+.terminal-side > .side-block:first-of-type h2 {
+  padding-right: calc(var(--ctl-h) + 8px);
+}
+/* A narrow screen keeps the driver and controls; the read-only access description goes first. */
+.terminal-main {
+  container-type: inline-size;
+}
+@container (max-width: 640px) {
+  .access-read .access-what,
+  .terminal-bar .where {
+    display: none;
+  }
+}
+
+/* ---------- the task and run drawers at narrow widths ---------- */
+/* Below 1180 px a drawer is a full-width sheet: a strip of board or Inbox beside it can't be read. */
+@media (max-width: 1179px) {
+  .main > .drawer {
+    width: 100%;
+    border-left: 0;
+  }
+}
+/* On a wide window, the Inbox and Unfiled lists move aside for an open drawer instead of sitting
+   under it, so every row's state and buttons stay in view. */
+@media (min-width: 1180px) {
+  .main:has(> .drawer) > .main-body:has(> .inbox) {
+    padding-right: min(640px, 82%);
+  }
+}
+
+/* ---------- commands, times, focus, and the Inbox beside a drawer ---------- */
+.cmd-word {
+  white-space: nowrap;
+}
+.faint-time {
+  white-space: nowrap;
+}
+.toast:has(.toast-action) {
+  align-items: center;
+}
+/* One focus marker: the keyboard's row. The pointer's hover doesn't mark a second one. */
+.inbox[data-keyboard] .inbox-row:hover:not(.focus) {
+  background: none;
+}
+.inbox-row.focus {
+  border-color: color-mix(in srgb, var(--text) 45%, var(--line));
+  box-shadow: none;
+}
+.inbox-row.focus.needs {
+  border-color: var(--amber-text);
+  box-shadow: none;
+}
+/* The state and age keep one width, so Settle and Allow line up from row to row. */
+.inbox-row .row-state {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 9.5em;
+}
+/* Beside an open drawer the rows are narrow: only the focused row keeps its buttons, and the
+   reason takes two lines, so an approval is never shown with its command cut off. */
+.main:has(> .drawer) .inbox-row:not(.focus) .right > .btn,
+.main:has(> .drawer) .inbox-row:not(.focus) .actions {
+  display: none;
+}
+.main:has(> .drawer) .inbox-row .reason {
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.main:has(> .drawer) .inbox-row .row-state {
+  min-width: 0;
+}
+
+.ended-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+/* A screen's own replies, on a line of their own: shown, never hidden, and quieter than typing. */
+.log-line .log-reply {
+  color: var(--muted);
+}
+.log-line .log-time {
+  flex: none;
+  color: var(--muted);
+  font-size: var(--font-12);
+  line-height: var(--line-12);
+}
+.asked-again {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: var(--font-12);
+  line-height: var(--line-12);
+}
+.access-cap {
+  white-space: nowrap;
+}
+@container (max-width: 760px) {
+  .access-cap {
+    display: none;
+  }
+}
+
+/* On a narrow screen the Space's own corner matters more than the badge, and the header's driver
+   pill already says who is driving. */
+@container (max-width: 640px) {
+  .space-stage .kb-badge {
+    display: none;
+  }
+}
+
+/* ---------- round 5 ---------- */
+.run-chip.folded {
+  color: var(--muted);
+  border-style: dashed;
+}
+/* Menus share the neutral ring and gap used by the other controls. */
+.pop [role="menuitem"]:focus-visible {
+  background: var(--hover);
+  box-shadow: none;
+}
+/* Room for the toast under the last row. */
+.inbox {
+  padding-bottom: 88px;
+}
+/* An approval's command is never cut beside its Allow: the reason wraps. */
+.inbox-row.needs .reason {
+  white-space: normal;
+}
+/* On a narrow list the buttons and state move under the text, so the text keeps its width. */
+.inbox {
+  container-type: inline-size;
+}
+@container (max-width: 620px) {
+  .inbox-row {
+    grid-template-columns: var(--face) minmax(0, 1fr);
+  }
+  .inbox-row > .right {
+    grid-column: 2;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  .inbox-row .row-state {
+    min-width: 0;
+    justify-content: flex-start;
+  }
+  .inbox-row > .row-keys {
+    grid-column: 2;
+  }
+}
+@container (max-width: 620px) {
+  .unfiled-actions {
+    grid-column: 2;
+  }
+}
+.run-again-note {
+  color: var(--muted);
+  line-height: var(--line-12);
+  font-size: var(--font-12);
+}
+
+/* ---------- round 6 ---------- */
+.card-note.wrap {
+  display: block;
+}
+.option-group-label {
+  margin-top: 6px;
+  font-size: var(--font-12);
+  color: var(--muted);
+  line-height: var(--line-12);
+}
+.option.machine-option:disabled > .mono,
+.option.machine-option:disabled > svg {
+  color: var(--muted);
+}
+/* Settle shows on the row under the pointer or the keys; other Done rows stay quiet. */
+.inbox-row:not(.focus):not(:hover) .settle-btn {
+  visibility: hidden;
+}
+
+/* The keyboard or input badge sits in its own strip under the screen, never over its output. */
+.terminal-main .xterm-host {
+  padding-bottom: 36px;
+}
+.terminal-main .xterm-host .kb-badge,
+.space-stage .kb-badge {
+  bottom: 7px;
+}
+.space-stage:has(.space-frame) {
+  padding-bottom: 36px;
+}
+.work-head .pop {
+  top: 34px;
+}
+
+/* ---------- round 7 ---------- */
+/* Mono runs thin: the machine and repo line keeps the muted line's weight on the eye. */
+.run-card-meta .mono,
+.inbox-row .reason .mono {
+  color: color-mix(in srgb, var(--text) 72%, var(--muted));
+}
+.ended-note .btn {
+  color: var(--text);
+}
+/* The board under an open task panel dims, so its cut-off cards read as background. */
+.main:has(> .drawer) > .main-body > .board-wrap {
+  opacity: 0.45;
+}
+/* A narrow terminal keeps where it runs; "No one else is watching" goes first. */
+@container (max-width: 640px) {
+  .terminal-bar .where {
+    display: flex;
+  }
+  .terminal-bar .watching {
+    display: none;
+  }
+}
+/* An approval nobody can answer (its machine is offline) isn't amber. */
+.run-card .prompt-box.band.quiet {
+  background: var(--sidebar);
+  border-color: var(--line);
+}
+
+/* ---------- round 8 ---------- */
+/* Run-card excerpts wrap, up to four lines; a longer tail loses its oldest lines, not its newest. */
+.run-output {
+  max-height: calc(4 * 1.45em + 14px);
+  overflow: hidden;
+  justify-content: flex-end;
+}
+.run-output .run-output-line {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  flex: none;
+}
+/* The terminal's spacing sits on xterm's own element, which its fit measures, so rows stop above
+   the keyboard strip and short of the scrollbar. */
+.terminal-main .xterm-host {
+  padding: 0;
+}
+.terminal-main .xterm-host .xterm {
+  padding: 10px 14px 38px 12px;
+}
+/* A screen at a fixed size scrolls above the keyboard strip, so no row slides under the badge; the
+   fit measures the same space (36px of strip, 2px of padding). */
+.terminal-main .xterm-host.fixed-size .xterm-frame {
+  bottom: 36px;
+}
+.terminal-main .xterm-host.fixed-size .xterm {
+  padding-bottom: 2px;
+}
+/* The focused Done row's Settle is its key hint; another row's button hides while the keys move. */
+.inbox-row.focus .settle-btn,
+.inbox[data-keyboard] .inbox-row:not(.focus) .settle-btn {
+  display: none;
+}
+.row-keys .key-hint {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  border: 0;
+  background: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+.row-keys .key-hint:hover {
+  color: var(--text);
+}
+/* A task panel covers the board's header tabs; they hide rather than show cut in half. */
+.main:has(> .drawer) > .work-head > .tabs {
+  visibility: hidden;
+}
+/* The Inbox stacks its rows below 760 px of width, so a reason line is never cut short. */
+@container (max-width: 760px) {
+  .inbox-row {
+    grid-template-columns: var(--face) minmax(0, 1fr);
+  }
+  .inbox-row > .right {
+    grid-column: 2;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  .inbox-row .row-state {
+    min-width: 0;
+    justify-content: flex-start;
+  }
+  .inbox-row > .row-keys,
+  .unfiled-actions {
+    grid-column: 2;
+  }
+  .inbox-row .reason {
+    white-space: normal;
+  }
+}
+.blocked-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  background: none;
+  padding: 4px 2px;
+  color: var(--muted);
+  font-size: var(--font-12);
+  text-align: left;
+  line-height: var(--line-12);
+}
+.blocked-toggle:hover {
+  color: var(--text);
+}
+.column-divider {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 6px 2px 0;
+  border-top: 1px solid var(--line);
+  font-size: var(--font-12);
+  color: var(--muted);
+  line-height: var(--line-12);
+}
+.column-head + .column-divider {
+  border-top: 0;
+  margin-top: 0;
+  padding-top: 2px;
+}
+
+/* ---------- round 9 ---------- */
+/* xterm paints its viewport black under the screen; it takes the screen's own background, so the
+   terminal is one surface with its text inset. */
+.terminal-main .xterm .xterm-viewport {
+  background-color: var(--term-bg) !important;
+}
+.terminal-main .xterm .xterm-scrollable-element > .scrollbar > .slider {
+  background: rgb(255 255 255 / 0.12) !important;
+  border-radius: var(--radius-inline);
+}
+.terminal-main .xterm .xterm-scrollable-element > .scrollbar.vertical {
+  width: 8px !important;
+}
+/* A run card's harness name is never cut: its state wraps under it when the row is full. */
+.run-card-head {
+  flex-wrap: wrap;
+  row-gap: 2px;
+}
+.run-card-name {
+  flex: 1 0 auto;
+  white-space: nowrap;
+}
+/* Board chips: the harness mark sits in the pill without a box of its own. */
+.run-chip .mark {
+  border: 0;
+  background: none;
+}
+/* Excerpts show whole lines, wrapped, and the newest lines; nothing is cut mid-word. */
+.run-output {
+  max-height: none;
+}
+.terminal-bar[hidden] {
+  display: none;
+}
+
+/* ---------- round 10 ---------- */
+.run-card-state {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: -4px;
+  font-size: var(--font-12);
+  line-height: var(--line-12);
+}
+.task-summary {
+  color: var(--text);
+}
+.run-chip .chip-offline {
+  color: var(--muted);
+  flex: none;
+}
+/* An ended terminal's state reads at full strength; its icon carries the state's color. */
+.driver-pill.ended {
+  color: var(--text);
+}
+/* An approval's command moves to the next line whole, and wraps inside only when it's longer. */
+.prompt-box .cmd {
+  display: inline-block;
+  max-width: 100%;
+  vertical-align: bottom;
+}
+.pop [role="menuitem"] .muted {
+  font-family: var(--ui);
+  margin-left: auto;
+}
+
+/* ---------- round 11 ---------- */
+/* The failed reason is one red line, not a box inside the card. */
+.run-fail {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--failed);
+}
+/* One focus ring for every row; amber stays on the state that needs you. */
+.inbox-row.focus.needs {
+  border-color: color-mix(in srgb, var(--text) 45%, var(--line));
+  box-shadow: none;
+}
+/* Beside an open panel, titles wrap to two lines like the reasons under them. */
+.main:has(> .drawer) .inbox-row .title span.t {
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Stopping a run is an ordinary action, not a failure: neutral like any button, red only on hover,
+   so a live run card never shows a red mark that reads as Failed. */
+.btn.stop-run {
+  color: var(--muted);
+}
+.btn.stop-run:hover:not(:disabled) {
+  color: var(--failed);
+}
+/* Unfiled: each row's suggested filing is outlined; only the row under the pointer or keyboard
+   fills it, so a list of rows doesn't show a column of primary buttons. */
+.unfiled-row:hover .btn.file-suggest,
+.unfiled-row:focus-within .btn.file-suggest {
+  background: var(--text);
+  color: var(--ground);
+  border-color: var(--text);
+}
+.btn.file-suggest {
+  font-weight: 700;
+}
+.unfiled-row .btn.file-suggest:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--text) 88%, var(--ground));
+}
+
+/* ---------- a live run's messages (ADR 0026) ---------- */
+.run-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.run-hearing {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  line-height: var(--line-13);
+  font-size: var(--font-13);
+}
+.run-hearing svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--muted);
+}
+.run-hears {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.run-hears-label {
+  font-size: var(--font-12);
+  color: var(--muted);
+  line-height: var(--line-12);
+}
+.run-inbox {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.run-inbox li {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  gap: 10px;
+  padding: 10px 0;
+  --face: 20px;
+}
+.run-inbox li + li {
+  border-top: 1px solid var(--line);
+}
+.run-inbox-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.run-inbox-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+.run-inbox-head .muted {
+  font-size: var(--font-12);
+  line-height: var(--line-12);
+}
+.run-inbox-when {
+  margin-left: auto;
+  flex: none;
+}
+.run-inbox-text {
+  margin: 0;
+  line-height: var(--line-13);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+  font-size: var(--font-13);
+}
+/* A joined run (ADR 0032) has chat only: said once where a terminal or thread would be. */
+.joined-note {
+  margin: 0;
+  font-size: var(--font-12);
+  line-height: var(--line-12);
+  color: var(--muted);
+  padding: 7px 10px;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--line);
+}
+
+/* An agent conversation in the task panel (ADR 0041): one block across the Runs grid, on the drawer's
+   own ground with no frame, laid out inside as a direct conversation is (DESIGN.md, Conversations). */
+.runs-grid > .a2a-chat {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.a2a-chat {
+  display: flex;
+  flex-direction: column;
+}
+.a2a-chat-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+  padding: 4px 0 9px;
+  border-bottom: 1px solid var(--line);
+}
+.a2a-chat-name {
+  white-space: nowrap;
+}
+.a2a-chat-head .grow {
+  flex: 1;
+}
+.a2a-chat-note {
+  margin: 0;
+  padding: 6px 0 0;
+}
+/* The conversation grows with what's in it; the drawer scrolls it, so there is one scroll. */
+.a2a-chat .a2a-chat-messages {
+  flex: none;
+  overflow: visible;
+  padding: 12px 8px 6px;
+  /* No hover bar here, so bubbles keep their width. */
+  --bar-room: 0px;
+}
+.a2a-chat .messages .bubble {
+  max-width: min(560px, 86%);
+}
+.a2a-chat .bubble .md li {
+  text-wrap: pretty;
+}
+.a2a-chat .tl-item + .tl-item,
+.a2a-chat .tl-item + .system-line,
+.a2a-chat .system-line + .tl-item {
+  margin-top: 10px;
+}
+.a2a-chat .tl-item.cont {
+  margin-top: 3px;
+}
+.a2a-chat .messages .msg:hover {
+  background: none;
+}
+/* Run details: the chat's terminal icon, small and muted beside an answer's time or at a line's end. */
+.a2a-chat .icon-btn.a2a-chat-run {
+  width: var(--ctl-small);
+  height: var(--ctl-small);
+  margin: -3px 0;
+  flex: none;
+  color: var(--muted);
+}
+.a2a-chat .icon-btn.a2a-chat-run:hover {
+  color: var(--text);
+}
+.a2a-chat-sending {
+  font-size: var(--font-12);
+  margin-top: 2px;
+  line-height: var(--line-12);
+}
+/* The one message box stays at the drawer's bottom edge while the conversation is in view. */
+.a2a-chat-composer {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  padding: 6px 0 10px;
+  background: var(--ground);
+}
+/* What scrolls into view stops above that box, not under it. */
+.drawer-body:has(.a2a-chat) {
+  scroll-padding-bottom: 128px;
+}
+.a2a-chat-under {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 18px;
+  padding: 3px 4px 0;
+  font-size: var(--font-12);
+  line-height: var(--line-12);
+}
+.a2a-chat-under .truncate {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Drawer metadata keeps machine names and repository paths separate and legible. */
+.drawer .run-card-meta .mono {
+  font-family: var(--mono);
+}
+.run-location {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-6);
+  min-width: 0;
+}
+.run-location > .mono {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.drawer .run-card-actions .btn.small {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+  height: var(--ctl-h);
+  border-radius: var(--radius-control);
+  padding-block: var(--space-4);
+}
+.drawer .face:not(.agent) {
+  font-size: var(--font-13);
+}
+/* ---------- Give to an agent (ADR 0044) ---------- */
+/* A board card's Give to an agent sits beside the card, in its top corner, on hover or focus. */
+.card-wrap {
+  position: relative;
+}
+.card-wrap.giveable .card .t {
+  padding-right: var(--space-24);
+}
+.card-give {
+  position: absolute;
+  top: var(--space-6);
+  right: var(--space-6);
+  opacity: 0;
+  transition: opacity var(--motion-fast);
+}
+.card-wrap:hover .card-give,
+.card-wrap:focus-within .card-give {
+  opacity: 1;
+}
+.card-give:focus-visible {
+  outline-offset: 0;
+}
+/* An agent's face takes the machine icon's place in its option. */
+.option.machine-option > .face {
+  flex: none;
+}

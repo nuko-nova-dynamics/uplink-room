@@ -1,0 +1,73 @@
+.card.task-card {
+  min-width: 0;
+}
+.task-card > * {
+  min-width: 0;
+  max-width: 100%;
+}
+.task-card .t,
+.task-card .card-note {
+  overflow-wrap: anywhere;
+}
+.task-card .card-note {
+  display: block;
+}
+.task-card .meta,
+.task-card .card-note,
+.task-card .run-chip {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+.task-card .card-note .mono {
+  font-size: inherit;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.task-card:active {
+  background: var(--hover);
+  border-color: var(--faint);
+}
+:root .project-column-head,
+:root .project-column-head .badge {
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+.project-repos .label,
+.project-repos .hint,
+.project-repos .repo-picker,
+.project-repos .repo-picker .mono,
+.project-repos .repo-picker .meta,
+.project-repos .repo-picker .hint {
+  font-family: var(--ui);
+  font-size: var(--font-13);
+  line-height: var(--line-13);
+}
+
+.board-wrap,
+.task-card {
+  --working: var(--muted);
+  --done: var(--muted);
+  --done-text: var(--muted);
+  --failed: var(--muted);
+}
+.task-card .card-note .mono {
+  font-family: var(--mono);
+}
+
+/* These are bare dialog actions, not 28 px window-header controls. */
+:root .dialog:has(.project-repos) .dialog-head .icon-btn {
+  width: var(--ctl-small);
+  height: var(--ctl-small);
+  border-radius: var(--radius-small);
+}
+
+.task-working-line {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  vertical-align: baseline;
+}
+.task-working-line > span:last-child {
+  text-box: trim-both cap alphabetic;
+  margin-top: var(--space-1);
+}

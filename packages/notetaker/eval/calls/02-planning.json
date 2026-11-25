@@ -1,0 +1,58 @@
+{
+  "id": "02-planning",
+  "kind": "Sprint planning: scope cut, several owners, a deferred idea, an open business question",
+  "channel": "reef-runner",
+  "language": "en",
+  "people": [
+    { "id": "julio", "name": "Julio Díaz", "voice": "Reed (English (US))" },
+    { "id": "ana", "name": "Ana García", "voice": "Samantha" },
+    { "id": "kenji", "name": "Kenji Sato", "voice": "Rishi" },
+    { "id": "nora", "name": "Nora Byrne", "voice": "Moira", "gain": 0.6 }
+  ],
+  "turns": [
+    { "speaker": "julio", "text": "OK, this is planning for the next two weeks, version 1.5. We have three candidates: cloud saves, the new tutorial, and photo mode. We can't do all three, so let's pick." },
+    { "speaker": "kenji", "text": "Cloud saves is the big one. We need a backend for it, I'd put it on Convex since we already use it, plus conflict handling when you play on two devices. I'd say eight days of work, maybe nine." },
+    { "speaker": "nora", "text": "The tutorial is mostly designed. The screens are done in Figma, I just need to export the assets. Implementing it is maybe four days." },
+    { "speaker": "ana", "text": "I can take the tutorial implementation. I did the onboarding last time, so I know that code." },
+    { "speaker": "julio", "text": "Great. And photo mode?" },
+    { "speaker": "nora", "text": "Photo mode is fun, but nobody is asking for it. I'd push it." },
+    { "speaker": "julio", "text": "Agreed. So the decision is: cloud saves and the tutorial this sprint, and photo mode moves to the next sprint." },
+    { "speaker": "kenji", "text": "Before I start on cloud saves, I want to write a short design doc for the conflict handling, because there are a few ways to do it and I want people to weigh in. I'll write it by Wednesday." },
+    { "speaker": "julio", "text": "Perfect. Please post it in the channel when it's ready." },
+    { "speaker": "nora", "text": "I'll export the tutorial assets today and hand them to Ana." },
+    { "speaker": "ana", "text": "Thanks. I'll need the animations as well, not only the static images." },
+    { "speaker": "nora", "text": "Sure, I'll include the animations." },
+    { "speaker": "julio", "text": "One thing we don't know is how much storage we get for cloud saves on iOS. Does anyone know the iCloud limit per user?" },
+    { "speaker": "kenji", "text": "No idea. It matters for the save file size, though." },
+    { "speaker": "julio", "text": "I'll find out and tell Kenji before he finishes the design doc." },
+    { "speaker": "ana", "text": "Should we also add analytics to the tutorial, so we can see where people drop off?" },
+    { "speaker": "julio", "text": "I like it, but not this sprint. Let's get the tutorial out first and add analytics later." },
+    { "speaker": "nora", "text": "There's another open question: is cloud saves free, or part of the premium pack? That changes the design of the settings screen." },
+    { "speaker": "julio", "text": "That's a business decision. I'll bring it up with Marta on Thursday, and we'll decide then. Until then, design it so it could go either way." },
+    { "speaker": "nora", "text": "OK, I'll keep both options in the settings mockup." },
+    { "speaker": "kenji", "text": "And the sprint demo, is it still on Friday the 14th?" },
+    { "speaker": "julio", "text": "Yes, the demo is on Friday the 14th, same time as usual. Anything else? No? Thanks, everyone." }
+  ],
+  "truth": {
+    "decisions": [
+      { "text": "This sprint (1.5) does cloud saves and the new tutorial; photo mode moves to the next sprint.", "match": [["photo mode"], ["next sprint", "push", "defer", "later", "moved", "moves", "postpone", "out of"]] },
+      { "text": "Tutorial analytics wait until after the tutorial ships, not this sprint.", "match": [["analytic"]] },
+      { "text": "The sprint demo stays on Friday the 14th.", "match": [["demo"]] },
+      { "text": "Until the free-or-premium question is settled, the settings screen is designed to work either way.", "match": [["either way", "both option", "both"]], "optional": true }
+    ],
+    "tasks": [
+      { "title": "Write a design doc for cloud save conflict handling by Wednesday and post it in the channel", "owner": "kenji", "match": [["design doc", "doc"], ["conflict", "cloud save"]] },
+      { "title": "Export the tutorial assets, with the animations, and hand them to Ana", "owner": "nora", "match": [["asset", "animation", "export"]] },
+      { "title": "Implement the new tutorial", "owner": "ana", "match": [["implement", "build", "develop"], ["tutorial"]], "exclude": [["asset", "export"]] },
+      { "title": "Find out the iCloud storage limit per user and tell Kenji", "owner": "julio", "match": [["icloud", "storage", "quota"]] },
+      { "title": "Decide with Marta on Thursday whether cloud saves are free or premium", "owner": "julio", "match": [["premium", "marta"]] },
+      { "title": "Build cloud saves (Convex backend, conflict handling) after the design doc", "owner": "kenji", "optional": true, "match": [["build", "implement", "develop"], ["cloud save"]], "exclude": [["design doc", "doc"]] },
+      { "title": "Keep both pricing options in the settings mockup", "owner": "nora", "optional": true, "match": [["settings", "mockup"]] }
+    ],
+    "notTasks": [
+      { "text": "Photo mode (moved to the next sprint)", "match": [["photo mode"]] },
+      { "text": "Tutorial analytics (explicitly not this sprint)", "match": [["analytic"]] }
+    ],
+    "notes": "Marta is not in the call; the Marta task belongs to Julio. Photo mode and tutorial analytics were deferred and should not be proposed as tasks."
+  }
+}

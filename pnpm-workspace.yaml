@@ -1,0 +1,17 @@
+packages:
+  - "packages/*"
+  - "apps/*"
+allowBuilds:
+  esbuild: true
+  node-pty: true
+  tsc-rs: true
+  # Postinstall scripts that only print messages.
+  browser-tabs-lock: false
+  core-js: false
+  # Only electron-builder's Squirrel.Windows target uses it; the app ships NSIS.
+  electron-winstaller: false
+  # cbor-x's optional native decoder for Node. The shared-browser frame bundles cbor-x for the browser, which never loads it.
+  cbor-extract: false
+patchedDependencies:
+  convex@1.49.0: patches/convex@1.49.0.patch
+  node-pty@1.1.0: patches/node-pty@1.1.0.patch

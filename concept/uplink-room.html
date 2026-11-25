@@ -1,0 +1,812 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Uplink Room concept</title>
+<style>
+:root{
+  --radius:10px;
+  --font-sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --background:#ffffff;--foreground:#18181b;
+  --card:#f7f7f8;--card-foreground:#18181b;
+  --muted:#f0f0f2;--muted-foreground:#5c5c66;
+  --border:#e2e2e6;--ring:#2f6fde;
+  --primary:#2f6fde;--primary-foreground:#ffffff;
+  --secondary:#f0f0f2;--secondary-foreground:#18181b;
+  --accent:#f0f0f2;--accent-foreground:#18181b;
+  --code-background:#f0f0f2;
+  --success:#15803d;--warning:#b45309;--destructive:#dc2626;--info:#0369a1;
+  --chart-1:#2563eb;--chart-2:#0d9488;--chart-3:#d97706;--chart-4:#9333ea;--chart-5:#db2777;--chart-6:#65a30d;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --background:#0f0f11;--foreground:#ededef;
+    --card:#18181b;--card-foreground:#ededef;
+    --muted:#232327;--muted-foreground:#a1a1aa;
+    --border:#2e2e33;--ring:#6b9af2;
+    --primary:#6b9af2;--primary-foreground:#0b0b0d;
+    --secondary:#232327;--secondary-foreground:#ededef;
+    --accent:#232327;--accent-foreground:#ededef;
+    --code-background:#18181b;
+    --success:#4ade80;--warning:#fbbf24;--destructive:#f87171;--info:#38bdf8;
+    --chart-1:#60a5fa;--chart-2:#2dd4bf;--chart-3:#fbbf24;--chart-4:#c084fc;--chart-5:#f472b6;--chart-6:#a3e635;
+  }
+}
+:root[data-theme="dark"]{
+  --background:#0f0f11;--foreground:#ededef;
+  --card:#18181b;--card-foreground:#ededef;
+  --muted:#232327;--muted-foreground:#a1a1aa;
+  --border:#2e2e33;--ring:#6b9af2;
+  --primary:#6b9af2;--primary-foreground:#0b0b0d;
+  --secondary:#232327;--secondary-foreground:#ededef;
+  --accent:#232327;--accent-foreground:#ededef;
+  --code-background:#18181b;
+  --success:#4ade80;--warning:#fbbf24;--destructive:#f87171;--info:#38bdf8;
+  --chart-1:#60a5fa;--chart-2:#2dd4bf;--chart-3:#fbbf24;--chart-4:#c084fc;--chart-5:#f472b6;--chart-6:#a3e635;
+}
+html{background:var(--background)}
+</style>
+<style>
+:root{
+  --svc-clerk:var(--chart-5);
+  --svc-convex:var(--chart-1);
+  --svc-livekit:var(--chart-2);
+  --svc-hyper:var(--chart-3);
+  --svc-agent:var(--chart-4);
+  --svc-app:var(--chart-6);
+  --svc-pc:var(--info);
+  --svc-oss:var(--muted-foreground);
+}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:880px;padding:40px 16px 72px;background:var(--background);font-family:var(--font-sans);color:var(--foreground);font-size:14.5px;line-height:1.55;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+::selection{background:color-mix(in srgb,var(--primary) 28%,transparent)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+svg.i{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.mono{font-family:var(--font-mono)}
+h1{font-size:34px;line-height:1.1;margin:6px 0 12px;letter-spacing:-0.02em;font-weight:650}
+.lede{font-size:16px;max-width:62ch;margin:0}
+.name-note{font-size:13px;color:var(--muted-foreground);margin:8px 0 0}
+.facts{display:flex;flex-wrap:wrap;gap:12px 28px;margin:22px 0 0}
+.facts div{display:flex;flex-direction:column;gap:1px}
+.facts dt{font-size:12.5px;color:var(--muted-foreground)}
+.facts dd{margin:0;font-weight:560}
+section{margin-top:56px}
+h2{font-size:20px;line-height:1.25;margin:0 0 6px;font-weight:620;letter-spacing:-0.01em}
+h3{font-size:15px;margin:26px 0 6px;font-weight:620}
+.sub{margin:0 0 18px;color:var(--muted-foreground);max-width:64ch}
+.how{margin:16px 0 0;padding:0 0 0 18px;max-width:68ch;font-size:14px;display:flex;flex-direction:column;gap:6px}
+.how li::marker{color:var(--muted-foreground)}
+.how b{font-weight:620}
+.note{font-size:13px;color:var(--muted-foreground);margin:12px 0 0;max-width:68ch}
+.mk{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;font:650 11px/1 var(--font-sans);color:var(--foreground);background:color-mix(in srgb,var(--c) 24%,var(--card));border:1.5px solid var(--c);flex:none}
+.dot{display:inline-flex;align-items:center;gap:7px}
+.dot::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
+.layer{display:grid;grid-template-columns:200px minmax(0,1fr);gap:8px 18px;border:1px solid var(--border);border-radius:var(--radius);padding:13px 16px;background:var(--card)}
+.layer.top{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 10%,var(--card))}
+.layer-n{font-weight:620;font-size:14.5px;line-height:1.35}
+.layer-n small{display:block;font-weight:400;font-size:12.5px;color:var(--muted-foreground);margin-top:3px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start}
+.chips span{font-size:12.5px;padding:2px 9px;border-radius:999px;border:1px solid var(--border);background:var(--background);line-height:1.5}
+.chips span b{font-weight:600}
+.chips span.not{border-style:dashed;color:var(--muted-foreground)}
+.lgap{height:30px;position:relative;margin-left:40px;display:flex;align-items:center}
+.lgap::before{content:"";position:absolute;left:0;top:0;bottom:0;border-left:1.5px solid var(--border)}
+.lgap span{margin-left:12px;font:11.5px var(--font-mono);color:var(--muted-foreground)}
+.win{border:1px solid var(--border);border-radius:calc(var(--radius) + 4px);background:var(--card);color:var(--card-foreground);box-shadow:0 18px 40px -22px color-mix(in srgb,var(--foreground) 40%,transparent);font-size:13px;line-height:1.45;overflow:hidden}
+.tb{display:flex;align-items:center;height:34px;padding:0 12px;border-bottom:1px solid var(--border);position:relative}
+.lights{display:flex;gap:7px}
+.lights i{width:11px;height:11px;border-radius:50%;background:var(--border)}
+.tb-title{position:absolute;left:0;right:0;text-align:center;font-size:12.5px;color:var(--muted-foreground);pointer-events:none}
+.panes{display:grid;grid-template-columns:184px minmax(0,1fr)}
+.side{background:color-mix(in srgb,var(--muted) 55%,var(--card));border-right:1px solid var(--border);display:flex;flex-direction:column;min-width:0}
+.team{padding:11px 14px;font-weight:620;border-bottom:1px solid var(--border)}
+.grp{padding:12px 8px 2px}
+.grp-h{display:flex;align-items:center;gap:6px;padding:0 6px 5px;font-size:12px;color:var(--muted-foreground);font-weight:560}
+.ch{display:flex;align-items:center;gap:6px;padding:4px 6px;border-radius:calc(var(--radius) - 2px);color:var(--muted-foreground)}
+.ch .h{font-family:var(--font-mono)}
+.ch.on{background:var(--accent);color:var(--accent-foreground);font-weight:560}
+.ch.unread{color:var(--foreground);font-weight:620}
+.ch .n{margin-left:auto;font-size:11px;font-weight:650;min-width:18px;text-align:center;padding:0 5px;line-height:17px;border-radius:999px;background:color-mix(in srgb,var(--warning) 30%,var(--card));border:1px solid var(--warning);color:var(--foreground)}
+.ch .st{margin-left:auto;width:7px;height:7px;border-radius:50%;background:var(--success)}
+.ch .st.off{background:transparent;border:1.5px solid var(--muted-foreground)}
+.sub-ch{padding-left:16px}
+.vppl{list-style:none;margin:1px 0 4px;padding:0 0 0 20px}
+.vppl li{display:flex;align-items:center;gap:7px;padding:3px 6px;color:var(--foreground)}
+.live{font-size:11px;padding:0 6px;line-height:16px;border-radius:999px;background:color-mix(in srgb,var(--destructive) 26%,var(--card));border:1px solid var(--destructive);color:var(--foreground);font-weight:620;margin-left:auto}
+.av{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:650;background:color-mix(in srgb,var(--foreground) 14%,var(--card));color:var(--foreground);flex:none}
+.av.lg{width:32px;height:32px;font-size:13px}
+.av.bot{border-radius:7px;background:color-mix(in srgb,var(--svc-agent) 28%,var(--card))}
+.av.talk{box-shadow:0 0 0 2px var(--card),0 0 0 3.5px var(--success)}
+.dock{margin-top:auto;border-top:1px solid var(--border);padding:10px 10px 12px 14px}
+.dock-t{display:flex;flex-direction:column;line-height:1.35}
+.dock-t strong{font-size:12.5px;display:flex;align-items:center;gap:6px}
+.dock-t strong::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--success)}
+.dock-t span{font-size:12px;color:var(--muted-foreground);padding-left:13px}
+.dock-b{display:flex;gap:4px;margin-top:9px}
+.ib{display:grid;place-items:center;width:31px;height:28px;padding:0;border-radius:calc(var(--radius) - 2px);border:1px solid var(--border);background:var(--card);color:var(--foreground)}
+.ib.on{background:var(--primary);color:var(--primary-foreground);border-color:var(--primary)}
+.chan{display:flex;flex-direction:column;min-width:0}
+.ch-h{display:flex;align-items:center;gap:7px;padding:0 14px;height:44px;border-bottom:1px solid var(--border)}
+.ch-h .h{font-family:var(--font-mono);color:var(--muted-foreground);font-size:15px}
+.ch-h strong{font-size:14px}
+.tabs{display:flex;gap:2px;margin-left:10px;min-width:0;flex-wrap:wrap}
+.tab{padding:4px 9px;border-radius:calc(var(--radius) - 2px);color:var(--muted-foreground);font-size:12.5px;white-space:nowrap}
+.tab.on{background:var(--secondary);color:var(--secondary-foreground);font-weight:560}
+.msgs{padding:14px 16px 4px;display:flex;flex-direction:column;gap:16px}
+.msg{display:grid;grid-template-columns:32px minmax(0,1fr);gap:10px}
+.meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.meta b{font-weight:620}
+.meta time{font-size:11.5px;color:var(--muted-foreground)}
+.badge{font-size:11px;padding:0 6px;line-height:17px;border-radius:4px;background:color-mix(in srgb,var(--svc-agent) 24%,var(--card));color:var(--foreground);font-weight:620}
+.msg p{margin:2px 0 0}
+.btn{padding:6px 12px;border-radius:calc(var(--radius) - 2px);border:1px solid var(--border);background:var(--card);font-size:12.5px;font-weight:560;white-space:nowrap}
+.btn.pri{background:var(--primary);color:var(--primary-foreground);border-color:var(--primary)}
+.btn.sm{padding:3px 10px;font-size:12px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:0 8px;border-radius:999px;border:1px solid var(--border);line-height:21px;white-space:nowrap}
+.chip.work::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--success)}
+.chip.via{border-color:color-mix(in srgb,var(--svc-pc) 60%,var(--border));background:color-mix(in srgb,var(--svc-pc) 10%,var(--card))}
+.frame{margin-top:8px;border:1px solid var(--border);border-radius:var(--radius);max-width:400px;background:var(--background)}
+.fr-h{display:flex;align-items:center;gap:8px;padding:7px 10px;border-bottom:1px solid var(--border);font-size:12px;color:var(--muted-foreground)}
+.fr-h .mono{color:var(--foreground)}
+.fr-h .mk{margin-left:auto}
+.dep{padding:12px 14px 14px}
+.dep-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.dep-top strong{font-size:14px}
+.ok{font-size:12px;font-weight:620;display:inline-flex;align-items:center;gap:6px}
+.ok::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--success)}
+.dep dl{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;margin:10px 0 12px;font-size:12.5px}
+.dep dt{color:var(--muted-foreground)}
+.dep dd{margin:0}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.browser{margin-top:8px;border:1px solid var(--border);border-radius:var(--radius);max-width:440px;overflow:hidden}
+.br-h{display:flex;align-items:center;gap:8px;padding:6px 8px;border-bottom:1px solid var(--border);background:var(--muted);color:var(--muted-foreground)}
+.url{flex:1;min-width:0;font:12px var(--font-mono);padding:3px 9px;border-radius:999px;background:var(--card);color:var(--foreground);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.page{position:relative;padding:14px 16px 16px;background:var(--background)}
+.pg-t{margin:0 0 8px;font-size:14px;font-weight:620}
+.li{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:12.5px}
+.li.tot{font-weight:650;border-bottom:0}
+.pay{margin-top:10px;width:100%;padding:8px;border-radius:calc(var(--radius) - 2px);border:0;background:var(--foreground);color:var(--background);font-weight:620;font-size:12.5px}
+.cur{position:absolute;display:flex;align-items:flex-start;pointer-events:none}
+.cur svg{width:15px;height:15px;fill:var(--c);stroke:var(--background);stroke-width:1.3;stroke-linejoin:round}
+.cur span{font-size:11px;font-weight:620;padding:0 6px;line-height:17px;border-radius:4px;background:color-mix(in srgb,var(--c) 30%,var(--card));border:1px solid var(--c);color:var(--foreground);margin:11px 0 0 -3px}
+.br-f{display:flex;align-items:center;gap:10px;padding:7px 10px;border-top:1px solid var(--border);font-size:12px;color:var(--muted-foreground)}
+.stack{display:flex}
+.stack .av{width:21px;height:21px;box-shadow:0 0 0 2px var(--card);margin-left:-5px}
+.stack .av:first-child{margin-left:0}
+.br-f .btn{margin-left:auto;padding:4px 14px}
+.comp{margin:10px 16px 14px;display:flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--background);color:var(--muted-foreground);font-size:13px}
+.comp .k{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:12px;white-space:nowrap}
+.comp kbd{font:11.5px var(--font-mono);border:1px solid var(--border);border-radius:4px;padding:0 5px}
+.key{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 28px;font-size:13.5px}
+.key li{display:flex;gap:10px;align-items:flex-start}
+.key .mk{margin-top:1px}
+.sample{font-size:12.5px;color:var(--muted-foreground);margin:12px 0 0}
+.th-h{padding:11px 16px 10px;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+.th-t{flex-basis:100%;font-size:14.5px;font-weight:620}
+.th-h .muted{font-size:12px;color:var(--muted-foreground)}
+.watch{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted-foreground)}
+.th-tabs{display:flex;gap:2px;padding:6px 12px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.acts{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:3px}
+.acts li{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted-foreground);min-width:0}
+.acts code{font:12px var(--font-mono);color:var(--foreground);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.plus{color:color-mix(in srgb,var(--success) 70%,var(--foreground));font:12px var(--font-mono)}
+.minus{color:color-mix(in srgb,var(--destructive) 70%,var(--foreground));font:12px var(--font-mono)}
+.term{margin-top:8px;background:var(--code-background);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.term-h{display:flex;align-items:center;gap:8px;padding:5px 10px;border-bottom:1px solid var(--border);font-size:11.5px;color:var(--muted-foreground)}
+.term-h .mono{color:var(--foreground)}
+.term-h span:last-child{margin-left:auto}
+.term pre{margin:0;padding:9px 12px 10px;font:12px/1.6 var(--font-mono);color:var(--foreground);white-space:pre;overflow-x:auto}
+.term .dim{color:var(--muted-foreground)}
+.term .pass{color:color-mix(in srgb,var(--success) 70%,var(--foreground))}
+.sugg{border:1px dashed color-mix(in srgb,var(--warning) 70%,var(--border));border-radius:var(--radius);padding:10px 12px;display:grid;grid-template-columns:32px minmax(0,1fr);gap:10px;background:color-mix(in srgb,var(--warning) 6%,var(--card))}
+.sugg .act{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;align-items:center}
+.sugg .act small{font-size:12px;color:var(--muted-foreground);margin-right:auto}
+.drive{margin:10px 16px 14px;border:1px solid var(--border);border-radius:var(--radius);background:var(--background);padding:8px 8px 8px 12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.drive .ph{color:var(--muted-foreground);font-size:13px;flex:1;min-width:140px}
+.drive .chip{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 14%,var(--card))}
+.pc{border:1px solid var(--border);border-radius:calc(var(--radius) + 4px);background:var(--card);overflow:hidden;font-size:13px;line-height:1.45;box-shadow:0 18px 40px -22px color-mix(in srgb,var(--foreground) 40%,transparent)}
+.pc-h{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:10px 14px;border-bottom:1px solid var(--border)}
+.pc-h strong{font-size:14px}
+.pc-h .muted{font-size:12px;color:var(--muted-foreground)}
+.pc-b{display:grid;grid-template-columns:minmax(0,1fr) 216px}
+.screen{background:color-mix(in srgb,var(--svc-pc) 16%,var(--muted));padding:22px 22px 44px;position:relative;display:flex;align-items:center;justify-content:center;min-height:268px}
+.gwin{width:100%;max-width:330px;background:var(--background);border:1px solid var(--border);border-radius:6px;box-shadow:0 12px 26px -14px color-mix(in srgb,var(--foreground) 55%,transparent);position:relative}
+.gwin-t{display:flex;justify-content:space-between;padding:5px 10px;border-bottom:1px solid var(--border);font-size:11.5px;color:var(--muted-foreground)}
+.gwin-b{padding:12px 14px 14px}
+.gwin-b .pg-t{font-size:15px}
+.set{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px solid var(--border);font-size:12.5px}
+.set span:first-child{color:var(--muted-foreground)}
+.gwin .btns{margin-top:12px;justify-content:flex-end}
+.taskbar{position:absolute;left:0;right:0;bottom:0;height:28px;background:color-mix(in srgb,var(--background) 80%,transparent);border-top:1px solid var(--border);display:flex;align-items:center;padding:0 12px;font-size:11.5px;color:var(--muted-foreground);gap:14px}
+.taskbar b{color:var(--foreground);font-weight:560}
+.taskbar span:last-child{margin-left:auto}
+.log{border-left:1px solid var(--border);padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.log-t{font-size:12px;color:var(--muted-foreground);font-weight:560}
+.log ol{margin:0;padding-left:18px;font-size:12.5px;display:flex;flex-direction:column;gap:5px}
+.log li::marker{color:var(--muted-foreground);font-family:var(--font-mono);font-size:11.5px}
+.log li.now{font-weight:620}
+.log .thought{font-size:12.5px;color:var(--muted-foreground);border-top:1px solid var(--border);padding-top:8px;margin-top:auto}
+.pc-f{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 14px;border-top:1px solid var(--border)}
+.pc-f small{font-size:12px;color:var(--muted-foreground);margin-left:auto}
+.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.colm-h{display:flex;align-items:center;justify-content:space-between;font-size:13px;margin:0 0 8px;font-weight:620}
+.colm-h .cnt{font-weight:500;color:var(--muted-foreground);font-size:12px}
+.run{border:1px solid var(--border);border-radius:var(--radius);background:var(--card);padding:11px 12px 12px;font-size:12.5px;display:flex;flex-direction:column;gap:8px}
+.run + .run{margin-top:10px}
+.run-t{font-size:13px;font-weight:600;line-height:1.35}
+.who{display:flex;align-items:center;gap:6px;color:var(--muted-foreground);font-size:12px;flex-wrap:wrap}
+.who .av{width:20px;height:20px;font-size:10.5px}
+.run-m{display:flex;justify-content:space-between;gap:8px;color:var(--muted-foreground);font-size:12px}
+.attempts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.attempts span{border:1px solid var(--border);border-radius:calc(var(--radius) - 2px);padding:5px 4px;font-size:11.5px;text-align:center;line-height:1.3}
+.attempts b{display:block;font-size:12px}
+.q{background:var(--muted);border-radius:calc(var(--radius) - 2px);padding:7px 9px;font-size:12.5px;color:var(--foreground)}
+.done{margin-top:10px;font-size:12.5px;color:var(--muted-foreground);padding:9px 12px;border:1px dashed var(--border);border-radius:var(--radius)}
+.frow{display:grid;grid-template-columns:170px minmax(0,1fr) 150px;gap:4px 18px;padding:10px 0;border-top:1px solid var(--border);margin:0}
+.frow.two{grid-template-columns:150px minmax(0,1fr)}
+.frow dt{font-weight:600}
+.frow dd{margin:0}
+.frow .desc{color:var(--muted-foreground)}
+.on-svc{display:flex;flex-direction:column;gap:2px;font-size:12.5px}
+.client{border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;background:var(--card)}
+.client-t{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.client-t strong{font-size:15px}
+.client-t span{color:var(--muted-foreground);font-size:13px}
+.parts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.parts span{font-size:12.5px;padding:2px 9px;border-radius:999px;border:1px solid var(--border)}
+.cols{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));column-gap:10px}
+.cols > div{display:flex;flex-direction:column}
+.wire{height:48px;position:relative;display:flex;justify-content:center;align-items:center;flex:none}
+.wire::before{content:"";position:absolute;top:0;bottom:0;left:50%;border-left:1.5px solid var(--c)}
+.wire span{position:relative;background:var(--background);font:11.5px var(--font-mono);padding:2px 4px;color:var(--muted-foreground);white-space:nowrap}
+.svc{border:1px solid var(--border);border-radius:var(--radius);padding:11px 12px 12px;background:var(--card);flex:1}
+.svc-n{display:flex;align-items:center;gap:7px;font-weight:620;font-size:13.5px}
+.svc-n::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--c);flex:none}
+.svc p{margin:5px 0 6px;font-size:12.5px;line-height:1.45}
+.svc .where{font:11.5px var(--font-mono);color:var(--muted-foreground)}
+.svc ul{margin:6px 0 0;padding-left:16px;font-size:12.5px;display:flex;flex-direction:column;gap:3px}
+.server{margin-left:calc((100% + 10px) / 5)}
+.server > .wire{width:calc((100% - 30px) / 4)}
+.srv{border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;background:var(--card)}
+.srv strong{display:block;font-size:13.5px;margin-bottom:6px}
+.srv dl{display:grid;grid-template-columns:max-content 1fr;gap:5px 14px;margin:0;font-size:12.5px}
+.srv dt{display:flex;align-items:center;gap:7px;font-weight:560}
+.srv dt::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
+.srv dd{margin:0;color:var(--muted-foreground)}
+.lower{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:10px}
+.lower > div{display:flex;flex-direction:column}
+.lat{font-size:13px;color:var(--muted-foreground);margin:16px 0 0;max-width:68ch}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-weight:560;color:var(--muted-foreground);font-size:12.5px;padding:0 12px 8px 0;border-bottom:1px solid var(--border)}
+td{padding:9px 12px 9px 0;border-bottom:1px solid var(--border);vertical-align:top}
+td:first-child{font-weight:560}
+.n{text-align:right;white-space:nowrap;padding-right:0}
+tfoot td{border-bottom:0;font-weight:650;font-size:14.5px;padding-top:12px}
+.plan{color:var(--muted-foreground)}
+.risks{margin:8px 0 0;padding-left:18px;font-size:14px;display:flex;flex-direction:column;gap:5px;max-width:68ch}
+.steps{list-style:none;counter-reset:s;margin:0;padding:0}
+.steps li{counter-increment:s;display:grid;grid-template-columns:28px minmax(0,1fr);gap:2px 10px;padding:10px 0;border-top:1px solid var(--border)}
+.steps li::before{content:counter(s);font:600 13px/1.55 var(--font-mono);color:var(--muted-foreground);grid-row:span 2}
+.steps b{font-weight:620}
+.steps span{color:var(--muted-foreground)}
+@media (max-width:620px){
+  h1{font-size:29px}
+  .layer{grid-template-columns:1fr}
+  .panes{grid-template-columns:1fr}
+  .side{order:2;border-right:0;border-top:1px solid var(--border)}
+  .msgs{padding:12px 12px 4px}
+  .comp,.drive{margin:10px 12px 12px}
+  .comp .k{display:none}
+  .watch{margin-left:0}
+  .key{grid-template-columns:1fr}
+  .pc-b{grid-template-columns:1fr}
+  .log{border-left:0;border-top:1px solid var(--border)}
+  .pc-f small{margin-left:0;flex-basis:100%}
+  .board{grid-template-columns:1fr}
+  .cols,.lower{grid-template-columns:1fr}
+  .wire{height:32px;justify-content:flex-start}
+  .wire::before{left:20px}
+  .wire span{margin-left:30px;background:none;padding:0}
+  .server{margin-left:0}
+  .server > .wire{width:auto}
+  .srv dl{grid-template-columns:1fr;gap:1px}
+  .srv dd{margin-bottom:6px}
+  .frow,.frow.two{grid-template-columns:1fr}
+  .on-svc{flex-direction:row;flex-wrap:wrap;gap:4px 14px;margin-top:2px}
+  td.plan{font-size:12.5px}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-spk" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M19 11a7 7 0 0 1-14 0"/><path d="M12 18v3"/></symbol>
+  <symbol id="i-hp" viewBox="0 0 24 24"><path d="M4 16v-4a8 8 0 0 1 16 0v4"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/></symbol>
+  <symbol id="i-cam" viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3"/></symbol>
+  <symbol id="i-scr" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol>
+  <symbol id="i-cur" viewBox="0 0 24 24"><path d="M4 3l7 17 2.4-7.4L21 10.2z"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/></symbol>
+  <symbol id="i-term" viewBox="0 0 24 24"><path d="m5 7 5 5-5 5"/><path d="M12 18h7"/></symbol>
+  <symbol id="i-pc" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
+  <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M4 13h4l2 3h4l2-3h4"/><path d="M5 5h14l1 8v6H4v-6z"/></symbol>
+  <symbol id="i-board" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M15 4v16"/></symbol>
+  <symbol id="i-thread" viewBox="0 0 24 24"><path d="M5 5h14v10H9l-4 4z"/></symbol>
+</svg>
+
+<header>
+  <h1>Uplink Room</h1>
+  <p class="lede">A shared space where the team and all of its agents work together. Uplink Room doesn't build agents. It connects the ones you already use (Claude Code, Codex, Grok, Hermes, OpenClaw) through the tools that already run them (T3 Code, Cua Spaces), and adds what a team needs around them: channels, calls, projects, and one view of everyone's work.</p>
+  <p class="name-note">Named after the uplink room at NASA's JPL, where the Curiosity team sends commands to its rover. Internal first; a product later if it earns it.</p>
+  <dl class="facts">
+    <div><dt>Desktop app</dt><dd>Electron, macOS and Windows</dd></div>
+    <div><dt>Connects</dt><dd>T3 Code, Cua Spaces, A2A agents</dd></div>
+    <div><dt>Region</dt><dd>US East</dd></div>
+    <div><dt>To start</dt><dd>$0–75 a month, plus machines</dd></div>
+  </dl>
+</header>
+
+<section>
+  <h2>One layer up</h2>
+  <p class="sub">T3 Code runs many agents on one machine. Uplink Room connects many machines, T3 Codes, terminals, and agents for a whole team.</p>
+  <div class="layer top"><div class="layer-n">Uplink Room<small>The team's space. What we build.</small></div>
+    <div class="chips"><span>People and roles</span><span>Channels and calls</span><span>Projects and runs</span><span>Waiting-on-you inbox</span><span>One view of every agent</span></div></div>
+  <div class="lgap"><span>MCP, A2A, Spaces</span></div>
+  <div class="layer"><div class="layer-n">Control planes<small>Open source. We connect to them.</small></div>
+    <div class="chips"><span><b>T3 Code</b> threads, terminals, worktrees, browser tabs</span><span><b>Cua Spaces</b> shared desktops</span><span><b>Agent gateways</b> OpenClaw, Hermes</span></div></div>
+  <div class="lgap"><span>start and steer</span></div>
+  <div class="layer"><div class="layer-n">Agents<small>Bring your own subscriptions.</small></div>
+    <div class="chips"><span>Claude Code</span><span>Codex</span><span>Grok Build</span><span>Cursor</span><span>OpenCode</span><span>Antigravity</span><span>Hermes Agent</span><span>OpenClaw</span><span class="not">Grok Bot, not yet</span></div></div>
+  <div class="lgap"><span>call</span></div>
+  <div class="layer"><div class="layer-n">Models<small>The labs.</small></div>
+    <div class="chips"><span>Claude</span><span>GPT</span><span>Grok</span><span>Gemini</span><span>Open models</span></div></div>
+  <ul class="how">
+    <li><b>T3 Code does the agent work.</b> It already runs Claude Code, Codex, Grok Build, Cursor, OpenCode, and Antigravity on a machine, with terminals and browser tabs. Its MCP server lets another app list, start, message, and stop threads.</li>
+    <li><b>Uplink Room does the team work.</b> Who is on which project, who approves what, which agent is stuck, and a call to talk it through.</li>
+    <li><b>Grok Bot can't join yet.</b> It's a closed app. Grok's coding agent, Grok Build, joins today through T3 Code.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>What's in it</h2>
+  <p class="sub">Eight building blocks. Uplink Room builds the first three and the bridge behind terminals; the rest come from tools that already exist.</p>
+  <dl>
+    <div class="frow"><dt>Channels</dt><dd class="desc">Text, replies, DMs, reactions, search, and interactive HTML apps posted into messages.</dd><dd class="on-svc"><span class="dot" style="--c:var(--svc-convex)">Convex</span><span class="dot" style="--c:var(--svc-app)">App sandbox</span></dd></div>
+    <div class="frow"><dt>Calls</dt><dd class="desc">Voice channels, video, and screen share with sound. Agents can join a call to listen and take notes.</dd><dd class="on-svc"><span class="dot" style="--c:var(--svc-livekit)">LiveKit</span></dd></div>
+    <div class="frow"><dt>Projects</dt><dd class="desc">Everything for one piece of work: its channel, agent threads, terminals, Spaces, files, and a board of tasks and their runs.</dd><dd class="on-svc"><span class="dot" style="--c:var(--svc-convex)">Convex</span></dd></div>
+    <div class="frow"><dt>Agent threads</dt><dd class="desc">T3 Code threads from any linked machine, shown in a channel. One driver at a time; others suggest prompts or ask for the wheel.</dd><dd class="on-svc"><span class="dot" style="--c:var(--svc-agent)">T3 Code</span></dd></div>
+    <div class="frow"><dt>Terminals</dt><dd class="desc">Any terminal on a linked machine, shared by the bridge: a plain shell, tmux, cmux, herdr, Rex, or T3 Code's own. Access sets who can watch, suggest, or drive.</dd><dd class="on-svc"><span class="dot" style="--c:var(--svc-agent)">Bridge</span></dd></div>
+    <div class="frow"><dt>Spaces</dt><dd class="desc">Full desktops on machines you own or rent. People and agents each get a cursor; anyone with edit access can step in.</dd><dd class="on-svc"><span class="dot" style="--c:var(--svc-pc)">Cua Spaces</span></dd></div>
+    <div class="frow"><dt>Shared browsers</dt><dd class="desc">For people browsing together. Agents use T3 Code's browser tabs, which you can watch and take over.</dd><dd class="on-svc"><span class="dot" style="--c:var(--svc-hyper)">Hyperbeam</span><span class="dot" style="--c:var(--svc-agent)">T3 Code</span></dd></div>
+    <div class="frow"><dt>Files</dt><dd class="desc">PDFs, images, docs, and canvases, with comments from people and agents pinned to the exact spot.</dd><dd class="on-svc"><span class="dot" style="--c:var(--svc-oss)">PDF.js, Tiptap, Excalidraw</span></dd></div>
+  </dl>
+</section>
+
+<section>
+  <h2>Agent threads</h2>
+  <p class="sub">In the Reef Runner project, Claude Code fixes a bug through T3 Code on the build machine while three people watch.</p>
+  <div class="win" role="img" aria-label="Mockup of a shared agent thread in the Reef Runner project">
+    <div class="tb"><span class="lights"><i></i><i></i><i></i></span><span class="tb-title">Uplink Room</span></div>
+    <div class="panes">
+      <aside class="side">
+        <div class="team">Your team</div>
+        <div class="grp">
+          <div class="ch unread"><svg class="i"><use href="#i-inbox"/></svg>Waiting on you<span class="n">2</span></div>
+        </div>
+        <div class="grp">
+          <div class="grp-h">Reef Runner</div>
+          <div class="ch"><svg class="i"><use href="#i-board"/></svg>Runs</div>
+          <div class="ch"><span class="h">#</span>design</div>
+          <div class="ch"><span class="h">#</span>build</div>
+          <div class="ch"><svg class="i"><use href="#i-thread"/></svg>Threads</div>
+          <div class="ch on sub-ch">Fix double jump</div>
+          <div class="ch sub-ch">Level 3 layout</div>
+          <div class="ch"><svg class="i"><use href="#i-pc"/></svg>Machines</div>
+          <div class="ch sub-ch">build-linux<span class="st"></span></div>
+          <div class="ch sub-ch">playtest-pc<span class="st"></span></div>
+          <div class="ch sub-ch">julio-mbp<span class="st off"></span></div>
+          <div class="ch"><svg class="i"><use href="#i-file"/></svg>Files</div>
+        </div>
+        <div class="grp" style="padding-bottom:12px">
+          <div class="grp-h">Other projects</div>
+          <div class="ch">Website</div>
+          <div class="ch">Ops</div>
+        </div>
+      </aside>
+      <main class="chan">
+        <div class="th-h">
+          <div class="th-t">Fix double jump on ledges</div>
+          <span class="chip"><span class="av bot" style="width:16px;height:16px;font-size:9.5px;border-radius:4px">cc</span>Claude Code</span>
+          <span class="chip via">T3 Code on build-linux</span>
+          <span class="chip work">Working</span>
+          <span class="watch"><span class="stack"><span class="av">J</span><span class="av">A</span><span class="av">D</span></span>3 here</span>
+        </div>
+        <div class="th-tabs"><span class="tab on">Thread</span><span class="tab">Diff +9 −4</span><span class="tab">Terminal</span><span class="tab">Files</span></div>
+        <div class="msgs">
+          <div class="msg">
+            <span class="av lg">J</span>
+            <div><div class="meta"><b>Julio</b><time>10:41</time></div>
+            <p>Players can double jump after walking off a ledge. Find out why and fix it, with a test.</p></div>
+          </div>
+          <div class="msg">
+            <span class="av lg bot">cc</span>
+            <div>
+              <div class="meta"><b>Claude Code</b><span class="badge">Agent</span><time>10:42</time></div>
+              <ul class="acts">
+                <li><svg class="i"><use href="#i-file"/></svg>Read <code>src/player/movement.ts</code></li>
+                <li><svg class="i"><use href="#i-file"/></svg>Read <code>src/player/movement.test.ts</code></li>
+              </ul>
+              <p style="margin-top:8px">The jump counter resets when the player leaves the ground, so coyote time hands out a second jump. I'll reset it only on landing.</p>
+              <ul class="acts">
+                <li><svg class="i"><use href="#i-edit"/></svg>Edited <code>src/player/movement.ts</code><span class="plus">+9</span><span class="minus">−4</span></li>
+              </ul>
+              <div class="term">
+                <div class="term-h"><svg class="i"><use href="#i-term"/></svg><span class="mono">build-linux</span><span>read-only for viewers</span></div>
+<pre><span class="dim">$</span> pnpm test movement
+ <span class="pass">✓</span> jumps once from the ground
+ <span class="pass">✓</span> coyote jump within 120 ms
+ <span class="pass">✓</span> no second jump after leaving a ledge
+<span class="dim"> Tests</span>  <span class="pass">3 passed</span> (3)</pre>
+              </div>
+            </div>
+          </div>
+          <div class="sugg">
+            <span class="av lg">A</span>
+            <div>
+              <div class="meta"><b>Ana</b><span style="font-size:12px;color:var(--muted-foreground)">suggested a prompt</span></div>
+              <p>Also check that wall jumps still reset the counter.</p>
+              <div class="act"><small>Waiting for Julio</small><button class="btn sm">Dismiss</button><button class="btn sm pri">Send</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="drive"><span class="chip">You're driving</span><span class="ph">Message Claude Code</span><button class="btn sm">Pass the wheel</button></div>
+      </main>
+    </div>
+  </div>
+  <ul class="how">
+    <li><b>The thread lives in T3 Code</b> on build-linux, using Julio's own Claude subscription. Uplink Room starts and follows it through T3 Code's MCP server and shows it in the project.</li>
+    <li><b>One driver, many suggesters.</b> This is T3 Code's guest-link flow (a guest's message waits until the owner sends or dismisses it), brought into a channel.</li>
+    <li><b>Any machine.</b> Each teammate's laptop and each shared cloud box runs T3 Code. Uplink Room keeps the list and sends new threads to whichever machine fits.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Spaces</h2>
+  <p class="sub">Codex playtests the Windows build on the office PC through Cua Spaces. Anyone watching can step in.</p>
+  <div class="pc" role="img" aria-label="Mockup of an agent operating a shared Windows desktop">
+    <div class="pc-h">
+      <svg class="i"><use href="#i-pc"/></svg><strong>playtest-pc</strong>
+      <span class="muted">Windows 11, office PC</span>
+      <span class="chip via">Cua Space</span>
+      <span class="chip work">Codex is driving</span>
+      <span class="watch"><span class="stack"><span class="av">A</span><span class="av">D</span></span>2 watching</span>
+    </div>
+    <div class="pc-b">
+      <div class="screen">
+        <div class="gwin">
+          <div class="gwin-t"><span>Reef Runner 0.4</span><span>playtest build</span></div>
+          <div class="gwin-b">
+            <div class="pg-t">Settings</div>
+            <div class="set"><span>Resolution</span><span>1920 × 1080</span></div>
+            <div class="set"><span>Window mode</span><span>Fullscreen</span></div>
+            <div class="set"><span>V-Sync</span><span>On</span></div>
+            <div class="set"><span>Controller</span><span>Xbox, connected</span></div>
+            <div class="btns"><button class="btn sm">Back</button><button class="btn sm pri">Apply</button></div>
+          </div>
+          <span class="cur" style="--c:var(--svc-agent);right:4px;bottom:-22px"><svg viewBox="0 0 24 24"><use href="#i-cur"/></svg><span>codex</span></span>
+        </div>
+        <div class="taskbar"><b>Start</b><span>ReefRunner.exe</span><span>10:58</span></div>
+      </div>
+      <div class="log">
+        <div class="log-t">What Codex is doing</div>
+        <ol>
+          <li>Launched ReefRunner.exe</li>
+          <li>Opened Settings</li>
+          <li>Set resolution to 1920 × 1080</li>
+          <li class="now">Clicking Apply</li>
+        </ol>
+        <p class="thought">Next: start level 1 and check the frame rate with V-Sync on.</p>
+      </div>
+    </div>
+    <div class="pc-f">
+      <button class="btn pri">Step in</button>
+      <button class="btn">Open in Spaces</button>
+      <small>Each person and agent has a cursor. Step in, then hand the desktop back.</small>
+    </div>
+  </div>
+  <ul class="how">
+    <li><b>Cua Spaces runs the desktops.</b> It turns machines you own or rent (a Mac or PC in the office, a Linux box, a VM in your own AWS or Google Cloud) into shared desktops. Claude Code, Codex, and Cursor can drive them.</li>
+    <li><b>Viewer or editor.</b> Share a Space to watch or to work in it. Teleport moves a signed-in app session into a Space after you approve it.</li>
+    <li><b>People still matter here.</b> On OSWorld 2.0, a test of 108 long computer tasks, the best agent completes 44% (Claude Opus 5, leaderboard of Oct 15, 2026).</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Projects: a board of runs</h2>
+  <p class="sub">Cards are pieces of agent work, not tickets. Nobody drags them; a card moves when its agent's state changes in T3 Code or Spaces.</p>
+  <div class="board" role="img" aria-label="Mockup of the Reef Runner runs board">
+    <div>
+      <div class="colm-h"><span class="dot" style="--c:var(--success)">Running</span><span class="cnt">2</span></div>
+      <div class="run">
+        <div class="run-t">Fix double jump on ledges</div>
+        <div class="who"><span class="av">J</span>Julio owns<span class="av bot">cc</span>Claude Code</div>
+        <div class="run-m"><span>build-linux</span><span>6 min</span></div>
+      </div>
+      <div class="run">
+        <div class="run-t">Playtest 0.4 settings on Windows</div>
+        <div class="who"><span class="av">D</span>Diego owns<span class="av bot">cx</span>Codex</div>
+        <div class="run-m"><span>playtest-pc</span><span>14 min</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="colm-h"><span class="dot" style="--c:var(--warning)">Waiting on you</span><span class="cnt">2</span></div>
+      <div class="run">
+        <div class="run-t">Level 3 layout</div>
+        <div class="who"><span class="av">A</span>Ana owns</div>
+        <div class="attempts"><span><b>A</b>Claude</span><span><b>B</b>Codex</span><span><b>C</b>Grok Build</span></div>
+        <div class="run-m"><span>3 runs ready</span><button class="btn sm">Compare</button></div>
+      </div>
+      <div class="run">
+        <div class="run-t">Steam page short description</div>
+        <div class="who"><span class="av">J</span>Julio owns<span class="av bot">hm</span>Hermes</div>
+        <div class="q">Call it a "roguelite" or an "action platformer"?</div>
+      </div>
+    </div>
+    <div>
+      <div class="colm-h"><span class="dot" style="--c:var(--info)">Ready to review</span><span class="cnt">1</span></div>
+      <div class="run">
+        <div class="run-t">Move input to the new controller API</div>
+        <div class="who"><span class="av">D</span>Diego owns<span class="av bot">cx</span>Codex</div>
+        <div class="run-m"><span>PR #142, +312 −88</span><span>julio-mbp</span></div>
+      </div>
+      <div class="done">12 runs done this week</div>
+    </div>
+  </div>
+  <ul class="how">
+    <li><b>A card is a pointer.</b> It points at a T3 Code thread, a Space, or an agent conversation. Uplink Room reads its state and moves the card.</li>
+    <li><b>An owner on every task, a driver on every run.</b> A person owns the result; whoever drives a run, a person or an agent, does the work. Linear splits the same way, with assignee and delegate.</li>
+    <li><b>Runs side by side.</b> Start the same task as three runs with different agents, compare the results, keep one.</li>
+    <li><b>Waiting on you.</b> Every question and approval from every machine and every agent lands in one inbox.</li>
+    <li><b>From talk to work.</b> An agent listens to channels and calls and proposes runs with its reasoning. You accept or dismiss.</li>
+  </ul>
+  <p class="sample">Names and numbers on this page are sample data.</p>
+</section>
+
+<section>
+  <h2>Channels and calls</h2>
+  <p class="sub">The #dev channel during a standup. Numbered markers show which service powers each part.</p>
+  <div class="win" role="img" aria-label="Mockup of the Uplink Room dev channel">
+    <div class="tb"><span class="lights"><i></i><i></i><i></i></span><span class="tb-title">Uplink Room</span></div>
+    <div class="panes">
+      <aside class="side">
+        <div class="team">Your team</div>
+        <div class="grp">
+          <div class="grp-h">Text channels <span class="mk" style="--c:var(--svc-convex)">1</span></div>
+          <div class="ch"><span class="h">#</span>general</div>
+          <div class="ch on"><span class="h">#</span>dev</div>
+          <div class="ch"><span class="h">#</span>design</div>
+          <div class="ch unread"><span class="h">#</span>deploys</div>
+        </div>
+        <div class="grp">
+          <div class="grp-h">Voice <span class="mk" style="--c:var(--svc-livekit)">2</span></div>
+          <div class="ch"><svg class="i"><use href="#i-spk"/></svg>Standup</div>
+          <ul class="vppl">
+            <li><span class="av">J</span>Julio<span class="live">Live</span></li>
+            <li><span class="av talk">A</span>Ana</li>
+            <li><span class="av">D</span>Diego</li>
+            <li><span class="av bot">nt</span>notetaker</li>
+          </ul>
+        </div>
+        <div class="dock">
+          <div class="dock-t"><strong>Voice connected</strong><span>Standup, sharing your screen</span></div>
+          <div class="dock-b">
+            <button class="ib" aria-label="Mute"><svg class="i"><use href="#i-mic"/></svg></button>
+            <button class="ib" aria-label="Deafen"><svg class="i"><use href="#i-hp"/></svg></button>
+            <button class="ib" aria-label="Camera"><svg class="i"><use href="#i-cam"/></svg></button>
+            <button class="ib on" aria-label="Stop sharing screen"><svg class="i"><use href="#i-scr"/></svg></button>
+          </div>
+        </div>
+      </aside>
+      <main class="chan">
+        <div class="ch-h">
+          <span class="h">#</span><strong>dev</strong>
+          <nav class="tabs"><span class="tab on">Chat</span><span class="tab">Sprint board</span><span class="tab">+ App</span></nav>
+        </div>
+        <div class="msgs">
+          <div class="msg">
+            <span class="av lg">A</span>
+            <div><div class="meta"><b>Ana</b><time>10:02</time></div>
+            <p>Staging build for the checkout fix is up. Can someone check it before we ship?</p></div>
+          </div>
+          <div class="msg">
+            <span class="av lg bot">db</span>
+            <div>
+              <div class="meta"><b>deploy-bot</b><span class="badge">Agent</span><time>10:03</time><span class="mk" style="--c:var(--svc-agent)">5</span></div>
+              <p>Build 214 passed. Here's the preview.</p>
+              <div class="frame">
+                <div class="fr-h"><span class="mono">deploy-status</span><span>HTML app, sandboxed</span><span class="mk" style="--c:var(--svc-app)">3</span></div>
+                <div class="dep">
+                  <div class="dep-top"><strong>checkout-fix</strong><span class="ok">Ready</span></div>
+                  <dl>
+                    <dt>Tests</dt><dd>182 passed</dd>
+                    <dt>Preview</dt><dd class="mono">staging.yourapp.com</dd>
+                    <dt>Commit</dt><dd class="mono">a3f9c1e</dd>
+                  </dl>
+                  <div class="btns"><button class="btn">Open preview</button><button class="btn pri">Promote to production</button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="msg">
+            <span class="av lg">D</span>
+            <div>
+              <div class="meta"><b>Diego</b><time>10:05</time></div>
+              <p>Opened a shared browser on the preview so we can click through it together.</p>
+              <div class="browser">
+                <div class="br-h"><svg class="i"><use href="#i-globe"/></svg><span class="url">staging.yourapp.com/checkout</span><span class="mk" style="--c:var(--svc-hyper)">4</span></div>
+                <div class="page">
+                  <div class="pg-t">Order summary</div>
+                  <div class="li"><span>Pro plan, monthly</span><span>$49.00</span></div>
+                  <div class="li"><span>Tax</span><span>$3.43</span></div>
+                  <div class="li tot"><span>Total</span><span>$52.43</span></div>
+                  <button class="pay">Pay $52.43</button>
+                  <span class="cur" style="--c:var(--primary);left:58%;top:36px"><svg viewBox="0 0 24 24"><use href="#i-cur"/></svg><span>Ana</span></span>
+                  <span class="cur" style="--c:var(--muted-foreground);left:30%;top:112px"><svg viewBox="0 0 24 24"><use href="#i-cur"/></svg><span>Diego</span></span>
+                </div>
+                <div class="br-f">
+                  <span class="stack"><span class="av">A</span><span class="av">D</span><span class="av">J</span></span>
+                  <span>3 people in this browser</span>
+                  <button class="btn">Join</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="comp"><span>Message #dev</span><span class="k"><kbd>/</kbd>apps and commands</span></div>
+      </main>
+    </div>
+  </div>
+  <ol class="key">
+    <li><span class="mk" style="--c:var(--svc-convex)">1</span><span><b>Convex</b>: channels, messages, presence, files.</span></li>
+    <li><span class="mk" style="--c:var(--svc-livekit)">2</span><span><b>LiveKit</b>: voice channel, screen share, and a note-taking agent in the call.</span></li>
+    <li><span class="mk" style="--c:var(--svc-app)">3</span><span><b>HTML app</b> posted by an agent, running in a sandboxed frame.</span></li>
+    <li><span class="mk" style="--c:var(--svc-hyper)">4</span><span><b>Hyperbeam</b> shared browser. Anyone in it can take control.</span></li>
+    <li><span class="mk" style="--c:var(--svc-agent)">5</span><span><b>Agent</b> member, labeled as an agent everywhere it appears.</span></li>
+  </ol>
+</section>
+
+<section>
+  <h2>How each agent gets in</h2>
+  <p class="sub">Uplink Room never runs an agent itself. Each one comes in through the tool that already runs it.</p>
+  <table>
+    <thead><tr><th>Agent</th><th>Gets in through</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Claude Code, Codex, Cursor, OpenCode, Antigravity</td><td>T3 Code on any linked machine</td><td class="plan">Works today, with each person's own subscriptions.</td></tr>
+      <tr><td>Grok</td><td>Grok Build, through T3 Code</td><td class="plan">Works today. Grok Bot itself is a closed app and can't join yet.</td></tr>
+      <tr><td>Agents using a desktop</td><td>Cua Spaces</td><td class="plan">Claude Code, Codex, and Cursor can drive a Space.</td></tr>
+      <tr><td>Hermes Agent</td><td>A2A 1.0, or its platform plugin</td><td class="plan">Open source (MIT), from Nous Research.</td></tr>
+      <tr><td>OpenClaw</td><td>A2A 1.0</td><td class="plan">Open source (MIT), with hundreds of published security advisories. Give it its own gateway and narrow access.</td></tr>
+      <tr><td>Any MCP client</td><td>Uplink Room's own MCP server</td><td class="plan">Claude Code or Codex on a laptop can read and post in channels.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Architecture</h2>
+  <p class="sub">The desktop app talks to five hosted services. Convex holds the team layer and the connectors to T3 Code, Cua Spaces, and outside agents.</p>
+  <div class="arch">
+    <div class="client">
+      <div class="client-t"><strong>Uplink Room desktop app</strong><span>Electron, on everyone's Mac or Windows PC in Miami and Guayaquil</span></div>
+      <div class="parts"><span>Chat</span><span>Calls</span><span>Projects</span><span>Thread views</span><span>Desktop views</span><span>Shared browsers</span><span>Files</span></div>
+    </div>
+    <div class="cols">
+      <div style="--c:var(--svc-clerk)"><div class="wire"><span>OAuth</span></div>
+        <div class="svc"><div class="svc-n">Clerk</div><p>Sign-in with Google accounts.</p><div class="where">Free tier</div></div></div>
+      <div style="--c:var(--svc-convex)"><div class="wire"><span>WebSocket</span></div>
+        <div class="svc"><div class="svc-n">Convex Cloud</div><p>People, channels, projects, runs, approvals, connections.</p><div class="where">N. Virginia</div></div></div>
+      <div style="--c:var(--svc-livekit)"><div class="wire"><span>WebRTC</span></div>
+        <div class="svc"><div class="svc-n">LiveKit Cloud</div><p>Voice, video, screen share, agents in calls.</p><div class="where">Nearest edge</div></div></div>
+      <div style="--c:var(--svc-hyper)"><div class="wire"><span>Embed SDK</span></div>
+        <div class="svc"><div class="svc-n">Hyperbeam</div><p>Browsers people share.</p><div class="where">North America</div></div></div>
+      <div style="--c:var(--svc-app)"><div class="wire"><span>iframe</span></div>
+        <div class="svc"><div class="svc-n">App sandbox</div><p>Renders HTML apps and channel tabs.</p><div class="where">Its own domain</div></div></div>
+    </div>
+    <div class="server" style="--c:var(--svc-convex)">
+      <div class="wire"><span>server side</span></div>
+      <div class="srv">
+        <strong>Convex functions</strong>
+        <dl>
+          <dt style="--c:var(--svc-agent)">T3 connector</dt><dd>Signs in to each machine's T3 Code MCP server; starts, messages, and follows threads.</dd>
+          <dt style="--c:var(--svc-pc)">Spaces connector</dt><dd>Lists Spaces, shares them with the right people, links them to runs.</dd>
+          <dt style="--c:var(--svc-agent)">Agent gateway</dt><dd>A2A endpoint and MCP server for outside agents, one token each.</dd>
+          <dt style="--c:var(--svc-convex)">Runs and approvals</dt><dd>The board, the waiting-on-you inbox, durable workflows.</dd>
+        </dl>
+      </div>
+      <div class="lower">
+        <div style="--c:var(--svc-agent)"><div class="wire"><span>MCP, OAuth</span></div>
+          <div class="svc"><div class="svc-n">T3 Code machines</div><p>Every laptop and shared box.</p>
+            <ul><li>Claude Code, Codex, Grok Build, Cursor</li><li>Terminals, worktrees</li><li>Agent browser tabs</li></ul>
+            <div class="where" style="margin-top:8px">T3 Connect or Tailscale</div></div></div>
+        <div style="--c:var(--svc-pc)"><div class="wire"><span>Spaces</span></div>
+          <div class="svc"><div class="svc-n">Cua Spaces</div><p>Desktops on machines you own or rent.</p>
+            <ul><li>Office Mac or PC</li><li>Linux VMs in your cloud</li></ul>
+            <div class="where" style="margin-top:8px">Your machines</div></div></div>
+        <div style="--c:var(--svc-agent)"><div class="wire"><span>A2A</span></div>
+          <div class="svc"><div class="svc-n">Outside agents</div><p>Agents that live elsewhere.</p>
+            <ul><li>Hermes Agent</li><li>OpenClaw</li><li>Any MCP client</li></ul>
+            <div class="where" style="margin-top:8px">Their own servers</div></div></div>
+      </div>
+    </div>
+  </div>
+  <p class="lat">Why US East: ping measured today from Quito is 49 ms to Miami, 77 ms to New York, and 127 ms to São Paulo.</p>
+</section>
+
+<section>
+  <h2>To test first</h2>
+  <p class="sub">Questions the docs don't answer. Each one is a small experiment.</p>
+  <ol class="steps">
+    <li><b>Live thread view</b><span>Can Uplink Room embed T3 Code's web client for a thread, or do we reuse its client code (MIT)? Try both on one machine.</span></li>
+    <li><b>Enough for the board</b><span>Does T3 Code's MCP server report when a thread is waiting for input, or does Uplink Room need its client protocol?</span></li>
+    <li><b>Shared subscriptions</b><span>T3 Code says it stays within Claude Code's, Codex's, and Antigravity's terms. Check whether teammates prompting a thread on one person's subscription is allowed, or give shared machines their own accounts.</span></li>
+    <li><b>Spaces inside Uplink Room</b><span>Can a Space be shown in our app, or only in Cua's? Can it run on Daytona VMs, or only on machines we control?</span></li>
+  </ol>
+</section>
+
+<section>
+  <h2>Who else is building this</h2>
+  <p class="sub">People and agents in one workspace is taking off. As of October 2026:</p>
+  <dl>
+    <div class="frow two"><dt>Slack</dt><dd class="desc">Dreamforce 2026: code channels where the team watches an agent work, steers it, and ships a preview. Agents from Anthropic, Cognition, GitHub, Vercel, and OpenAI.</dd></div>
+    <div class="frow two"><dt>Claude Tag</dt><dd class="desc">June 2026, Slack only, beta. One Claude per channel that everyone shares, with admin-set tools, spending limits, and an activity log.</dd></div>
+    <div class="frow two"><dt>Grok Bot</dt><dd class="desc">August 2026, beta. Always-on agents with their own cloud computer, messaged like coworkers. A closed app.</dd></div>
+    <div class="frow two"><dt>Amp</dt><dd class="desc">Multiplayer threads for its own agent, and a Space that adds voice, video, and screen share to a thread.</dd></div>
+    <div class="frow two"><dt>Buzz (Block)</dt><dd class="desc">Open-source developer preview. Chat with teammates and agents, then plan, code, and open PRs in one place.</dd></div>
+  </dl>
+  <h3>Where Uplink Room is different</h3>
+  <p style="margin:0;max-width:68ch">Each of these pushes one company's agent or one company's chat. Uplink Room sits a layer above: it doesn't compete with T3 Code, Cua, or any agent, it brings them together for a team. That neutrality is the opening.</p>
+  <h3>Risks</h3>
+  <ul class="risks">
+    <li>It depends on young projects. T3 Code is at v0.1.x and guest links and linked machines are beta. Both T3 Code (MIT) and Cua Spaces (source-available) can be forked if needed.</li>
+    <li>Selling it later: Cua Spaces' license forbids competing products, so a paid Uplink Room would need Cua's hosted plan or a deal with them.</li>
+    <li>Agents on shared machines with saved logins are a security target, and the bridge holds a shell on people's machines.</li>
+    <li>Slack already ships code channels, and Buzz is free.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Monthly cost</h2>
+  <p class="sub">Most of the stack is free. You pay for machines, and for model use through the subscriptions you already have.</p>
+  <table>
+    <thead><tr><th>Piece</th><th>Plan</th><th class="n">Per month</th></tr></thead>
+    <tbody>
+      <tr><td>Convex Cloud</td><td class="plan">Free, or Professional at $25 per developer for daily backups</td><td class="n">$0–25</td></tr>
+      <tr><td>LiveKit Cloud</td><td class="plan">Build with 5,000 participant-minutes, or Ship with 150,000 for $50</td><td class="n">$0–50</td></tr>
+      <tr><td>Hyperbeam</td><td class="plan">10,000 participant-minutes free, then $0.007 a minute</td><td class="n">$0</td></tr>
+      <tr><td>T3 Code</td><td class="plan">Free and open source. T3 Connect is free for now, 3 machines per account.</td><td class="n">$0</td></tr>
+      <tr><td>Cua Spaces</td><td class="plan">Free: 2 live sessions and 20 remote hours a month. Teams: $30 per seat.</td><td class="n">$0, or $30/seat</td></tr>
+      <tr><td>Clerk, app sandbox</td><td class="plan">Free tiers</td><td class="n">$0</td></tr>
+    </tbody>
+    <tfoot><tr><td>Total to start</td><td></td><td class="n">$0–75</td></tr></tfoot>
+  </table>
+  <p class="note">Plus machines: an office Mac or PC you already own costs nothing extra; a small cloud VM is about $0.17 an hour (Daytona's list price for 2 vCPU and 4 GB). Models run on each person's Claude, ChatGPT, and Grok subscriptions through T3 Code. Add $99 a year for Apple code signing.</p>
+</section>
+
+<section>
+  <h2>Build order</h2>
+  <p class="sub">Each step is usable on its own before the next one starts.</p>
+  <ol class="steps">
+    <li><b>Chat</b><span>Electron app, Clerk sign-in, channels, replies, DMs, and file uploads on Convex.</span></li>
+    <li><b>Calls</b><span>Voice channels, video, and screen share with sound on LiveKit.</span></li>
+    <li><b>Connect T3 Code</b><span>Link each teammate's machine and one shared box. Threads show up in projects; anyone can follow, the owner drives.</span></li>
+    <li><b>Connect Cua Spaces</b><span>The office PC and one Linux VM as shared desktops, linked to runs.</span></li>
+    <li><b>Projects</b><span>The board of tasks and runs, the waiting-on-you inbox, and several runs per task across agents.</span></li>
+    <li><b>Open the doors</b><span>A2A for Hermes and OpenClaw, and Uplink Room's own MCP server.</span></li>
+    <li><b>Files, apps, and browsers</b><span>PDFs, docs, canvases, HTML apps in messages, and shared browsers.</span></li>
+  </ol>
+</section>
+</body>
+</html>

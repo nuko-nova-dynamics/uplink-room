@@ -1,0 +1,111 @@
+<!doctype html>
+<!-- Today's sidebar: every caller listed under the channel, 5 rows and then 'and N more'. -->
+<html lang="en" data-theme="light" data-state="voice"><head><meta charset="utf-8"><meta name="viewport" content="width=1320"><style>
+:root{--ground:#FCFCFC;--sidebar:#F5F5F5;--raised:#FFFFFF;--hover:#EFEFEF;--current:#E8E8E8;--chip:#F0F0F0;--line:#E6E6E6;--text:#1A1A1A;--muted:#666666;--faint:#8F8F8F;--bubble-own:#222222;--on-own:#FFFFFF;--bubble:#EFEFEF;--hang-up:#E5484D;--speaking:#1F9D63;--face-fill:#E6E6E6;--face-ink:#4D4D4D;--screen:#0F1115;--shadow:0 6px 24px rgb(0 0 0/.08),0 1px 3px rgb(0 0 0/.06)}
+:root[data-theme=dark]{--ground:#121212;--sidebar:#0E0E0E;--raised:#1F1F1F;--hover:#262626;--current:#212121;--chip:#262626;--line:#2C2C2C;--text:#ECECEC;--muted:#A1A1A1;--faint:#636363;--bubble-own:#3B3B3B;--on-own:#ECECEC;--bubble:#262626;--speaking:#3ECF8E;--face-fill:#2E2E2E;--face-ink:#CFCFCF;--screen:#08090B;--shadow:0 6px 24px rgb(0 0 0/.5),0 0 0 1px #2C2C2C}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--ground)}
+body{font:400 13px/18px -apple-system,"SF Pro Text",Inter,system-ui,sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}
+svg{display:block;flex:none}
+.win{display:flex;width:1320px;height:840px;overflow:hidden;background:var(--ground)}
+.win.side-only{width:288px;height:560px}
+.side{width:288px;flex:none;background:var(--sidebar);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:8px}
+.side-top{display:flex;align-items:center;gap:8px;height:36px;padding:0 6px 0 10px;font-weight:600;font-size:14px}
+.side-top .grow{flex:1}
+.nav{position:relative;display:flex;align-items:center;gap:10px;min-height:36px;padding:0 10px;border-radius:10px;font-size:13px;color:var(--text)}
+.nav.big{min-height:44px}
+.nav.cur{background:var(--current)}
+.nav .grow{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav .lead{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--muted)}
+.nav.cur .lead{background:var(--hover)}
+.sect{font-size:13px;color:var(--muted);padding:18px 8px 8px}
+.muted{color:var(--muted)}
+.foot{margin-top:auto;display:flex;align-items:center;gap:10px;height:52px;padding:0 10px}
+.foot .grow{flex:1}
+.member{display:flex;align-items:center;gap:10px;height:36px;padding:0 10px 0 28px;color:var(--muted)}
+.member .grow{flex:1}
+.more-line{height:32px;padding:0 10px 0 34px;display:flex;align-items:center;color:var(--muted)}
+.f{width:32px;height:32px;border-radius:50%;background:var(--face-fill);color:var(--face-ink);font-weight:650;font-size:12px;letter-spacing:.02em;display:grid;place-items:center;flex:none;position:relative}
+.f.s20{width:20px;height:20px;font-size:8px}
+.f.s24{width:24px;height:24px;font-size:9.5px}
+.f.s28{width:28px;height:28px;font-size:10.5px}
+.f.s64{width:64px;height:64px;font-size:20px}
+.f.talk{box-shadow:inset 0 0 0 2px var(--speaking)}
+.agent{width:32px;height:32px;flex:none}
+.stack{display:flex;align-items:center}
+.stack .f{box-shadow:0 0 0 2px var(--ring-bg,var(--raised))}
+.stack .f+.f{margin-left:-6px}
+.stack .f:nth-child(1){z-index:3}.stack .f:nth-child(2){z-index:2}.stack .f:nth-child(3){z-index:1}
+.stack .f.talk{box-shadow:inset 0 0 0 2px var(--speaking),0 0 0 2px var(--ring-bg,var(--raised))}
+.nav.cur .stack .f{background:color-mix(in srgb,var(--text) 14%,var(--current))}
+.main{flex:1;min-width:0;display:flex;flex-direction:column;position:relative}
+.head{height:52px;flex:none;display:flex;align-items:center;gap:8px;padding:0 12px 0 20px;position:relative}
+.head .grow{flex:1}
+.h1{font-size:20px;font-weight:600;display:flex;align-items:center;gap:6px}
+.h1 .hash{color:var(--muted);font-weight:400}
+.tpill{position:absolute;left:50%;top:8px;transform:translateX(-50%);height:36px;padding:0 16px;border-radius:999px;background:var(--raised);border:1px solid var(--line);display:flex;align-items:center;gap:8px;font-weight:500;font-size:13px}
+.tpill .hash{color:var(--muted)}
+.ib{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:var(--text)}
+.ib.on{background:var(--current)}
+.btn{height:28px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--raised);display:inline-flex;gap:6px;align-items:center;font-size:13px;font-weight:500;white-space:nowrap}
+.btn.on{background:var(--current);border-color:transparent}
+.count{display:flex;align-items:center;gap:8px;color:var(--muted);margin-right:4px}
+.chat{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;width:720px;max-width:calc(100% - 48px);margin:0 auto;gap:10px;padding-bottom:12px}
+.day{align-self:center;color:var(--muted);font-size:13px;margin:4px 0}
+.own{align-self:flex-end;background:var(--bubble-own);color:var(--on-own);border-radius:18px;padding:9px 14px;font-size:15px;line-height:22px;max-width:70%}
+.msg{display:flex;gap:10px;align-items:flex-start}
+.msg .who{display:flex;gap:8px;align-items:baseline;font-size:13px;margin-bottom:4px}
+.msg .who b{font-weight:650}
+.bub{display:inline-block;background:var(--bubble);border-radius:18px;padding:9px 14px;font-size:15px;line-height:22px}
+.sys{align-self:center;display:flex;gap:6px;align-items:center;color:var(--muted);font-size:13px}
+.sys b{color:var(--text);font-weight:600}
+.composer{flex:none;width:720px;max-width:calc(100% - 48px);margin:0 auto 24px;height:44px;border-radius:22px;border:1px solid var(--line);background:var(--raised);display:flex;align-items:center;gap:10px;padding:0 12px 0 14px;color:var(--faint);font-size:15px}
+.composer .grow{flex:1}
+.composer svg{color:var(--muted)}
+/* Call controls */
+.ctl{width:36px;height:36px;border-radius:999px;display:grid;place-items:center;color:var(--text)}
+.ctl.leave{background:var(--hang-up);color:#fff}
+.ctl.off{background:var(--chip)}
+.controls{align-self:center;display:flex;gap:6px;padding:4px;border-radius:999px;background:var(--raised);box-shadow:var(--shadow)}
+.sep{width:1px;height:20px;background:var(--line);margin:0 4px}
+.time{font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px;padding:0 6px}
+.plus{font-size:12px;color:var(--muted);padding-left:6px;font-variant-numeric:tabular-nums}
+/* The shared screen: Ana's tide table */
+.screen{position:relative;background:var(--screen);border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.sheet{background:#fff;color:#1a1a1a;border-radius:6px;width:86%;height:84%;display:flex;flex-direction:column;overflow:hidden;font-size:12px}
+.sheet .bar{height:26px;background:#ececec;display:flex;align-items:center;gap:6px;padding:0 10px;flex:none}
+.sheet .bar i{width:9px;height:9px;border-radius:50%;background:#cfcfcf}
+.sheet .bar span{margin-left:8px;color:#555}
+.sheet h3{margin:10px 14px 6px;font-size:14px}
+.sheet table{border-collapse:collapse;margin:0 14px;width:calc(100% - 28px)}
+.sheet td,.sheet th{border-bottom:1px solid #e9e9e9;padding:4px 6px;text-align:left;font-variant-numeric:tabular-nums}
+.sheet th{color:#666;font-weight:600}
+.cap{position:absolute;left:10px;bottom:10px;display:flex;gap:6px;align-items:center;background:rgb(0 0 0/.6);color:#fff;border-radius:7px;padding:3px 8px;font-size:12px}
+.tools{position:absolute;right:10px;top:10px;display:flex;gap:4px;background:rgb(0 0 0/.6);color:#fff;border-radius:7px;padding:2px}
+.tools span{width:24px;height:24px;display:grid;place-items:center}
+/* Tiles (today) */
+.stage{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;padding:10px 20px 0}
+.tile{position:relative;border-radius:10px;background:color-mix(in srgb,var(--text) 6%,var(--ground));height:112px;display:grid;place-items:center}
+.tile.talk::after{content:"";position:absolute;inset:0;border:2px solid var(--speaking);border-radius:10px}
+.tile.small{height:74px}
+.tile.small .f.s64{width:40px;height:40px;font-size:13px}
+.tile .name{position:absolute;left:8px;bottom:8px;display:flex;gap:4px;align-items:center;background:var(--raised);border-radius:6px;padding:1px 6px;font-size:12px;color:var(--text)}
+.tile.small .name{bottom:5px;left:5px;font-size:11px}
+/* States */
+:root[data-state=voice] .when-screen{display:none!important}
+:root[data-state=screen] .when-voice{display:none!important}
+</style></head>
+<body><div class="win side-only"><aside class="side">
+    <div class="side-top"><svg class="agent" width="20" height="20" viewBox="0 0 32 32" aria-hidden="true"><path d="M23 4l3 3-6 8-3-1Z" fill="#7a5a2a"/><ellipse cx="15" cy="20" rx="11" ry="9" fill="#E8B04A"/><ellipse cx="15" cy="17" rx="9" ry="5" fill="#F3C969"/><circle cx="11.5" cy="20" r="1.4" fill="#2a1d08"/><circle cx="18.5" cy="20" r="1.4" fill="#2a1d08"/><ellipse cx="9" cy="23" rx="1.8" ry="1" fill="#e48b6a" opacity=".6"/><ellipse cx="21" cy="23" rx="1.8" ry="1" fill="#e48b6a" opacity=".6"/></svg><span>Harbor Labs</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><path d="m7 10 5 5 5-5"/></svg><span class="grow"></span><span class="ib"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><circle cx="11" cy="11" r="6"/><path d="m20 20-4.5-4.5"/></svg></span><span class="ib"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 5v14M5 12h14"/></svg></span></div>
+    <div class="nav big" style="margin-top:6px"><span class="lead"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><path d="M3 13h5l1.5 3h5L16 13h5"/><path d="M5.5 5h13L21 13v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-5Z"/></svg></span><span class="grow">Inbox</span></div>
+    <div class="sect">Roster</div>
+    <div class="nav big"><svg class="agent" width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><path d="M23 4l3 3-6 8-3-1Z" fill="#7a5a2a"/><ellipse cx="15" cy="20" rx="11" ry="9" fill="#E8B04A"/><ellipse cx="15" cy="17" rx="9" ry="5" fill="#F3C969"/><circle cx="11.5" cy="20" r="1.4" fill="#2a1d08"/><circle cx="18.5" cy="20" r="1.4" fill="#2a1d08"/><ellipse cx="9" cy="23" rx="1.8" ry="1" fill="#e48b6a" opacity=".6"/><ellipse cx="21" cy="23" rx="1.8" ry="1" fill="#e48b6a" opacity=".6"/></svg><span class="grow">Claude Code</span></div>
+    <div class="sect">Conversations</div>
+    <div class="nav big cur"><span class="lead"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><path d="M4 9h3l5-4v14l-5-4H4Z"/><path d="M16 9a4 4 0 0 1 0 6M19 6.5a8 8 0 0 1 0 11"/></svg></span><span class="grow">general</span></div>
+         <div class="member"><span class="f s24 talk" title="Rosa Vega">RV</span><span class="grow">Rosa Vega</span></div><div class="member"><span class="f s24" title="Ana Ruiz">AR</span><span class="grow">Ana Ruiz</span></div><div class="member"><span class="f s24" title="Ben Okafor">BO</span><span class="grow">Ben Okafor</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><path d="M15 9.3V6a3 3 0 0 0-5.7-1.3M9 9v3a3 3 0 0 0 5 2.2M19 11a7 7 0 0 1-.6 2.8M5 11a7 7 0 0 0 11.6 5.3M12 18v3M3 3l18 18"/></svg></div><div class="member"><span class="f s24" title="Chloe Martin">CM</span><span class="grow">Chloe Martin</span></div><div class="member"><span class="f s24" title="Dev Patel">DP</span><span class="grow">Dev Patel</span></div>
+         <div class="more-line">and 7 more</div>
+    <div class="nav big"><span class="f">LO</span><span class="grow">Lena Okafor and Sam Ito</span></div>
+    <div class="nav"><span style="width:16px;display:grid;place-items:center;color:var(--muted)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><path d="m7 10 5 5 5-5"/></svg></span><span class="grow muted">All conversations</span></div>
+    <div class="sect" style="display:flex;gap:4px;align-items:center">Projects <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><path d="m10 7 5 5-5 5"/></svg></div>
+    <div class="foot"><span class="f s24" title="Rosa Vega">RV</span><span class="grow">Rosa Vega</span><span class="ib"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg></span></div>
+  </aside></div></body></html>

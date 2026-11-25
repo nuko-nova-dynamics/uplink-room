@@ -1,0 +1,15 @@
+[
+  {
+    "check": "contrast",
+    "component": "pin-marker-pin-marker",
+    "state": "selected",
+    "selector": "#root > div.no-mac-inset:nth-child(1) > div.app:nth-child(1) > main.main:nth-child(2) > div.main-body:nth-child(2) > div.files-layout.ph-no-capture:nth-child(1) > section.viewer-col:nth-child(2) > div.viewer-body:nth-child(2) > div.image-viewer:nth-child(1) > div.image-scroll:nth-child(2) > div.image-stage.fit:nth-child(1) > button.pin.selected:nth-child(2)::text(0)[0:1]",
+    "reason": "The selected pin's number sits on the marker its ::before paints (--text behind --ground), which the measurement can't see: it compares the number with the page under the transparent button and gets 1:1. Read from the captures, the painted pair is 15.31:1 in dark and 16.90:1 in light (captures/pin-marker-pin-marker/selected/*/2x.png)."
+  },
+  {
+    "check": "even-spacing",
+    "component": "composer-task-picker",
+    "selector": "#root > div.no-mac-inset:nth-child(1) > div.app:nth-child(1) > main.main:nth-child(2) > div.channel-layout:nth-child(1) > div.channel-col:nth-child(1) > div.composer:nth-child(3) > div.composer-box:nth-child(2) > div.composer-line:nth-child(1) > div.composer-tool:nth-child(1) > div.pop.composer-menu.tasks:nth-child(2) > div:nth-child(2) > button.sub:nth-child(2)",
+    "reason": "The composer's task menu indents a run under its task on purpose: the sub row's 28 px leading padding against 9 px trailing is the hierarchy cue, not uneven padding (captures/composer-task-picker/default/*/2x.png)."
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "ask": "calls-calm-round-1",
+  "question": "layout",
+  "prompt": "How should a call look inside its channel?",
+  "level": 3,
+  "revision": 1,
+  "choice": [
+    "pill"
+  ],
+  "values": {},
+  "notes": "",
+  "options": {
+    "pill": {
+      "label": "One call pill",
+      "detail": "Faces, time and controls in one pill under the title. No tiles for voice. Only screens and cameras get space.",
+      "folder": "pill/"
+    }
+  }
+}
